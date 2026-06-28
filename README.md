@@ -62,28 +62,48 @@ session lead table
 optional webhook submission
 ```
 
+## Mainland-first lead saving
+
+For mainland China use cases, do **not** make Google Sheet the primary option.
+
+Recommended options:
+
+```text
+1. Feishu / Lark robot webhook
+2. WeCom / Enterprise WeChat robot webhook
+3. Tencent Cloud Function
+4. Alibaba Cloud Function
+5. Self-hosted backend API
+6. Tencent Docs / WPS / Kingsoft form workflow via CSV import
+```
+
 ### Optional Streamlit Secrets
 
-To enable automatic lead saving, add the following in Streamlit Cloud:
+Feishu / Lark robot:
 
 ```toml
-LEAD_WEBHOOK_URL = "https://your-webhook-url"
+LEAD_WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/xxxx"
+WEBHOOK_PROVIDER = "feishu"
 OWNER_EMAIL = "your-email@example.com"
 ```
 
-`LEAD_WEBHOOK_URL` can point to:
+WeCom / Enterprise WeChat robot:
 
-```text
-Google Apps Script / Google Sheet
-Feishu / Lark webhook
-Make
-Zapier
-Notion automation
-Supabase Edge Function
-custom backend API
+```toml
+LEAD_WEBHOOK_URL = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxxx"
+WEBHOOK_PROVIDER = "wecom"
+OWNER_EMAIL = "your-email@example.com"
 ```
 
-If `LEAD_WEBHOOK_URL` is not configured, the site still works, but leads must be downloaded or sent manually.
+Generic backend API, Tencent Cloud Function, Alibaba Cloud Function, Supabase, etc.:
+
+```toml
+LEAD_WEBHOOK_URL = "https://your-api-endpoint"
+WEBHOOK_PROVIDER = "generic"
+OWNER_EMAIL = "your-email@example.com"
+```
+
+If `LEAD_WEBHOOK_URL` is not configured, the site still works, but leads must be downloaded as TXT/CSV or sent manually.
 
 ## Freelancer monetization loop
 
