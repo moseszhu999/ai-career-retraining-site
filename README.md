@@ -113,6 +113,44 @@ Recommended price:
 3999 RMB
 ```
 
+## Freelance monetization camp
+
+The repository includes a full 5-day freelance monetization curriculum:
+
+```text
+five_day_freelance_monetization_camp_curriculum.md
+```
+
+Positioning:
+
+```text
+skill learning
+-> sample artifacts
+-> service package
+-> quote sheet
+-> client outreach script
+-> delivery SOP
+-> review and price-up path
+```
+
+5-day freelance camp promise:
+
+```text
+1 sellable service package
+3 sample cases
+1 quote sheet
+1 client outreach script / profile intro
+1 client requirement checklist
+1 delivery SOP
+1 review and price-up plan
+```
+
+Recommended price:
+
+```text
+4999 RMB
+```
+
 ## Instructor manual
 
 The repository includes a full instructor delivery manual:
@@ -221,18 +259,6 @@ OWNER_EMAIL = "your-email@example.com"
 ```
 
 If `LEAD_WEBHOOK_URL` is not configured, the site still works, but leads must be downloaded as TXT/CSV or sent manually.
-
-## Freelancer monetization loop
-
-```text
-skill learning
--> sample artifacts
--> service package
--> quote sheet
--> client outreach script
--> delivery SOP
--> review and price-up path
-```
 
 ## Product promise
 
