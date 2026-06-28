@@ -5,7 +5,7 @@ from datetime import datetime
 import pandas as pd
 import streamlit as st
 
-st.set_page_config(page_title="AI Skill Growth · Product App", page_icon="🚀", layout="wide")
+st.set_page_config(page_title="AI Skill Growth OS", page_icon="🚀", layout="wide")
 
 st.markdown(
     """
@@ -13,8 +13,8 @@ st.markdown(
 .main .block-container{max-width:1180px;padding-top:.8rem;padding-bottom:4rem}
 .app-nav{position:sticky;top:.4rem;z-index:999;margin-bottom:1rem;border:1px solid #c7d2fe;border-radius:1.3rem;background:rgba(255,255,255,.96);box-shadow:0 14px 34px rgba(15,23,42,.08);padding:.78rem 1rem;display:flex;justify-content:space-between;align-items:center;gap:1rem}.brand{display:flex;gap:.6rem;align-items:center;font-weight:980;color:#111827}.logo{width:38px;height:38px;border-radius:14px;background:linear-gradient(135deg,#4f46e5,#06b6d4);color:white;display:grid;place-items:center}.brand small{display:block;color:#64748b;font-weight:850}.nav-note{display:flex;gap:.42rem;flex-wrap:wrap}.pill{display:inline-block;border-radius:999px;padding:.28rem .64rem;font-size:.82rem;font-weight:900;border:1px solid #e2e8f0;background:#f8fafc;color:#475569;margin:.15rem .2rem .15rem 0}.hot{background:linear-gradient(90deg,#4f46e5,#06b6d4);border:none;color:white}.green{background:#dcfce7;color:#166534;border-color:#bbf7d0}.orange{background:#ffedd5;color:#9a3412;border-color:#fed7aa}.red{background:#fee2e2;color:#991b1b;border-color:#fecaca}.blue{background:#dbeafe;color:#1e40af;border-color:#bfdbfe}
 .nav-panel{margin:.7rem 0 1.1rem;padding:.55rem;border:1px solid #e0e7ff;border-radius:1.2rem;background:#f8fafc}div[data-testid='stRadio']>label{display:none}div[role='radiogroup']{display:flex;flex-wrap:wrap;gap:.45rem}div[role='radiogroup'] label{border:1px solid #dbeafe!important;border-radius:999px!important;background:white!important;padding:.42rem .85rem!important}div[role='radiogroup'] label p{font-weight:950!important;color:#334155!important;font-size:.93rem!important}div[role='radiogroup'] label:has(input:checked){background:linear-gradient(90deg,#4f46e5,#06b6d4)!important}div[role='radiogroup'] label:has(input:checked) p{color:white!important}
-.hero{border:1px solid #c7d2fe;border-radius:1.6rem;background:radial-gradient(circle at right,#ecfeff,#eef2ff 48%,#fff);padding:2rem;margin:1rem 0 1.2rem;box-shadow:0 18px 44px rgba(15,23,42,.08)}.hero h1{font-size:2.55rem;line-height:1.06;margin:.45rem 0;color:#0f172a;font-weight:980}.hero h1 span{background:linear-gradient(90deg,#4f46e5,#06b6d4);-webkit-background-clip:text;color:transparent}.hero p{color:#475569;line-height:1.75;font-size:1.02rem;max-width:900px}.eyebrow{display:inline-block;font-size:.78rem;letter-spacing:.12em;color:#3730a3;font-weight:950;background:white;border:1px solid #c7d2fe;border-radius:999px;padding:.3rem .65rem}.section-title{font-size:1.55rem;font-weight:950;margin:1.2rem 0 .35rem;color:#0f172a}.section-sub{color:#64748b;line-height:1.65;margin-bottom:.8rem}.grid2{display:grid;grid-template-columns:1.15fr .85fr;gap:1rem}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}.card{border:1px solid #e2e8f0;border-radius:1.15rem;background:white;padding:1rem;box-shadow:0 8px 22px rgba(15,23,42,.045)}.card h3{margin:.15rem 0 .45rem;color:#111827}.card p{color:#64748b;line-height:1.58}.soft{background:#f8fafc;border-color:#dbeafe}.good{background:#f0fdf4;border-color:#bbf7d0}.warn{background:#fff7ed;border-color:#fed7aa}.metric{font-size:2rem;font-weight:950;color:#111827}.quote{white-space:pre-wrap;background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1rem;line-height:1.65}.timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:.55rem}.timeline div{background:white;border:1px solid #c7d2fe;border-radius:1rem;padding:.85rem;text-align:center}.timeline b{display:block;color:#4f46e5}.progress-shell{height:.7rem;border-radius:999px;background:#e2e8f0;overflow:hidden}.progress-bar{height:100%;background:linear-gradient(90deg,#4f46e5,#06b6d4)}.mini{font-size:.86rem;color:#64748b;line-height:1.55}.task-card{border-left:5px solid #6366f1}
-@media(max-width:960px){.app-nav{align-items:flex-start;flex-direction:column}.nav-note{display:none}.grid2,.grid3,.grid4,.timeline{grid-template-columns:1fr}.hero h1{font-size:2rem}}
+.hero{border:1px solid #c7d2fe;border-radius:1.6rem;background:radial-gradient(circle at right,#ecfeff,#eef2ff 48%,#fff);padding:2rem;margin:1rem 0 1.2rem;box-shadow:0 18px 44px rgba(15,23,42,.08)}.hero h1{font-size:2.55rem;line-height:1.06;margin:.45rem 0;color:#0f172a;font-weight:980}.hero h1 span{background:linear-gradient(90deg,#4f46e5,#06b6d4);-webkit-background-clip:text;color:transparent}.hero p{color:#475569;line-height:1.75;font-size:1.02rem;max-width:900px}.eyebrow{display:inline-block;font-size:.78rem;letter-spacing:.12em;color:#3730a3;font-weight:950;background:white;border:1px solid #c7d2fe;border-radius:999px;padding:.3rem .65rem}.section-title{font-size:1.55rem;font-weight:950;margin:1.2rem 0 .35rem;color:#0f172a}.section-sub{color:#64748b;line-height:1.65;margin-bottom:.8rem}.grid2{display:grid;grid-template-columns:1.15fr .85fr;gap:1rem}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}.card{border:1px solid #e2e8f0;border-radius:1.15rem;background:white;padding:1rem;box-shadow:0 8px 22px rgba(15,23,42,.045)}.card h3{margin:.15rem 0 .45rem;color:#111827}.card p{color:#64748b;line-height:1.58}.soft{background:#f8fafc;border-color:#dbeafe}.good{background:#f0fdf4;border-color:#bbf7d0}.warn{background:#fff7ed;border-color:#fed7aa}.metric{font-size:2rem;font-weight:950;color:#111827}.quote{white-space:pre-wrap;background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1rem;line-height:1.65}.timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:.55rem}.timeline div{background:white;border:1px solid #c7d2fe;border-radius:1rem;padding:.85rem;text-align:center}.timeline b{display:block;color:#4f46e5}.progress-shell{height:.7rem;border-radius:999px;background:#e2e8f0;overflow:hidden}.progress-bar{height:100%;background:linear-gradient(90deg,#4f46e5,#06b6d4)}.mini{font-size:.86rem;color:#64748b;line-height:1.55}.task-card{border-left:5px solid #6366f1}.system-line{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-top:1rem}.system-line div{background:white;border:1px solid #dbeafe;border-radius:1rem;padding:.9rem}.system-line b{display:block;color:#3730a3;margin-bottom:.2rem}
+@media(max-width:960px){.app-nav{align-items:flex-start;flex-direction:column}.nav-note{display:none}.grid2,.grid3,.grid4,.timeline,.system-line{grid-template-columns:1fr}.hero h1{font-size:2rem}}
 </style>
 """,
     unsafe_allow_html=True,
@@ -49,8 +49,8 @@ def render_nav() -> str:
     st.markdown(
         """
 <div class='app-nav'>
-  <div class='brand'><div class='logo'>AI</div><div>AI Skill Growth<small>一人公司 · Agent OS · v4.3.6.1</small></div></div>
-  <div class='nav-note'><span class='pill'>学员端</span><span class='pill'>任务卡</span><span class='pill'>Agent反馈</span><span class='pill hot'>作品集</span></div>
+  <div class='brand'><div class='logo'>AI</div><div>AI Skill Growth OS<small>学员前台 · Agent反馈 · 作品集 · Founder后台</small></div></div>
+  <div class='nav-note'><span class='pill'>统一前台</span><span class='pill'>任务卡</span><span class='pill'>Agent反馈</span><span class='pill hot'>Founder OS</span></div>
 </div>
 """,
         unsafe_allow_html=True,
@@ -68,19 +68,25 @@ def render_home() -> None:
     st.markdown(
         f"""
 <div class='hero'>
-<span class='eyebrow'>DEFAULT PRODUCT HOME</span>
-<h1>每天完成一个任务，<br><span>自动沉淀一个作品集</span></h1>
-<p><b>普通用户只需要看四个入口：</b>首页、我的任务、作品集、咨询。后台、SQL、SOP、运营看板、Founder Console 都不要放在普通导航里。</p>
-<span class='pill hot'>我的任务</span><span class='pill'>Agent反馈</span><span class='pill'>作品集</span><span class='pill'>下一步</span>
+<span class='eyebrow'>UNIFIED PRODUCT HOME · v4.3.7</span>
+<h1>一个入口，四个动作：<br><span>任务、反馈、作品集、咨询</span></h1>
+<p><b>统一后的产品逻辑：</b>学员只看任务和结果；Agent 负责高频反馈；作品集沉淀证据；Founder 只进后台处理异常、质检和运营日报。</p>
+<span class='pill hot'>我的任务</span><span class='pill'>Agent反馈</span><span class='pill'>作品集</span><span class='pill'>咨询转化</span>
 <div style='margin-top:1rem'><div class='mini'>训练进度：{done}/{total} · {pct}%</div><div class='progress-shell'><div class='progress-bar' style='width:{pct}%'></div></div></div>
+<div class='system-line'>
+  <div><b>1. 学员</b><span>只做今日任务</span></div>
+  <div><b>2. Agent</b><span>给反馈和评分</span></div>
+  <div><b>3. 作品集</b><span>沉淀可展示证据</span></div>
+  <div><b>4. Founder</b><span>只看异常和日报</span></div>
+</div>
 </div>
 """,
         unsafe_allow_html=True,
     )
     cards = [
-        ("🎯", "今天做什么", "系统只给一个主任务，避免学员被菜单和后台概念淹没。"),
-        ("🤖", "怎么修改", "Agent 直接指出缺什么、怎么改、下一步交什么。"),
-        ("📁", "留下什么", "每个通过任务都沉淀成作品集证据。"),
+        ("🎯", "前台统一", "普通用户只看到首页、我的任务、作品集、咨询。"),
+        ("🤖", "后台统一", "Founder Console 单独存在，不混入普通用户路径。"),
+        ("📁", "结果统一", "平台交付的是训练结果和作品集，不是课程时长。"),
     ]
     st.markdown("<div class='grid3'>" + "".join(f"<div class='card'><h3>{i} {t}</h3><p>{b}</p></div>" for i, t, b in cards) + "</div>", unsafe_allow_html=True)
 
@@ -131,7 +137,7 @@ def render_portfolio() -> None:
 def render_consult() -> None:
     st.markdown("<div class='section-title'>咨询</div>", unsafe_allow_html=True)
     st.markdown("<div class='section-sub'>咨询页是转化入口，普通用户不需要看到报价后台，只需要知道适不适合自己。</div>", unsafe_allow_html=True)
-    with st.form("consult_form_v4361"):
+    with st.form("consult_form_v437"):
         name = st.text_input("姓名 / 称呼")
         identity = st.selectbox("你现在属于哪类人？", ["职场新人", "在岗提升", "升职准备", "转岗 / 跳槽", "自由职业 / 副业接单", "企业培训负责人", "小微老板"])
         goal = st.selectbox("你最想解决什么？", ["学新技能", "提升现有技能", "做作品集", "升职表达", "换工作 / 高薪跳槽", "自由职业接单", "企业内训"])
@@ -144,9 +150,9 @@ def render_consult() -> None:
 
 
 def render_founder_backdoor() -> None:
-    with st.expander("Founder / Owner 入口"):
-        st.caption("普通用户导航不显示后台。Founder Console 继续单独 owner-gated。")
-        st.info("请从左侧页面列表打开 Founder_Agent_Console / Student_Home / Product_App。此处不再使用 st.page_link，避免不同 Streamlit 版本或页面路径导致首页崩溃。")
+    with st.expander("Founder OS / 后台入口"):
+        st.caption("普通用户前台只保留四个入口。Founder Console 是唯一后台页，继续单独 owner-gated。")
+        st.info("从左侧页面列表打开 Founder_Agent_Console。这里不使用 st.page_link，避免页面路径导致首页崩溃。")
 
 
 page = render_nav()
@@ -160,4 +166,4 @@ else:
     render_consult()
 
 render_founder_backdoor()
-st.caption("AI Skill Growth Platform · Default Product Home · v4.3.6.1")
+st.caption("AI Skill Growth OS · Unified Product Frontend · v4.3.7")
