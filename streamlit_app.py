@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import urllib.request
 from datetime import datetime
 from urllib.parse import quote
@@ -19,7 +20,7 @@ CSS = """
 .nav-panel{margin:.65rem 0 1.15rem;padding:.55rem;border:1px solid #e0e7ff;border-radius:1.2rem;background:#f8fafc;box-shadow:0 10px 26px rgba(15,23,42,.05)}
 div[data-testid="stRadio"]>label{display:none}div[role="radiogroup"]{display:flex;flex-wrap:wrap;gap:.42rem}div[role="radiogroup"] label{border:1px solid #dbeafe!important;border-radius:999px!important;background:white!important;padding:.38rem .74rem!important}div[role="radiogroup"] label p{font-weight:900!important;color:#334155!important;font-size:.9rem!important}div[role="radiogroup"] label:has(input:checked){background:linear-gradient(90deg,#4f46e5,#06b6d4)!important}div[role="radiogroup"] label:has(input:checked) p{color:white!important}
 .hero,.subhero,.workspace-hero{border:1px solid #c7d2fe;border-radius:1.45rem;background:radial-gradient(circle at right,#ecfeff,#eef2ff 46%,#fff);box-shadow:0 18px 44px rgba(15,23,42,.08);padding:1.35rem;margin:1.15rem 0}.hero{padding:2.1rem}.hero h1{font-size:3rem;line-height:1.05;margin:.55rem 0;color:var(--ink);font-weight:980}.hero h1 span{background:linear-gradient(90deg,var(--brand),var(--brand2));-webkit-background-clip:text;color:transparent}.hero p,.subhero p{color:#475569;line-height:1.75}.eyebrow,.label{display:inline-block;font-size:.78rem;letter-spacing:.12em;color:#3730a3;font-weight:950;background:white;border:1px solid #c7d2fe;border-radius:999px;padding:.3rem .65rem}.btn{display:inline-flex;border-radius:999px;padding:.78rem 1.08rem;font-weight:950;margin:.25rem}.primary{background:linear-gradient(90deg,var(--brand),#7c3aed);color:white}.secondary{background:white;color:#3730a3;border:1px solid #c7d2fe}.pill{display:inline-block;border-radius:999px;background:white;color:#3730a3;border:1px solid #c7d2fe;padding:.28rem .62rem;margin:.15rem;font-weight:850;font-size:.83rem}
-.kicker{font-size:.78rem;font-weight:950;letter-spacing:.14em;color:var(--brand);text-transform:uppercase;margin-top:1.8rem}.title{font-size:1.65rem;font-weight:950;color:var(--ink)}.sub{color:var(--muted);line-height:1.75;max-width:850px}.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:.95rem}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}.card,.offer,.task-panel,.student-card,.portfolio-card,.review-card,.ops-card,.rubric-card,.state-card{border:1px solid var(--line);border-radius:1.08rem;background:white;padding:1rem;box-shadow:0 8px 22px rgba(15,23,42,.045);min-height:120px}.card p,.portfolio-card p,.review-card p,.ops-card p,.state-card p{color:var(--muted);line-height:1.58}.soft{background:#f8fafc;border-color:#dbeafe}.green{background:#f0fdf4;border-color:#bbf7d0}.orange{background:#fff7ed;border-color:#fed7aa}.dark{background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1rem;white-space:pre-wrap}.flow{display:grid;grid-template-columns:repeat(6,1fr);gap:.55rem}.flow div{background:white;border:1px solid #c7d2fe;border-radius:1rem;padding:.85rem;text-align:center}.flow b{display:block;color:var(--brand)}.flow span{font-weight:850;color:#312e81;font-size:.82rem}
+.kicker{font-size:.78rem;font-weight:950;letter-spacing:.14em;color:var(--brand);text-transform:uppercase;margin-top:1.8rem}.title{font-size:1.65rem;font-weight:950;color:var(--ink)}.sub{color:var(--muted);line-height:1.75;max-width:850px}.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:.95rem}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}.card,.offer,.task-panel,.student-card,.portfolio-card,.review-card,.ops-card,.rubric-card,.state-card,.template-card{border:1px solid var(--line);border-radius:1.08rem;background:white;padding:1rem;box-shadow:0 8px 22px rgba(15,23,42,.045);min-height:120px}.card p,.portfolio-card p,.review-card p,.ops-card p,.state-card p,.template-card p{color:var(--muted);line-height:1.58}.soft{background:#f8fafc;border-color:#dbeafe}.green{background:#f0fdf4;border-color:#bbf7d0}.orange{background:#fff7ed;border-color:#fed7aa}.dark{background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1rem;white-space:pre-wrap}.flow{display:grid;grid-template-columns:repeat(6,1fr);gap:.55rem}.flow div{background:white;border:1px solid #c7d2fe;border-radius:1rem;padding:.85rem;text-align:center}.flow b{display:block;color:var(--brand)}.flow span{font-weight:850;color:#312e81;font-size:.82rem}
 .offer{position:relative;border-color:#dbeafe;min-height:270px}.offer.featured{border:2px solid #4f46e5}.tag,.status-chip{display:inline-block;border-radius:999px;padding:.24rem .58rem;font-size:.76rem;font-weight:950}.tag{background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe}.price{font-size:1.35rem;font-weight:980;color:#16a34a}.offer-btn{position:absolute;left:1rem;right:1rem;bottom:1rem;text-align:center;border-radius:999px;padding:.62rem;background:#0f172a;color:white;font-weight:950}.form-card,.diagnosis{border:1px solid #dbeafe;background:white;border-radius:1.25rem;padding:1.15rem;box-shadow:0 14px 34px rgba(15,23,42,.07)}.summary{border-radius:1rem;background:#0f172a;color:#e2e8f0;padding:1rem;line-height:1.7;white-space:pre-wrap}.lead-note,.ai-feedback{border:1px solid #bbf7d0;background:#f0fdf4;color:#14532d;border-radius:1rem;padding:1rem;margin-top:1rem;font-weight:850}.mail-link{display:inline-block;border-radius:999px;background:linear-gradient(90deg,#4f46e5,#06b6d4);color:white!important;text-decoration:none;padding:.7rem 1rem;font-weight:950;margin-top:.7rem}.mobile-sticky{display:none}
 .workspace-head{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start}.day-card{border:1px solid #dbeafe;border-radius:1.05rem;background:white;padding:.92rem;min-height:118px;box-shadow:0 8px 18px rgba(15,23,42,.045)}.day-card.active{border:2px solid #4f46e5;background:#eef2ff}.day-card.done{background:#f0fdf4;border-color:#bbf7d0}.chip-green{background:#dcfce7;color:#166534}.chip-blue{background:#dbeafe;color:#1e40af}.chip-orange{background:#ffedd5;color:#9a3412}.chip-gray{background:#f1f5f9;color:#475569}.chip-red{background:#fee2e2;color:#991b1b}.teacher-box{border:1px solid #fed7aa;background:#fff7ed;color:#7c2d12;border-radius:1rem;padding:1rem;font-weight:850}.copy-note{font-size:.82rem;color:#64748b;font-weight:850;margin:.25rem 0 .5rem}.progress-wrap{height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden}.progress-bar{height:100%;background:linear-gradient(90deg,#4f46e5,#06b6d4)}.state-line{display:flex;gap:.35rem;flex-wrap:wrap;margin:.8rem 0}.state-step{border:1px solid #dbeafe;border-radius:999px;background:#f8fafc;color:#475569;padding:.3rem .55rem;font-size:.8rem;font-weight:900}.state-step.on{background:#eef2ff;color:#3730a3;border-color:#818cf8}.state-step.done{background:#dcfce7;color:#166534;border-color:#86efac}
 @media(max-width:960px){.nav{position:relative}.nav-inner,.workspace-head{align-items:flex-start;flex-direction:column}.badges{display:none}.grid2,.grid3,.grid4{grid-template-columns:1fr}.flow{grid-template-columns:repeat(2,1fr)}}@media(max-width:640px){.main .block-container{padding-left:.75rem;padding-right:.75rem;padding-bottom:6.2rem}.nav-panel{overflow-x:auto}.nav-panel div[role="radiogroup"]{flex-wrap:nowrap;overflow-x:auto}.hero h1{font-size:2rem}.mobile-sticky{display:flex;position:fixed;left:.7rem;right:.7rem;bottom:.7rem;z-index:1000;gap:.5rem;background:rgba(15,23,42,.92);border-radius:1rem;padding:.55rem}.mobile-sticky span{flex:1;text-align:center;border-radius:.8rem;padding:.68rem .5rem;color:white;font-weight:950}.mobile-sticky .m1{background:linear-gradient(90deg,#4f46e5,#06b6d4)}}
@@ -29,11 +30,48 @@ st.markdown(CSS, unsafe_allow_html=True)
 
 TEXT = {"zh": {"nav": "导航", "home": "首页", "workspace": "学习工作台", "trial": "2小时体验课", "sop": "跟进SOP", "paths": "成长路径", "skills": "技能训练", "portfolio": "作品集", "freelance": "自由职业", "company": "企业内训", "pricing": "报价", "booking": "预约咨询", "faq": "FAQ"}}
 STATUS_ORDER = ["未开始", "进行中", "已提交", "AI已反馈", "待老师点评", "已点评", "已入作品集"]
-STATUS_CHIP = {"未开始": "chip-gray", "进行中": "chip-blue", "已提交": "chip-orange", "AI已反馈": "chip-blue", "待老师点评": "chip-orange", "已点评": "chip-green", "已入作品集": "chip-green", "风险": "chip-red"}
+STATUS_CHIP = {"未开始": "chip-gray", "进行中": "chip-blue", "已提交": "chip-orange", "AI已反馈": "chip-blue", "待老师点评": "chip-orange", "已点评": "chip-green", "已入作品集": "chip-green", "风险": "chip-red", "等待": "chip-gray"}
 MOTIVE_ROWS = [("新人上手", "从不会到能做", "学习岗位基础技能，完成第一个可检查任务"), ("在岗提升", "从能做到价值更高", "把重复任务做成 AI 工作流，提升交付质量"), ("升职准备", "从执行者到负责人", "学会分析、汇报、复盘和带新人"), ("转岗换工作", "从旧岗位到新岗位", "补齐新岗位技能，形成可展示作品集"), ("自由职业增收", "从会技能到能接单", "形成服务包、报价和交付作品")]
 ROLE_ROWS = [("行政 / 人事", "会议纪要、制度、SOP、招聘沟通、数据说明"), ("销售 / 商务", "客户画像、跟进话术、方案初稿、报价说明、成交复盘"), ("运营 / 市场", "活动方案、内容日历、数据复盘、转化话术"), ("IT / 项目人员", "需求理解、测试用例、Bug 报告、日报周报、发表说明"), ("自由职业者", "服务包设计、报价单、交付 SOP、客户沟通、案例展示"), ("小微老板", "市场调研、文案、报价、客户沟通、流程清单")]
 SKILL_ROWS = [("学新技能", "用 AI 生成学习路径、解释概念、给例子、拆练习"), ("做任务", "把学习目标变成真实工作任务，而不是只看教程"), ("被纠错", "让 AI 做第一轮反馈：遗漏、逻辑、格式、表达、风险"), ("再修改", "根据反馈修改，形成第二版、第三版成果"), ("做作品", "把练习变成能给老板、客户或面试官看的作品"), ("会表达", "能说明自己怎么学、怎么做、怎么用 AI 提升结果")]
 FREELANCE_ROWS = [("选技能", "选择能变现的技能方向"), ("做样品", "用 AI 辅助完成 2-3 个可展示样品"), ("包装服务", "把技能变成清楚的服务包"), ("获客表达", "写主页简介、私信话术、报价说明"), ("交付流程", "形成需求确认、初稿、修改、验收、复盘 SOP"), ("提价路径", "从低价单到标准化服务，再到高价值项目")]
+
+COURSE_TEMPLATES = {
+    "growth_5d": {
+        "name": "5 天 AI 技能成长营",
+        "audience": "职场新人 / 在岗提升 / 升职准备 / 转岗跳槽",
+        "promise": "3 个可展示作品 + AI 反馈记录 + 老师点评 + 30 天行动计划",
+        "tasks": [
+            {"task_key": "g_day1", "day": "Day 1", "title": "定目标 + 拆任务", "outcome": "技能成长路线图", "prompt": "你是职业技能教练。请把我的目标拆成 5 天训练任务，并说明每天交付物。", "standard": "目标明确；任务可执行；交付物可检查。"},
+            {"task_key": "g_day2", "day": "Day 2", "title": "作品 1：基础任务作品", "outcome": "测试用例 + Bug 报告模板", "prompt": "你是严格的软件测试教练。请根据登录页面需求设计测试用例，并输出遗漏点和 Bug 报告模板。", "standard": "覆盖正常、异常、边界、安全、权限；步骤可执行。"},
+            {"task_key": "g_day3", "day": "Day 3", "title": "作品 2：复杂任务作品", "outcome": "复杂需求拆解 + 异常场景补全", "prompt": "请把复杂业务需求拆成流程、角色、输入输出、异常分支和测试点。", "standard": "能解释流程；能发现异常；能说明遗漏信息。"},
+            {"task_key": "g_day4", "day": "Day 4", "title": "作品 3：展示 / 发表作品", "outcome": "项目发表说明 + 成果表达稿", "prompt": "请把我的项目成果整理成 3 分钟发表稿，包含背景、任务、方法、结果和改进点。", "standard": "表达清楚；能展示价值；能回答追问。"},
+            {"task_key": "g_day5", "day": "Day 5", "title": "复盘 + 后续路径", "outcome": "30 天行动计划", "prompt": "请根据我的 3 个作品和老师点评，生成后续 30 天行动计划。", "standard": "路径清楚；动作具体；能持续复盘。"},
+        ],
+    },
+    "freelance_5d": {
+        "name": "5 天自由职业技能变现营",
+        "audience": "自由职业 / 副业接单者",
+        "promise": "1 个服务包 + 3 个样品案例 + 报价单 + 获客话术 + 交付 SOP",
+        "tasks": [
+            {"task_key": "f_day1", "day": "Day 1", "title": "选择可售卖技能", "outcome": "服务方向定位", "prompt": "请帮我把一个技能转成可售卖服务方向，说明目标客户、痛点和交付物。", "standard": "客户明确；痛点具体；交付边界清楚。"},
+            {"task_key": "f_day2", "day": "Day 2", "title": "样品案例 1", "outcome": "第一个可展示样品", "prompt": "请根据目标客户场景，帮我设计一个可展示样品案例。", "standard": "样品能展示能力；客户能看懂价值。"},
+            {"task_key": "f_day3", "day": "Day 3", "title": "服务包 + 报价单", "outcome": "可报价服务包", "prompt": "请把我的技能包装成 3 档服务包，包含交付内容、周期、修改次数和价格边界。", "standard": "价格边界明确；交付流程清楚；不承诺不可控结果。"},
+            {"task_key": "f_day4", "day": "Day 4", "title": "获客私信 + 主页介绍", "outcome": "获客表达素材", "prompt": "请帮我写一版自由职业主页介绍和 3 条获客私信。", "standard": "不夸大；有案例；能引导客户回复。"},
+            {"task_key": "f_day5", "day": "Day 5", "title": "交付 SOP + 提价路径", "outcome": "客户交付流程", "prompt": "请生成从需求确认到验收复盘的交付 SOP，并设计提价路径。", "standard": "流程完整；风险可控；提价有依据。"},
+        ],
+    },
+    "enterprise_dept": {
+        "name": "企业部门 AI 训练营",
+        "audience": "企业内训部门 / 新人培养 / 部门负责人",
+        "promise": "部门任务模板 + 评分标准 + 员工练习包 + 培训复盘",
+        "tasks": [
+            {"task_key": "e_1", "day": "模块 1", "title": "部门高频任务清单", "outcome": "AI 训练任务地图", "prompt": "请把部门高频任务整理成可训练任务清单，并标出可用 AI 辅助的环节。", "standard": "任务真实；频率高；能训练。"},
+            {"task_key": "e_2", "day": "模块 2", "title": "任务模板 + 示例", "outcome": "部门任务模板", "prompt": "请把一个部门任务改造成员工练习模板，包含输入、步骤、输出和评分标准。", "standard": "可复制；可评分；可用于新人训练。"},
+            {"task_key": "e_3", "day": "模块 3", "title": "成果发表 + 复盘", "outcome": "培训复盘报告", "prompt": "请生成部门 AI 训练营成果发表结构和复盘报告模板。", "standard": "能展示成果；能发现共性问题；能给出后续训练建议。"},
+        ],
+    },
+}
 
 
 def get_secret(name: str, default: str = "") -> str:
@@ -79,24 +117,68 @@ def html_card(icon: str, title: str, body: str, cls: str = "card") -> str:
     return f"<div class='{cls}'><b>{icon} {title}</b><p>{body}</p></div>"
 
 
+def safe_id(text: str) -> str:
+    slug = re.sub(r"[^a-zA-Z0-9_]+", "_", text.strip())
+    return slug.strip("_") or "item"
+
+
 def chip(status: str) -> str:
     return f"<span class='status-chip {STATUS_CHIP.get(status, 'chip-gray')}'>{status}</span>"
 
 
+def template_task(course_id: str, task_key: str) -> dict:
+    for task in COURSE_TEMPLATES[course_id]["tasks"]:
+        if task["task_key"] == task_key:
+            return task
+    raise KeyError(task_key)
+
+
+def build_instance(student: str, course_id: str, task_key: str, status: str = "未开始", **overrides) -> dict:
+    course = COURSE_TEMPLATES[course_id]
+    task = template_task(course_id, task_key)
+    instance = {
+        "id": f"{safe_id(student)}_{course_id}_{task_key}_{len(st.session_state.get('task_instances', []))}",
+        "student": student,
+        "course_id": course_id,
+        "course": course["name"],
+        "task_key": task_key,
+        "day": task["day"],
+        "title": task["title"],
+        "desc": task["outcome"],
+        "prompt": task["prompt"],
+        "standard": task["standard"],
+        "status": status,
+        "version": "未提交",
+        "score": 0,
+        "risk": "正常" if status not in {"未开始"} else "等待",
+        "portfolio": False,
+        "draft": "",
+        "ai_feedback": "",
+        "teacher_review": "",
+    }
+    instance.update(overrides)
+    return instance
+
+
 def init_workspace_state():
-    if "workspace_items" not in st.session_state:
-        st.session_state["workspace_items"] = [
-            {"id": "work1", "student": "张同学", "course": "5 天 AI 技能成长营", "day": "Day 2", "title": "作品 1：基础任务作品", "desc": "登录页面测试用例 + Bug 报告模板", "status": "进行中", "version": "未提交", "score": 0, "risk": "正常", "portfolio": False, "draft": "", "ai_feedback": "", "teacher_review": ""},
-            {"id": "work2", "student": "张同学", "course": "5 天 AI 技能成长营", "day": "Day 3", "title": "作品 2：复杂任务作品", "desc": "复杂需求拆解 + 异常场景补全", "status": "未开始", "version": "未提交", "score": 0, "risk": "等待", "portfolio": False, "draft": "", "ai_feedback": "", "teacher_review": ""},
-            {"id": "work3", "student": "张同学", "course": "5 天 AI 技能成长营", "day": "Day 4", "title": "作品 3：展示 / 发表作品", "desc": "项目发表说明 + 成果表达稿", "status": "未开始", "version": "未提交", "score": 0, "risk": "等待", "portfolio": False, "draft": "", "ai_feedback": "", "teacher_review": ""},
-            {"id": "li1", "student": "李同学", "course": "5 天 AI 技能成长营", "day": "Day 3", "title": "作品 2：复杂任务作品", "desc": "复杂任务拆解", "status": "待老师点评", "version": "第二版", "score": 0, "risk": "表达不清", "portfolio": False, "draft": "已提交第二版复杂任务拆解。", "ai_feedback": "AI 已建议补充异常分支。", "teacher_review": ""},
-            {"id": "wang1", "student": "王同学", "course": "自由职业技能变现营", "day": "Day 1", "title": "服务包草稿", "desc": "自由职业服务包定位", "status": "已提交", "version": "第一版", "score": 0, "risk": "未看AI反馈", "portfolio": False, "draft": "我可以提供 AI PPT 美化服务。", "ai_feedback": "", "teacher_review": ""},
-        ]
+    st.session_state.setdefault("course_templates", COURSE_TEMPLATES)
+    if "task_instances" not in st.session_state:
+        st.session_state["task_instances"] = []
+        st.session_state["task_instances"].extend([
+            build_instance("张同学", "growth_5d", "g_day1", "已点评", version="第一版", score=22, teacher_review="目标清楚，可以进入 Day 2。"),
+            build_instance("张同学", "growth_5d", "g_day2", "进行中"),
+            build_instance("张同学", "growth_5d", "g_day3", "未开始"),
+            build_instance("张同学", "growth_5d", "g_day4", "未开始"),
+            build_instance("张同学", "growth_5d", "g_day5", "未开始"),
+            build_instance("李同学", "growth_5d", "g_day3", "待老师点评", version="第二版", risk="表达不清", draft="已提交第二版复杂任务拆解。", ai_feedback="AI 已建议补充异常分支。"),
+            build_instance("王同学", "freelance_5d", "f_day1", "已提交", version="第一版", risk="未看AI反馈", draft="我可以提供 AI PPT 美化服务。"),
+            build_instance("企业A组", "enterprise_dept", "e_1", "AI已反馈", version="第一版", risk="待人工判断", draft="部门高频任务：周报、会议纪要、客户回复。", ai_feedback="AI反馈：任务频率清楚，但缺少评分标准。"),
+        ])
 
 
 def get_item(item_id: str) -> dict:
     init_workspace_state()
-    for item in st.session_state["workspace_items"]:
+    for item in st.session_state["task_instances"]:
         if item["id"] == item_id:
             return item
     raise KeyError(item_id)
@@ -122,17 +204,24 @@ def status_flow_html(status: str) -> str:
 def workspace_df() -> pd.DataFrame:
     init_workspace_state()
     rows = []
-    for item in st.session_state["workspace_items"]:
+    for item in st.session_state["task_instances"]:
         rows.append({
-            "学员": item["student"], "课程": item["course"], "Day": item["day"], "作品": item["title"],
-            "版本": item["version"], "状态": item["status"], "评分": item["score"] or "-", "风险": item["risk"],
-            "作品集": "是" if item["portfolio"] else "否"
+            "学员": item["student"],
+            "课程": item["course"],
+            "Day/模块": item["day"],
+            "作品/任务": item["title"],
+            "模板ID": item["course_id"] + "/" + item["task_key"],
+            "版本": item["version"],
+            "状态": item["status"],
+            "评分": item["score"] or "-",
+            "风险": item["risk"],
+            "作品集": "是" if item["portfolio"] else "否",
         })
     return pd.DataFrame(rows)
 
 
 def render_top_nav(lang: str):
-    st.markdown("""<div class='nav'><div class='nav-inner'><div class='brand'><div class='logo'>AI</div><div>AI Skill Growth Platform<small>技能成长 · 作品交付 · 学习工作台</small></div></div><div class='badges'><span class='badge'>职场成长</span><span class='badge'>学习任务</span><span class='badge'>作品集</span><span class='badge cta'>预约体验课</span></div></div></div>""", unsafe_allow_html=True)
+    st.markdown("""<div class='nav'><div class='nav-inner'><div class='brand'><div class='logo'>AI</div><div>AI Skill Growth Platform<small>技能成长 · 模板引擎 · 学习工作台</small></div></div><div class='badges'><span class='badge'>职场成长</span><span class='badge'>课程模板</span><span class='badge'>任务实例</span><span class='badge cta'>预约体验课</span></div></div></div>""", unsafe_allow_html=True)
     nav_keys = ["home", "workspace", "trial", "sop", "paths", "skills", "portfolio", "freelance", "company", "pricing", "booking", "faq"]
     st.markdown("<div class='nav-panel'>", unsafe_allow_html=True)
     page = st.radio(TEXT[lang]["nav"], nav_keys, horizontal=True, label_visibility="collapsed", format_func=lambda key: TEXT[lang][key], key="top_page_nav")
@@ -151,9 +240,9 @@ def render_offer_section():
 
 
 def render_home(lang: str):
-    st.markdown("""<div class='hero'><span class='eyebrow'>AI Skill Growth Platform</span><h1>AI 技能成长<br><span>教育平台</span></h1><p><b>用 AI 更快学会新技能，并做出可展示、可交付、可变现的成果。</b><br>面向职场新人、在岗提升者、升职准备者、转岗/跳槽者、自由职业者、小微老板和企业内训部门。</p><span class='btn primary'>🚀 预约 2 小时体验课</span><span class='btn secondary'>🧑‍💻 进入学习工作台</span><div><span class='pill'>今天学什么</span><span class='pill'>今天做什么</span><span class='pill'>AI 如何反馈</span><span class='pill'>老师如何点评</span><span class='pill'>作品集沉淀</span></div></div>""", unsafe_allow_html=True)
+    st.markdown("""<div class='hero'><span class='eyebrow'>AI Skill Growth Platform</span><h1>AI 技能成长<br><span>教育平台</span></h1><p><b>用 AI 更快学会新技能，并做出可展示、可交付、可变现的成果。</b><br>v3.4 重点：用“课程任务模板 + 学员任务实例”把学习产品做成可复用引擎。</p><span class='btn primary'>🚀 预约 2 小时体验课</span><span class='btn secondary'>🧑‍💻 进入学习工作台</span><div><span class='pill'>课程模板</span><span class='pill'>任务实例</span><span class='pill'>AI 反馈</span><span class='pill'>老师点评</span><span class='pill'>运营看板</span></div></div>""", unsafe_allow_html=True)
     section("METHOD", "AI 技能成长闭环", "把学习从“看资料”变成“有目标、有任务、有反馈、有作品、有价值”的训练流程。")
-    flow = [("01", "定目标"), ("02", "学技能"), ("03", "做任务"), ("04", "AI 反馈"), ("05", "出作品"), ("06", "老师点评")]
+    flow = [("01", "定目标"), ("02", "套模板"), ("03", "生成实例"), ("04", "AI 反馈"), ("05", "老师点评"), ("06", "入作品集")]
     st.markdown("<div class='flow'>" + "".join(f"<div><b>{n}</b><span>{t}</span></div>" for n, t in flow) + "</div>", unsafe_allow_html=True)
     section("ARTIFACTS", "作品墙示例", "学完不是听懂，而是能拿出东西。")
     artifacts = [("销售", "客户画像 + 跟进话术 + 成交复盘"), ("运营", "活动方案 + 内容日历 + 数据复盘"), ("行政", "会议纪要 + 行动项表 + SOP"), ("IT / 测试", "需求理解 + 测试用例 + Bug 报告"), ("自由职业", "服务包 + 报价单 + 样品案例"), ("企业内训", "任务包 + 评分标准 + 成果发表")]
@@ -161,34 +250,46 @@ def render_home(lang: str):
     render_offer_section()
 
 
-def render_state_flow():
+def current_student_items(student: str = "张同学") -> list[dict]:
     init_workspace_state()
-    section("STATE FLOW", "v3.3 模拟学习状态流", "这一步把静态页面升级成可操作的交付流程：作品会在当前会话中从进行中流转到提交、AI 反馈、老师点评、进入作品集。")
-    item = get_item("work1")
-    st.markdown(f"<div class='state-card'><b>{item['title']}</b><p>{item['desc']}</p>{status_flow_html(item['status'])}<p>当前状态：{chip(item['status'])}　版本：{item['version']}　评分：{item['score'] or '-'}</p></div>", unsafe_allow_html=True)
+    return [it for it in st.session_state["task_instances"] if it["student"] == student and it["course_id"] == "growth_5d"]
+
+
+def current_item() -> dict:
+    items = current_student_items("张同学")
+    for status in ["进行中", "已提交", "AI已反馈", "待老师点评", "已点评"]:
+        for item in items:
+            if item["status"] == status:
+                return item
+    return items[0]
+
+
+def render_state_flow(item: dict):
+    section("STATE FLOW", "v3.4 模板实例状态流", "状态流现在作用在“学员任务实例”上，而不是写死的一条作品。")
+    st.markdown(f"<div class='state-card'><b>{item['day']}｜{item['title']}</b><p>来自模板：{item['course_id']} / {item['task_key']}<br>交付物：{item['desc']}</p>{status_flow_html(item['status'])}<p>当前状态：{chip(item['status'])}　版本：{item['version']}　评分：{item['score'] or '-'}</p></div>", unsafe_allow_html=True)
     cols = st.columns(5)
-    if cols[0].button("提交第一版", key="flow_submit"):
+    if cols[0].button("提交第一版", key=f"flow_submit_{item['id']}"):
         set_item_status(item, "已提交")
         item["version"] = "第一版"
-        item["draft"] = st.session_state.get("student_first_draft", "") or "模拟第一版作品：登录页面测试用例 + Bug 报告模板。"
+        item["draft"] = st.session_state.get("student_first_draft", "") or f"模拟第一版作品：{item['desc']}"
         item["risk"] = "等待AI反馈"
         st.rerun()
-    if cols[1].button("生成 AI 反馈", key="flow_ai"):
+    if cols[1].button("生成 AI 反馈", key=f"flow_ai_{item['id']}"):
         set_item_status(item, "AI已反馈")
-        item["ai_feedback"] = "AI反馈：目标基本清楚，但缺少账号锁定、验证码、安全输入、不同角色权限。下一版请用表格补充测试步骤、测试数据和预期结果。"
+        item["ai_feedback"] = f"AI反馈：已根据模板标准检查。当前作品需要对照“{item['standard']}”补充遗漏，并把内容改成可执行格式。"
         item["risk"] = "遗漏场景较多"
         st.rerun()
-    if cols[2].button("提交老师点评", key="flow_teacher_queue"):
+    if cols[2].button("提交老师点评", key=f"flow_teacher_{item['id']}"):
         set_item_status(item, "待老师点评")
         item["risk"] = "待人工判断"
         st.rerun()
-    if cols[3].button("老师已点评", key="flow_reviewed"):
+    if cols[3].button("老师已点评", key=f"flow_reviewed_{item['id']}"):
         set_item_status(item, "已点评")
         item["score"] = 21
-        item["teacher_review"] = "老师点评：可以进入第二版修改。补充安全场景后，可进入作品集候选。"
+        item["teacher_review"] = "老师点评：可以进入第二版修改。补齐关键遗漏后，可进入作品集候选。"
         item["risk"] = "需二版修改"
         st.rerun()
-    if cols[4].button("收入作品集", key="flow_portfolio"):
+    if cols[4].button("收入作品集", key=f"flow_portfolio_{item['id']}"):
         set_item_status(item, "已入作品集")
         item["score"] = max(int(item["score"] or 0), 23)
         item["teacher_review"] = item["teacher_review"] or "老师点评：达到作品集展示标准。"
@@ -198,62 +299,52 @@ def render_state_flow():
 
 def render_student_workspace():
     init_workspace_state()
-    item = get_item("work1")
-    completed = sum(1 for it in st.session_state["workspace_items"][:3] if it["status"] in {"已点评", "已入作品集"})
-    progress = 20 + completed * 25 + (10 if item["status"] in {"已提交", "AI已反馈", "待老师点评"} else 0)
-    progress = min(progress, 95)
-    st.markdown(f"""<div class='workspace-hero'><div class='workspace-head'><div><span class='label'>模拟学员账号</span><h2>张同学 · Day 2 / 5</h2><p>当前课程：5 天 AI 技能成长营。学习目标：用 AI 完成测试用例、Bug 报告和项目发表作品。当前状态：{item['title']} {chip(item['status'])}</p></div><div class='student-card'><b>学习完成度</b><p>整体进度：{progress}%</p><div class='progress-wrap'><div class='progress-bar' style='width:{progress}%'></div></div><p>{chip(item['status'])} <span class='status-chip chip-orange'>老师点评：{item['status'] if item['status'] in ['待老师点评','已点评','已入作品集'] else '待提交'}</span></p></div></div></div>""", unsafe_allow_html=True)
-    render_state_flow()
-    section("PATH", "5 天学习路径", "每一天都对应一个可交付结果，而不是普通课程目录。")
-    days = [("Day 1", "定目标 + 拆任务", "已完成", "done"), ("Day 2", "作品 1：基础任务", item["status"], "active"), ("Day 3", "作品 2：复杂任务", get_item("work2")["status"], ""), ("Day 4", "作品 3：展示任务", get_item("work3")["status"], ""), ("Day 5", "复盘 + 后续路径", "未开始", "")]
-    st.markdown("<div class='grid3'>" + "".join(f"<div class='day-card {cls}'><b>{d}</b><p>{t}</p>{chip(s)}</div>" for d, t, s, cls in days) + "</div>", unsafe_allow_html=True)
+    item = current_item()
+    user_items = current_student_items("张同学")
+    completed = sum(1 for it in user_items if it["status"] in {"已点评", "已入作品集"})
+    progress = min(20 + completed * 15 + (10 if item["status"] in {"已提交", "AI已反馈", "待老师点评"} else 0), 95)
+    st.markdown(f"""<div class='workspace-hero'><div class='workspace-head'><div><span class='label'>模拟学员账号</span><h2>张同学 · {item['course']}</h2><p>当前任务实例：{item['day']} / {item['title']} {chip(item['status'])}</p></div><div class='student-card'><b>学习完成度</b><p>整体进度：{progress}%</p><div class='progress-wrap'><div class='progress-bar' style='width:{progress}%'></div></div><p>{chip(item['status'])} <span class='status-chip chip-orange'>老师点评：{item['status'] if item['status'] in ['待老师点评','已点评','已入作品集'] else '待提交'}</span></p></div></div></div>""", unsafe_allow_html=True)
+    render_state_flow(item)
+    section("PATH", "从课程模板生成的 5 天任务实例", "每一行都是一个学员任务实例，继承自课程模板，但有自己的状态、草稿、反馈和评分。")
+    st.markdown("<div class='grid3'>" + "".join(f"<div class='day-card {'active' if it['id']==item['id'] else 'done' if it['status'] in ['已点评','已入作品集'] else ''}'><b>{it['day']}</b><p>{it['title']}</p>{chip(it['status'])}</div>" for it in user_items) + "</div>", unsafe_allow_html=True)
     left, right = st.columns([1.05, .95])
     with left:
-        section("TODAY", "今日任务", "今日任务：完成作品 1：基础任务作品。")
-        st.markdown("""<div class='task-panel'><h3>完成作品 1：基础任务作品</h3><ol><li>阅读任务说明</li><li>查看优秀示例</li><li>使用 AI 提示词生成第一版</li><li>粘贴你的第一版作品</li><li>查看 AI 反馈</li><li>修改成第二版</li><li>提交给老师点评</li></ol></div>""", unsafe_allow_html=True)
-        section("STANDARD", "做到什么标准", "先给标准，再让学员做，避免只生成一堆空话。")
-        st.markdown("""<div class='task-panel'><ul><li><b>目标清楚：</b>能看出测试对象、功能范围和提交结果。</li><li><b>结构完整：</b>覆盖正常流程、异常流程、边界输入、安全与权限。</li><li><b>可执行：</b>测试步骤、输入数据、预期结果能被别人照着执行。</li><li><b>有遗漏检查：</b>主动说明还需要补充哪些信息。</li><li><b>有 Bug 报告模板：</b>包含标题、环境、步骤、实际结果、预期结果、严重程度。</li></ul></div>""", unsafe_allow_html=True)
+        section("TODAY", "今日任务", f"今日任务：完成 {item['title']}。")
+        st.markdown(f"<div class='task-panel'><h3>{item['title']}</h3><p><b>交付物：</b>{item['desc']}</p><p><b>做到什么标准：</b>{item['standard']}</p><ol><li>阅读任务说明</li><li>复制 AI 提示词</li><li>生成第一版</li><li>粘贴作品草稿</li><li>推进 AI 反馈和老师点评</li></ol></div>", unsafe_allow_html=True)
     with right:
-        section("PROMPT", "AI 提示词区", "给学员一个可复制提示词，先让 AI 做第一轮高频反馈。")
-        prompt_text = """你是一个严格的软件测试教练。
-请根据以下登录页面需求，设计测试用例。
-要求覆盖正常登录、错误密码、空字段、输入格式、权限与安全、异常提示。
-同时输出遗漏点和 Bug 报告模板。
-需求如下：
-【粘贴需求】"""
-        st.markdown("<div class='copy-note'>复制下面提示词，到你常用的 AI 工具里使用。</div>", unsafe_allow_html=True)
-        st.code(prompt_text, language="text")
+        section("PROMPT", "模板提示词", "提示词来自课程任务模板，不是每个页面临时手写。")
+        st.code(item["prompt"], language="text")
         section("CURRENT FEEDBACK", "当前反馈记录", "这里显示本次会话里的 AI 反馈和老师点评。")
         st.markdown(f"<div class='teacher-box'><b>AI反馈：</b><br>{item['ai_feedback'] or '暂无，请先点击“生成 AI 反馈”。'}<br><br><b>老师点评：</b><br>{item['teacher_review'] or '暂无，请先提交老师点评。'}</div>", unsafe_allow_html=True)
     section("SUBMIT", "作品提交框", "先用文本框模拟提交。后续可以接入数据库、文件上传、老师点评后台和真实 AI API。")
-    draft = st.text_area("粘贴你的第一版作品", value=item["draft"], height=220, placeholder="例如：登录页面测试用例列表、Bug 报告模板、遗漏点检查……", key="student_first_draft")
-    if st.button("保存到当前作品草稿", type="primary"):
+    draft = st.text_area("粘贴你的第一版作品", value=item["draft"], height=220, placeholder=f"请提交：{item['desc']}", key="student_first_draft")
+    if st.button("保存到当前任务实例草稿", type="primary"):
         item["draft"] = draft
-        set_item_status(item, "进行中")
-        st.success("已保存到当前会话。点击上方“提交第一版”可推进状态流。")
+        if item["status"] == "未开始":
+            set_item_status(item, "进行中")
+        st.success("已保存到当前会话。点击上方按钮可推进状态流。")
     section("PORTFOLIO", "作品集进度", "学习结果最终要沉淀为可展示作品。")
-    user_items = st.session_state["workspace_items"][:3]
-    st.markdown("<div class='grid3'>" + "".join(f"<div class='portfolio-card'><h4>{it['title']}</h4><p>{it['desc']}</p>{chip('已入作品集' if it['portfolio'] else it['status'])}</div>" for it in user_items) + "</div>", unsafe_allow_html=True)
+    st.markdown("<div class='grid3'>" + "".join(f"<div class='portfolio-card'><h4>{it['title']}</h4><p>{it['desc']}</p>{chip('已入作品集' if it['portfolio'] else it['status'])}</div>" for it in user_items if it["task_key"] != "g_day1") + "</div>", unsafe_allow_html=True)
 
 
 def render_teacher_review_workspace():
     init_workspace_state()
-    section("TEACHER REVIEW", "老师点评端", "老师不负责高频陪聊，老师负责最终判断：是否达到作品标准、是否可以进入作品集、下一版怎么改。")
+    section("TEACHER REVIEW", "老师点评端", "老师看到的是学员任务实例，而不是课程模板。模板提供评分标准，实例保存草稿、反馈、分数和老师结论。")
     df = workspace_df()
     review_df = df[df["状态"].isin(["待老师点评", "AI已反馈", "已提交", "已点评", "已入作品集"])]
     st.dataframe(review_df, use_container_width=True, hide_index=True)
-    review_options = [f"{it['id']}｜{it['student']}｜{it['title']}｜{it['status']}" for it in st.session_state["workspace_items"] if it["status"] in ["待老师点评", "AI已反馈", "已提交", "已点评", "已入作品集"]]
+    review_options = [f"{it['id']}｜{it['student']}｜{it['title']}｜{it['status']}" for it in st.session_state["task_instances"] if it["status"] in ["待老师点评", "AI已反馈", "已提交", "已点评", "已入作品集"]]
     if not review_options:
         st.info("暂无待点评作品。")
         return
     left, right = st.columns([1.05, .95])
     with left:
         section("SUBMISSION", "学员作品预览", "模拟老师看到的提交内容。")
-        selected = st.selectbox("选择待点评作品", review_options, key="review_select_v33")
+        selected = st.selectbox("选择待点评作品", review_options, key="review_select_v34")
         item_id = selected.split("｜", 1)[0]
         item = get_item(item_id)
-        st.markdown(f"<div class='review-card'><b>当前点评对象：</b>{item['student']} / {item['title']} {chip(item['status'])}<p><b>草稿：</b>{item['draft'] or '暂无草稿'}</p><p><b>AI反馈：</b>{item['ai_feedback'] or '暂无AI反馈'}</p></div>", unsafe_allow_html=True)
-        review_text = st.text_area("老师可编辑点评", value=item["teacher_review"] or "整体方向正确，但第一版还不能进入作品集。请补充安全、权限、边界输入和异常提示场景，并把每条测试用例改成可执行格式。", height=160, key=f"teacher_review_text_{item_id}")
+        st.markdown(f"<div class='review-card'><b>当前点评对象：</b>{item['student']} / {item['title']} {chip(item['status'])}<p><b>模板标准：</b>{item['standard']}</p><p><b>草稿：</b>{item['draft'] or '暂无草稿'}</p><p><b>AI反馈：</b>{item['ai_feedback'] or '暂无AI反馈'}</p></div>", unsafe_allow_html=True)
+        review_text = st.text_area("老师可编辑点评", value=item["teacher_review"] or "整体方向正确，但第一版还不能进入作品集。请根据模板标准补充遗漏，并把输出改成可执行格式。", height=160, key=f"teacher_review_text_{item_id}")
     with right:
         section("RUBRIC", "评分标准", "先标准化，再个性化点评。")
         clarity = st.slider("目标清楚", 1, 5, 4, key=f"clarity_{item_id}")
@@ -286,24 +377,24 @@ def render_teacher_review_workspace():
     st.code("""【老师点评记录】
 学员：
 课程：
-作品：
+任务模板：
+任务实例：
 版本：
 评分：
 结论：通过 / 修改后通过 / 退回重做
 优点：
 主要问题：
 必须修改：
-可选优化：
 是否进入作品集：是 / 否
 下一步任务：""", language="text")
 
 
 def render_ops_workspace():
     init_workspace_state()
-    section("OPERATIONS", "班主任 / 运营看板", "运营不是看销售线索，而是看学习交付有没有卡住：谁没提交、谁待点评、谁要催改、谁可以进入作品集。")
+    section("OPERATIONS", "班主任 / 运营看板", "运营看的是任务实例状态：谁没提交、谁待点评、谁要催改、谁可以进入作品集。")
     df = workspace_df()
     m1, m2, m3, m4 = st.columns(4)
-    m1.metric("本期作品", len(df))
+    m1.metric("任务实例", len(df))
     m2.metric("今日应提交", int((df["状态"].isin(["进行中", "未开始"])).sum()))
     m3.metric("待老师点评", int((df["状态"] == "待老师点评").sum()))
     m4.metric("风险项", int((df["风险"].isin(["风险", "遗漏场景较多", "未看AI反馈"])).sum()))
@@ -318,8 +409,8 @@ def render_ops_workspace():
         if st.button("模拟一键提醒未提交学员"):
             st.success("已生成模拟提醒：请今晚 21:00 前提交第一版作品。")
     with col2:
-        if st.button("重置 v3.3 模拟数据"):
-            st.session_state.pop("workspace_items", None)
+        if st.button("重置 v3.4 模拟数据"):
+            st.session_state.pop("task_instances", None)
             init_workspace_state()
             st.rerun()
     section("SOP", "班主任日常 SOP", "先把人工运营流程跑通，后面再接自动化。")
@@ -327,21 +418,97 @@ def render_ops_workspace():
 1. 上午检查昨日未提交学员。
 2. 中午检查待老师点评列表。
 3. 下午提醒学员根据点评修改第二版。
-4. 晚上统计每人作品状态：未开始 / 进行中 / 已提交 / AI已反馈 / 待老师点评 / 已点评 / 已入作品集。
+4. 晚上按课程模板 / 学员 / 任务实例统计状态。
 5. Day 5 前确认每人至少 3 个作品和 1 份表达稿。
 6. 风险学员单独私信，确认是不会做、没时间，还是目标不清。""", language="text")
 
 
+def template_df(course_id: str | None = None) -> pd.DataFrame:
+    rows = []
+    for cid, course in COURSE_TEMPLATES.items():
+        if course_id and cid != course_id:
+            continue
+        for task in course["tasks"]:
+            rows.append({
+                "课程模板ID": cid,
+                "课程名称": course["name"],
+                "Day/模块": task["day"],
+                "任务Key": task["task_key"],
+                "任务标题": task["title"],
+                "交付物": task["outcome"],
+                "做到什么标准": task["standard"],
+            })
+    return pd.DataFrame(rows)
+
+
+def render_template_engine():
+    init_workspace_state()
+    section("TEMPLATE ENGINE", "课程模板引擎", "v3.4 的核心：把课程任务模板和学员任务实例分开。模板定义学习路径，实例记录每个学员的状态和作品。")
+    st.markdown("""<div class='grid3'><div class='template-card green'><b>1. 课程任务模板</b><p>定义 Day、任务标题、交付物、提示词、评分标准。</p></div><div class='template-card soft'><b>2. 学员任务实例</b><p>从模板生成，保存状态、草稿、AI 反馈、老师点评和评分。</p></div><div class='template-card orange'><b>3. 统一工作台</b><p>5 天成长营、自由职业营、企业内训都能复用同一套状态流。</p></div></div>""", unsafe_allow_html=True)
+    course_options = list(COURSE_TEMPLATES.keys())
+    selected_course = st.selectbox("选择课程模板", course_options, format_func=lambda cid: COURSE_TEMPLATES[cid]["name"], key="template_course_select")
+    course = COURSE_TEMPLATES[selected_course]
+    st.markdown(f"<div class='state-card'><b>{course['name']}</b><p>适用对象：{course['audience']}<br>交付承诺：{course['promise']}</p></div>", unsafe_allow_html=True)
+    st.dataframe(template_df(selected_course), use_container_width=True, hide_index=True)
+    left, right = st.columns([1, 1])
+    with left:
+        section("CREATE INSTANCE", "从模板创建模拟学员任务实例", "这里模拟未来真实后台：选择课程模板和学员后，一键生成学习任务。")
+        new_student = st.text_input("学员 / 小组名称", value="新学员", key="new_student_name")
+        if st.button("为该学员生成整套任务实例", type="primary"):
+            existing = len(st.session_state["task_instances"])
+            for task in course["tasks"]:
+                status = "进行中" if task == course["tasks"][0] else "未开始"
+                st.session_state["task_instances"].append(build_instance(new_student, selected_course, task["task_key"], status))
+            st.success(f"已生成 {len(course['tasks'])} 个任务实例。当前实例总数：{existing} → {len(st.session_state['task_instances'])}")
+    with right:
+        section("DATA MODEL", "当前原型数据模型", "后续接数据库时可以直接拆成 CourseTemplate、TaskTemplate、Enrollment、TaskInstance 四张表。")
+        st.code("""CourseTemplate
+- course_id
+- name
+- audience
+- promise
+
+TaskTemplate
+- task_key
+- course_id
+- day
+- title
+- outcome
+- prompt
+- standard
+
+Enrollment
+- student_id
+- course_id
+- start_date
+- coach_id
+
+TaskInstance
+- instance_id
+- student_id
+- task_key
+- status
+- draft
+- ai_feedback
+- teacher_review
+- score
+- portfolio""", language="text")
+    section("ALL INSTANCES", "当前会话内的所有学员任务实例", "模板引擎创建的任务会同步到学员端、老师点评端和运营看板。")
+    st.dataframe(workspace_df(), use_container_width=True, hide_index=True)
+
+
 def render_learning_workspace(lang: str):
     init_workspace_state()
-    subhero("V3.3 WORKFLOW", "学习工作台：可流转的模拟学习状态", "从静态三角色页面升级为小型 LMS 原型：学员提交作品，AI 生成反馈，老师保存点评，班主任看板同步状态。所有数据先保存在当前 Streamlit 会话里。")
-    tab_student, tab_teacher, tab_ops = st.tabs(["学员端", "老师点评端", "班主任 / 运营看板"])
+    subhero("V3.4 TEMPLATE ENGINE", "学习工作台：课程模板 + 学员任务实例", "从单条状态流升级为可复用学习产品引擎：课程模板负责定义路径，学员任务实例负责记录每个人的提交、AI 反馈、老师点评和作品集状态。")
+    tab_student, tab_teacher, tab_ops, tab_template = st.tabs(["学员端", "老师点评端", "班主任 / 运营看板", "课程模板引擎"])
     with tab_student:
         render_student_workspace()
     with tab_teacher:
         render_teacher_review_workspace()
     with tab_ops:
         render_ops_workspace()
+    with tab_template:
+        render_template_engine()
 
 
 def render_trial(lang: str):
@@ -374,7 +541,7 @@ def render_paths(lang: str):
 
 def render_skills(lang: str):
     subhero("SKILL TRAINING", "技能训练", "AI 把学习过程变成训练闭环：定目标、学概念、做任务、收反馈、改作品、能表达。")
-    steps = [("01", "定技能目标"), ("02", "生成学习路径"), ("03", "拆真实任务"), ("04", "AI 先纠错"), ("05", "老师再点评"), ("06", "提交作品")]
+    steps = [("01", "定技能目标"), ("02", "选择课程模板"), ("03", "生成任务实例"), ("04", "AI 先纠错"), ("05", "老师再点评"), ("06", "提交作品")]
     st.markdown("<div class='flow'>" + "".join(f"<div><b>{n}</b><span>{t}</span></div>" for n, t in steps) + "</div>", unsafe_allow_html=True)
     st.markdown("<div class='grid3'>" + "".join(html_card("🧠", a, b) for a, b in SKILL_ROWS) + "</div>", unsafe_allow_html=True)
     st.dataframe(pd.DataFrame([{"方向": a, "可训练技能": b} for a, b in ROLE_ROWS]), use_container_width=True, hide_index=True)
@@ -383,7 +550,7 @@ def render_skills(lang: str):
 def render_portfolio(lang: str):
     subhero("PORTFOLIO", "作品集", "升职、转岗、跳槽、接单时，最有说服力的是能被检查的作品。")
     init_workspace_state()
-    portfolio_items = [it for it in st.session_state["workspace_items"] if it.get("portfolio")]
+    portfolio_items = [it for it in st.session_state["task_instances"] if it.get("portfolio")]
     showcase = [("销售作品包", "客户画像 / 跟进话术 / 方案初稿 / 成交复盘"), ("运营作品包", "活动方案 / 内容日历 / 数据复盘 / 转化话术"), ("IT / 测试作品包", "需求理解 / 测试用例 / Bug 报告 / 发表说明"), ("自由职业作品包", "服务包 / 报价单 / 样品案例 / 交付 SOP")]
     st.markdown("<div class='grid2'>" + "".join(html_card("📦", a, b, "card soft") for a, b in showcase) + "</div><div class='card green'><b>作品集的作用</b><p>把“我学过”变成“我能交付”。</p></div>", unsafe_allow_html=True)
     section("LIVE PORTFOLIO", "当前会话作品集", "如果你在学习工作台点击“收入作品集”，这里会同步显示。")
@@ -512,7 +679,7 @@ def main():
     else:
         render_faq(lang)
     st.markdown("<div class='mobile-sticky'><span class='m1'>预约体验课</span><span>学习工作台</span></div>", unsafe_allow_html=True)
-    st.caption("AI Skill Growth Platform · simulated learning workflow prototype v3.3")
+    st.caption("AI Skill Growth Platform · course template and task instance engine v3.4")
 
 
 if __name__ == "__main__":
