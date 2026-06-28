@@ -13,7 +13,7 @@ st.markdown(
 .main .block-container{max-width:1180px;padding-top:.8rem;padding-bottom:4rem}
 .app-nav{position:sticky;top:.35rem;z-index:999;margin-bottom:1rem;border:1px solid #c7d2fe;border-radius:1.35rem;background:rgba(255,255,255,.97);box-shadow:0 14px 34px rgba(15,23,42,.08);padding:.85rem 1rem;display:flex;justify-content:space-between;align-items:center;gap:1rem}.brand{display:flex;gap:.65rem;align-items:center;font-weight:980;color:#111827}.logo{width:40px;height:40px;border-radius:15px;background:linear-gradient(135deg,#4f46e5,#06b6d4);color:white;display:grid;place-items:center}.brand small{display:block;color:#64748b;font-weight:850}.nav-note{display:flex;gap:.42rem;flex-wrap:wrap}.pill{display:inline-block;border-radius:999px;padding:.3rem .68rem;font-size:.82rem;font-weight:900;border:1px solid #e2e8f0;background:#f8fafc;color:#475569;margin:.12rem .18rem .12rem 0}.hot{background:linear-gradient(90deg,#4f46e5,#06b6d4);border:none;color:white}.green{background:#dcfce7;color:#166534;border-color:#bbf7d0}.orange{background:#ffedd5;color:#9a3412;border-color:#fed7aa}.red{background:#fee2e2;color:#991b1b;border-color:#fecaca}.blue{background:#dbeafe;color:#1e40af;border-color:#bfdbfe}.purple{background:#ede9fe;color:#5b21b6;border-color:#ddd6fe}
 .nav-panel{margin:.7rem 0 1.15rem;padding:.55rem;border:1px solid #e0e7ff;border-radius:1.2rem;background:#f8fafc}div[data-testid='stRadio']>label{display:none}div[role='radiogroup']{display:flex;flex-wrap:wrap;gap:.45rem}div[role='radiogroup'] label{border:1px solid #dbeafe!important;border-radius:999px!important;background:white!important;padding:.42rem .88rem!important}div[role='radiogroup'] label p{font-weight:950!important;color:#334155!important;font-size:.93rem!important}div[role='radiogroup'] label:has(input:checked){background:linear-gradient(90deg,#4f46e5,#06b6d4)!important}div[role='radiogroup'] label:has(input:checked) p{color:white!important}
-.hero{border:1px solid #c7d2fe;border-radius:1.65rem;background:radial-gradient(circle at right,#ecfeff,#eef2ff 48%,#fff);padding:2rem;margin:1rem 0 1.2rem;box-shadow:0 18px 44px rgba(15,23,42,.08)}.hero h1{font-size:2.65rem;line-height:1.05;margin:.45rem 0;color:#0f172a;font-weight:980}.hero h1 span{background:linear-gradient(90deg,#4f46e5,#06b6d4);-webkit-background-clip:text;color:transparent}.hero p{color:#475569;line-height:1.75;font-size:1.03rem;max-width:900px}.eyebrow{display:inline-block;font-size:.78rem;letter-spacing:.12em;color:#3730a3;font-weight:950;background:white;border:1px solid #c7d2fe;border-radius:999px;padding:.3rem .65rem}.section-title{font-size:1.55rem;font-weight:950;margin:1.25rem 0 .35rem;color:#0f172a}.section-sub{color:#64748b;line-height:1.65;margin-bottom:.8rem}.grid2{display:grid;grid-template-columns:1.12fr .88fr;gap:1rem}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}.card{border:1px solid #e2e8f0;border-radius:1.15rem;background:white;padding:1rem;box-shadow:0 8px 22px rgba(15,23,42,.045)}.card h3{margin:.15rem 0 .45rem;color:#111827}.card p{color:#64748b;line-height:1.58}.soft{background:#f8fafc;border-color:#dbeafe}.good{background:#f0fdf4;border-color:#bbf7d0}.warn{background:#fff7ed;border-color:#fed7aa}.metric{font-size:2rem;font-weight:950;color:#111827}.quote{white-space:pre-wrap;background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1rem;line-height:1.65}.timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:.55rem}.timeline div{background:white;border:1px solid #c7d2fe;border-radius:1rem;padding:.85rem;text-align:center}.timeline b{display:block;color:#4f46e5}.timeline span{display:block;font-size:.86rem;color:#475569;font-weight:850;margin:.15rem 0}.progress-shell{height:.7rem;border-radius:999px;background:#e2e8f0;overflow:hidden}.progress-bar{height:100%;background:linear-gradient(90deg,#4f46e5,#06b6d4)}.mini{font-size:.86rem;color:#64748b;line-height:1.55}.task-card{border-left:5px solid #6366f1}.system-line{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-top:1rem}.system-line div{background:white;border:1px solid #dbeafe;border-radius:1rem;padding:.9rem}.system-line b{display:block;color:#3730a3;margin-bottom:.2rem}.step{display:flex;gap:.65rem;align-items:flex-start;margin:.65rem 0}.num{min-width:28px;height:28px;border-radius:999px;background:#eef2ff;color:#3730a3;font-weight:950;display:grid;place-items:center}.proof{border:1px solid #e0e7ff;border-radius:1rem;padding:1rem;background:linear-gradient(180deg,#fff,#f8fafc)}.proof h3{margin:.1rem 0 .35rem;color:#111827}.proof p{color:#64748b}.package{border:1px solid #dbeafe;border-radius:1rem;padding:1rem;background:white}.package b{display:block;color:#0f172a;margin-bottom:.35rem}.owner-note{border:1px dashed #c7d2fe;background:#f8fafc;border-radius:1rem;padding:1rem;color:#475569;line-height:1.65}
+.hero{border:1px solid #c7d2fe;border-radius:1.65rem;background:radial-gradient(circle at right,#ecfeff,#eef2ff 48%,#fff);padding:2rem;margin:1rem 0 1.2rem;box-shadow:0 18px 44px rgba(15,23,42,.08)}.hero h1{font-size:2.65rem;line-height:1.05;margin:.45rem 0;color:#0f172a;font-weight:980}.hero h1 span{background:linear-gradient(90deg,#4f46e5,#06b6d4);-webkit-background-clip:text;color:transparent}.hero p{color:#475569;line-height:1.75;font-size:1.03rem;max-width:900px}.eyebrow{display:inline-block;font-size:.78rem;letter-spacing:.12em;color:#3730a3;font-weight:950;background:white;border:1px solid #c7d2fe;border-radius:999px;padding:.3rem .65rem}.section-title{font-size:1.55rem;font-weight:950;margin:1.25rem 0 .35rem;color:#0f172a}.section-sub{color:#64748b;line-height:1.65;margin-bottom:.8rem}.grid2{display:grid;grid-template-columns:1.12fr .88fr;gap:1rem}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}.card{border:1px solid #e2e8f0;border-radius:1.15rem;background:white;padding:1rem;box-shadow:0 8px 22px rgba(15,23,42,.045)}.card h3{margin:.15rem 0 .45rem;color:#111827}.card p{color:#64748b;line-height:1.58}.soft{background:#f8fafc;border-color:#dbeafe}.good{background:#f0fdf4;border-color:#bbf7d0}.warn{background:#fff7ed;border-color:#fed7aa}.metric{font-size:2rem;font-weight:950;color:#111827}.quote{white-space:pre-wrap;background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1rem;line-height:1.65}.timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:.55rem}.timeline div{background:white;border:1px solid #c7d2fe;border-radius:1rem;padding:.85rem;text-align:center}.timeline b{display:block;color:#4f46e5}.timeline span{display:block;font-size:.86rem;color:#475569;font-weight:850;margin:.15rem 0}.progress-shell{height:.7rem;border-radius:999px;background:#e2e8f0;overflow:hidden}.progress-bar{height:100%;background:linear-gradient(90deg,#4f46e5,#06b6d4)}.mini{font-size:.86rem;color:#64748b;line-height:1.55}.task-card{border-left:5px solid #6366f1}.system-line{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-top:1rem}.system-line div{background:white;border:1px solid #dbeafe;border-radius:1rem;padding:.9rem}.system-line b{display:block;color:#3730a3;margin-bottom:.2rem}.step{display:flex;gap:.65rem;align-items:flex-start;margin:.65rem 0}.num{min-width:28px;height:28px;border-radius:999px;background:#eef2ff;color:#3730a3;font-weight:950;display:grid;place-items:center}.proof{border:1px solid #e0e7ff;border-radius:1rem;padding:1rem;background:linear-gradient(180deg,#fff,#f8fafc)}.proof h3{margin:.1rem 0 .35rem;color:#111827}.proof p{color:#64748b}.package{border:1px solid #dbeafe;border-radius:1rem;padding:1rem;background:white}.package b{display:block;color:#0f172a;margin-bottom:.35rem}.owner-note{border:1px dashed #c7d2fe;background:#f8fafc;border-radius:1rem;padding:1rem;color:#475569;line-height:1.65}.workbench-head{border:1px solid #c7d2fe;border-radius:1.35rem;padding:1.2rem;background:linear-gradient(135deg,#ffffff,#eef2ff);margin:.8rem 0 1rem}.workbench-head h2{margin:.2rem 0;color:#0f172a;font-size:1.75rem}.workbench-head p{color:#475569;line-height:1.7}.focus-card{border:1px solid #c7d2fe;border-radius:1.2rem;background:white;padding:1rem;box-shadow:0 10px 24px rgba(79,70,229,.08)}.focus-card h3{margin:.1rem 0;color:#111827}.side-panel{border:1px solid #e2e8f0;border-radius:1.15rem;background:#f8fafc;padding:1rem}.standard-list{border:1px solid #e0e7ff;border-radius:1rem;background:white;padding:1rem}.next-box{border:1px solid #fed7aa;background:#fff7ed;border-radius:1rem;padding:1rem;color:#7c2d12;line-height:1.65}.action-box{border:1px solid #bbf7d0;background:#f0fdf4;border-radius:1rem;padding:1rem;color:#166534;line-height:1.65}.mode-tag{font-size:.78rem;font-weight:950;letter-spacing:.1em;color:#4f46e5;text-transform:uppercase}
 @media(max-width:960px){.app-nav{align-items:flex-start;flex-direction:column}.nav-note{display:none}.grid2,.grid3,.grid4,.timeline,.system-line{grid-template-columns:1fr}.hero h1{font-size:2rem}}
 </style>
 """,
@@ -29,13 +29,13 @@ PRODUCT_NAV = {
 
 TASKS = pd.DataFrame(
     [
-        ["Day 1", "目标拆解", "Agent已点评", 86, "5天成长路线图", "可进入作品集", 100],
-        ["Day 2", "测试用例作品", "AI已反馈", 64, "测试用例 + Bug报告", "补充权限、安全、边界", 70],
-        ["Day 3", "复杂需求拆解", "待Agent点评", 0, "流程 + 异常分支", "等待Agent点评", 45],
-        ["Day 4", "发表作品", "未开始", 0, "3分钟发表稿", "完成前序任务后开启", 0],
-        ["Day 5", "30天行动计划", "未开始", 0, "成长计划", "完成作品后生成", 0],
+        ["Day 1", "目标拆解", "Agent已点评", 86, "5天成长路线图", "可进入作品集", 100, "已完成", "把目标拆成5天任务和可检查交付物"],
+        ["Day 2", "测试用例作品", "AI已反馈", 64, "测试用例 + Bug报告", "补充权限、安全、边界", 70, "今日主任务", "围绕登录页面补齐测试用例和Bug报告模板"],
+        ["Day 3", "复杂需求拆解", "待Agent点评", 0, "流程 + 异常分支", "等待Agent点评", 45, "等待点评", "把业务需求拆成角色、流程、输入输出和异常分支"],
+        ["Day 4", "发表作品", "未开始", 0, "3分钟发表稿", "完成前序任务后开启", 0, "未解锁", "把作品整理成可发表、可面试、可汇报的表达"],
+        ["Day 5", "30天行动计划", "未开始", 0, "成长计划", "完成作品后生成", 0, "未解锁", "根据前4天成果生成后续行动计划"],
     ],
-    columns=["day", "title", "status", "score", "outcome", "next", "progress"],
+    columns=["day", "title", "status", "score", "outcome", "next", "progress", "focus", "brief"],
 )
 
 PORTFOLIO = pd.DataFrame(
@@ -47,7 +47,7 @@ PORTFOLIO = pd.DataFrame(
     columns=["作品", "证明材料", "评分", "状态", "说明"],
 )
 
-STATUS_CLASS = {"Agent已点评": "green", "AI已反馈": "orange", "待Agent点评": "blue", "未开始": "", "修改中": "orange", "可展示": "green", "待点评": "blue"}
+STATUS_CLASS = {"Agent已点评": "green", "AI已反馈": "orange", "待Agent点评": "blue", "未开始": "", "修改中": "orange", "可展示": "green", "待点评": "blue", "今日主任务": "purple", "已完成": "green", "等待点评": "blue", "未解锁": ""}
 
 
 def chip(status: str) -> str:
@@ -63,7 +63,7 @@ def render_nav() -> str:
         """
 <div class='app-nav'>
   <div class='brand'><div class='logo'>AI</div><div>AI Skill Growth OS<small>学员前台 · Agent反馈 · 作品集 · Founder后台</small></div></div>
-  <div class='nav-note'><span class='pill'>页面优先</span><span class='pill'>任务卡</span><span class='pill'>作品集</span><span class='pill hot'>v4.5 UI</span></div>
+  <div class='nav-note'><span class='pill'>页面优先</span><span class='pill'>学习工作台</span><span class='pill'>作品集</span><span class='pill hot'>v4.5.1 UI</span></div>
 </div>
 """,
         unsafe_allow_html=True,
@@ -119,53 +119,102 @@ def render_home() -> None:
 
 
 def render_tasks() -> None:
-    st.markdown("<div class='section-title'>我的任务</div>", unsafe_allow_html=True)
-    st.markdown("<div class='section-sub'>页面阶段先用示例数据，先把任务卡、反馈区、操作按钮和下一步说明做清楚。后续 v4.5 再接 Supabase。</div>", unsafe_allow_html=True)
+    st.markdown(
+        """
+<div class='workbench-head'>
+<span class='mode-tag'>MY TASKS WORKBENCH · PAGE FIRST</span>
+<h2>今天只做一个任务：把草稿改成可检查作品</h2>
+<p>这一页要让学员不用理解后台、不用找菜单，只知道：当前任务是什么、草稿写在哪里、Agent说要改什么、下一步点哪个按钮。</p>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
 
+    completed = int((TASKS["progress"] >= 100).sum())
+    active = TASKS.iloc[1]
+    pending = int((TASKS["status"] == "待Agent点评").sum())
+    portfolio_ready = int((TASKS["status"] == "Agent已点评").sum())
+    st.markdown(
+        f"""
+<div class='grid4'>
+  <div class='card'><span class='mini'>当前任务</span><div class='metric'>{active['day']}</div><p>{active['title']}</p></div>
+  <div class='card'><span class='mini'>已完成</span><div class='metric'>{completed}/5</div><p>至少一个结果可进入作品集。</p></div>
+  <div class='card'><span class='mini'>等待点评</span><div class='metric'>{pending}</div><p>Founder后台未来只看这类异常/待处理。</p></div>
+  <div class='card'><span class='mini'>作品候选</span><div class='metric'>{portfolio_ready}</div><p>高质量任务会进入作品集候选。</p></div>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
+
+    st.markdown("<div class='section-title'>训练路径</div>", unsafe_allow_html=True)
     st.markdown(
         "<div class='timeline'>"
-        + "".join(f"<div><b>{r['day']}</b><span>{r['title']}</span>{chip(r['status'])}<div class='progress-shell'><div class='progress-bar' style='width:{int(r['progress'])}%'></div></div></div>" for _, r in TASKS.iterrows())
+        + "".join(f"<div><b>{r['day']}</b><span>{r['title']}</span>{chip(r['focus'])}<div class='progress-shell'><div class='progress-bar' style='width:{int(r['progress'])}%'></div></div></div>" for _, r in TASKS.iterrows())
         + "</div>",
         unsafe_allow_html=True,
     )
 
-    left, right = st.columns([1.12, .88])
+    st.markdown("<div class='section-title'>今日任务</div>", unsafe_allow_html=True)
+    left, right = st.columns([1.15, .85])
     with left:
         labels = [f"{r['day']} · {r['title']}" for _, r in TASKS.iterrows()]
         label = st.selectbox("选择任务", labels, index=1)
         row = TASKS.iloc[labels.index(label)]
         st.markdown(
             f"""
-<div class='card task-card'>
+<div class='focus-card'>
 <h3>{row['day']} · {row['title']}</h3>
-<p><b>交付物：</b>{row['outcome']}<br><b>状态：</b>{chip(row['status'])}<br><b>下一步：</b>{row['next']}</p>
+<p><b>任务说明：</b>{row['brief']}<br><b>交付物：</b>{row['outcome']}<br><b>状态：</b>{chip(row['status'])}<br><b>下一步：</b>{row['next']}</p>
 </div>
 """,
             unsafe_allow_html=True,
         )
-        st.text_area(
+        draft = st.text_area(
             "作品草稿",
-            value="目标：补齐登录页面测试能力\n步骤：列正常、异常、边界、安全场景\n输出：测试用例表 + Bug报告模板\n风险：还缺权限和SQL注入场景",
-            height=210,
+            value="目标：补齐登录页面测试能力\n\n当前草稿：\n1. 正常登录：输入正确用户名和密码，可以登录成功。\n2. 错误密码：提示密码错误。\n3. 空用户名：提示必须输入用户名。\n\n待补充：权限、安全、边界、Bug报告模板。",
+            height=250,
         )
+        st.caption(f"草稿字数：{len(draft)}。页面阶段仅做交互展示，后续接入保存到 Supabase。")
         c1, c2, c3 = st.columns(3)
         c1.button("保存草稿", type="primary")
         c2.button("请求AI反馈")
         c3.button("提交给Agent")
 
-    with right:
-        st.markdown("<div class='quote'>【Agent反馈预览】\n你的草稿方向正确，但还缺少：\n1. 权限差异；\n2. 边界值输入；\n3. SQL注入场景；\n4. 每条用例的预期结果。\n\n下一步：把每个测试点改成“前置条件 → 操作步骤 → 预期结果”。</div>", unsafe_allow_html=True)
-        st.markdown("<div class='section-title'>完成标准</div>", unsafe_allow_html=True)
         st.markdown(
             """
-<div class='card'>
-<div class='step'><div class='num'>1</div><div><b>交付物明确</b><br><span class='mini'>能被别人打开检查，而不是一句感想。</span></div></div>
-<div class='step'><div class='num'>2</div><div><b>覆盖边界</b><br><span class='mini'>正常、异常、权限、安全、边界至少覆盖三类。</span></div></div>
-<div class='step'><div class='num'>3</div><div><b>可进入作品集</b><br><span class='mini'>最终结果可以解释给面试官、客户或上级。</span></div></div>
+<div class='action-box'>
+<b>下一步行动</b><br>
+先补齐“权限 / 安全 / 边界”三类测试点，再把每条测试点写成：前置条件 → 操作步骤 → 预期结果。
 </div>
 """,
             unsafe_allow_html=True,
         )
+
+    with right:
+        st.markdown("<div class='side-panel'>", unsafe_allow_html=True)
+        st.markdown("<div class='section-title'>Agent反馈预览</div>", unsafe_allow_html=True)
+        st.markdown("<div class='quote'>【Agent反馈】\n你的草稿已经覆盖基础登录，但还不能成为作品集材料。\n\n优点：\n- 有正常和异常用例。\n- 能说明输入和预期。\n\n需要补充：\n1. 权限差异：普通用户/管理员/未授权用户。\n2. 安全场景：SQL注入、暴力尝试、锁定策略。\n3. 边界输入：超长用户名、特殊字符、空格。\n4. Bug报告模板：标题、步骤、实际结果、预期结果、严重度。\n\n建议：先补 6 条用例，再写 1 个Bug报告样例。</div>", unsafe_allow_html=True)
+        st.markdown("<div class='section-title'>完成标准</div>", unsafe_allow_html=True)
+        st.markdown(
+            """
+<div class='standard-list'>
+<div class='step'><div class='num'>1</div><div><b>交付物明确</b><br><span class='mini'>能被别人打开检查，不是一句学习感想。</span></div></div>
+<div class='step'><div class='num'>2</div><div><b>覆盖三类风险</b><br><span class='mini'>权限、安全、边界至少各有一个测试点。</span></div></div>
+<div class='step'><div class='num'>3</div><div><b>表达可展示</b><br><span class='mini'>最终结果可以解释给面试官、客户或上级。</span></div></div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            """
+<div class='next-box'>
+<b>页面设计意图</b><br>
+右侧只放反馈、标准和下一步，不放后台数据。学员看到的是产品动作，不是数据库字段。
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+        st.markdown("</div>", unsafe_allow_html=True)
 
 
 def render_portfolio() -> None:
@@ -216,7 +265,7 @@ def render_consult() -> None:
         unsafe_allow_html=True,
     )
 
-    with st.form("consult_form_v45_pages"):
+    with st.form("consult_form_v451_pages"):
         name = st.text_input("姓名 / 称呼")
         contact = st.text_input("联系方式，选填")
         identity = st.selectbox("你现在属于哪类人？", ["职场新人", "在岗提升", "升职准备", "转岗 / 跳槽", "自由职业 / 副业接单", "企业培训负责人", "小微老板"])
@@ -254,4 +303,4 @@ else:
     render_consult()
 
 render_founder_backdoor()
-st.caption("AI Skill Growth OS · Page First Sprint · v4.5")
+st.caption("AI Skill Growth OS · My Tasks Workbench · v4.5.1")
