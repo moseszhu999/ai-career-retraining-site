@@ -15,22 +15,25 @@ st.markdown(
 :root{
   --ink:#0f172a;--muted:#64748b;--brand:#4f46e5;--brand2:#06b6d4;--green:#22c55e;--orange:#f97316;--soft:#eef2ff;--line:#e2e8f0;
 }
-.main .block-container{max-width:1180px;padding-top:.75rem;padding-bottom:3rem}
-[data-testid="stSidebar"]{background:linear-gradient(180deg,#f8fafc,#eef2ff)}
+.main .block-container{max-width:1180px;padding-top:.65rem;padding-bottom:3rem}
+[data-testid="stSidebar"]{display:none}
+[data-testid="collapsedControl"]{display:none}
 section{margin:2.35rem 0 .95rem}.section-kicker{font-size:.78rem;font-weight:950;letter-spacing:.14em;text-transform:uppercase;color:var(--brand);margin-bottom:.25rem}.section-title{font-size:1.72rem;font-weight:950;color:var(--ink);line-height:1.22;margin:.1rem 0 .35rem}.section-sub{color:var(--muted);font-size:1rem;line-height:1.75;max-width:850px}
-.platform-nav{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin:.2rem 0 1rem;padding:.72rem .95rem;border:1px solid #e0e7ff;border-radius:999px;background:rgba(255,255,255,.78);backdrop-filter:blur(16px);box-shadow:0 10px 28px rgba(15,23,42,.06)}.brand{display:flex;align-items:center;gap:.55rem;font-weight:950;color:#111827}.brand-logo{width:32px;height:32px;display:grid;place-items:center;border-radius:11px;background:linear-gradient(135deg,var(--brand),var(--brand2));color:white}.nav-pills span{display:inline-block;margin-left:.3rem;padding:.28rem .62rem;border-radius:999px;background:#f8fafc;border:1px solid #e2e8f0;color:#475569;font-size:.82rem;font-weight:850}
+.site-shell{position:sticky;top:.45rem;z-index:999;margin:.1rem 0 1.2rem}.platform-nav{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.72rem .95rem;border:1px solid rgba(199,210,254,.9);border-radius:1.25rem;background:rgba(255,255,255,.84);backdrop-filter:blur(18px);box-shadow:0 14px 34px rgba(15,23,42,.08)}.brand{display:flex;align-items:center;gap:.62rem;font-weight:950;color:#111827}.brand-logo{width:36px;height:36px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(135deg,var(--brand),var(--brand2));color:white;box-shadow:0 10px 22px rgba(79,70,229,.24)}.brand-sub{font-size:.78rem;color:var(--muted);font-weight:800;margin-top:-.1rem}.nav-actions{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap}.nav-badge{display:inline-block;padding:.36rem .7rem;border-radius:999px;background:#f8fafc;border:1px solid #e2e8f0;color:#475569;font-size:.82rem;font-weight:900}.nav-cta{display:inline-block;padding:.42rem .75rem;border-radius:999px;background:linear-gradient(90deg,var(--brand),#7c3aed);color:white;font-size:.82rem;font-weight:950;box-shadow:0 10px 22px rgba(79,70,229,.22)}
+.nav-panel{margin-top:.65rem;padding:.55rem;border:1px solid #e0e7ff;border-radius:1.2rem;background:rgba(248,250,252,.88);box-shadow:0 10px 26px rgba(15,23,42,.05)}.nav-row{display:grid;grid-template-columns:1fr auto;gap:.8rem;align-items:center}.nav-help{font-size:.82rem;color:#64748b;font-weight:850;white-space:nowrap}.nav-help b{color:#3730a3}
+div[data-testid="stRadio"] > label{display:none}div[role="radiogroup"]{display:flex;flex-wrap:wrap;gap:.42rem}div[role="radiogroup"] label{border:1px solid #dbeafe!important;border-radius:999px!important;background:white!important;padding:.38rem .74rem!important;box-shadow:0 4px 12px rgba(15,23,42,.035);transition:.16s ease}div[role="radiogroup"] label:hover{transform:translateY(-1px);border-color:#a5b4fc!important;box-shadow:0 8px 18px rgba(79,70,229,.12)}div[role="radiogroup"] label p{font-weight:900!important;color:#334155!important;font-size:.9rem!important}div[role="radiogroup"] label:has(input:checked){background:linear-gradient(90deg,#4f46e5,#06b6d4)!important;border-color:#4f46e5!important;box-shadow:0 10px 24px rgba(79,70,229,.2)}div[role="radiogroup"] label:has(input:checked) p{color:white!important}.nav-panel + div[data-testid="stHorizontalBlock"]{margin-top:.4rem}.lang-strip{margin-top:.42rem;display:flex;justify-content:flex-end}.lang-strip div[role="radiogroup"] label{padding:.24rem .54rem!important}.lang-strip div[role="radiogroup"] label p{font-size:.78rem!important}
 .hero-wrap{position:relative;padding:2.25rem;border:1px solid #c7d2fe;border-radius:1.65rem;background:radial-gradient(circle at 86% 12%,#cffafe 0,#eef2ff 32%,#f8fafc 72%);box-shadow:0 24px 70px rgba(15,23,42,.10);margin-bottom:1.2rem;overflow:hidden}.hero-wrap:before{content:"";position:absolute;inset:-140px auto auto -120px;width:310px;height:310px;border-radius:50%;background:rgba(79,70,229,.11)}.hero-wrap:after{content:"";position:absolute;right:-90px;bottom:-120px;width:320px;height:320px;border-radius:50%;background:rgba(6,182,212,.14)}.hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr .95fr;gap:1.7rem;align-items:center}.eyebrow{display:inline-block;font-size:.78rem;letter-spacing:.13em;color:#3730a3;font-weight:950;text-transform:uppercase;background:white;border:1px solid #c7d2fe;border-radius:999px;padding:.32rem .65rem}.hero-title{margin:.7rem 0 .8rem;font-size:3.15rem;line-height:1.02;color:var(--ink);font-weight:980}.hero-title span{background:linear-gradient(90deg,var(--brand),var(--brand2));-webkit-background-clip:text;color:transparent}.hero-copy{font-size:1.12rem;color:#475569;line-height:1.78;max-width:730px}.hero-copy b{color:#312e81}.cta-row{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.1rem}.btn{display:inline-flex;align-items:center;gap:.35rem;border-radius:999px;padding:.78rem 1.08rem;font-weight:950;text-decoration:none}.btn-primary{background:linear-gradient(90deg,var(--brand),#7c3aed);color:white;box-shadow:0 12px 25px rgba(79,70,229,.28)}.btn-secondary{background:white;color:#3730a3;border:1px solid #c7d2fe}.hero-tags{margin-top:1rem}.pill{display:inline-block;border-radius:999px;background:rgba(255,255,255,.86);color:#3730a3;border:1px solid #c7d2fe;padding:.28rem .62rem;margin:.15rem;font-weight:850;font-size:.83rem}.statbar{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-top:1.08rem}.stat{background:rgba(255,255,255,.88);border:1px solid #e0e7ff;border-radius:1rem;padding:.78rem;text-align:center}.stat b{display:block;font-size:1.48rem;color:var(--brand)}.stat span{font-size:.82rem;color:var(--muted);font-weight:850}
 .visual{position:relative;min-height:420px;border:1px solid #dbeafe;border-radius:1.45rem;background:linear-gradient(160deg,#fff,#eef2ff 54%,#ecfeff);overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.86),0 18px 36px rgba(30,41,59,.08)}.visual:before{content:"";position:absolute;width:235px;height:235px;border-radius:50%;background:rgba(79,70,229,.12);right:-60px;top:-60px}.visual:after{content:"";position:absolute;width:190px;height:190px;border-radius:50%;background:rgba(6,182,212,.16);left:-50px;bottom:-50px}.screen{position:absolute;left:32px;right:32px;top:31px;padding:1rem;border-radius:1.05rem;background:#0f172a;color:#e2e8f0;box-shadow:0 18px 38px rgba(15,23,42,.28);z-index:2}.screen-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.65rem}.screen b{color:#93c5fd}.dots span{display:inline-block;width:8px;height:8px;border-radius:50%;background:#475569;margin-left:4px}.screen-line{height:9px;background:#334155;border-radius:999px;margin:.55rem 0}.screen-line.short{width:65%}.coach-box{margin-top:.75rem;background:#111827;border:1px solid #334155;border-radius:.8rem;padding:.72rem;color:#cbd5e1;font-size:.86rem;line-height:1.55}.coach-box strong{color:#a7f3d0}.path-ribbon{position:absolute;left:28px;right:28px;top:231px;display:grid;grid-template-columns:repeat(5,1fr);gap:.45rem;z-index:3}.path-ribbon div{background:white;border:1px solid #c7d2fe;border-radius:.85rem;padding:.62rem .35rem;text-align:center;box-shadow:0 8px 20px rgba(15,23,42,.06)}.path-ribbon b{display:block;color:var(--brand);font-size:.85rem}.path-ribbon span{display:block;color:#312e81;font-size:.75rem;font-weight:900}.float-card{position:absolute;z-index:3;background:white;border:1px solid #e2e8f0;border-radius:1rem;padding:.85rem;box-shadow:0 16px 34px rgba(15,23,42,.14);color:var(--ink);font-weight:930}.float-card small{display:block;color:var(--muted);font-weight:750;margin-top:.25rem}.fc1{left:27px;bottom:116px}.fc2{right:28px;bottom:82px}.fc3{left:146px;bottom:25px}
 .card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem}.card{border:1px solid var(--line);border-radius:1.08rem;background:white;padding:1rem;box-shadow:0 8px 22px rgba(15,23,42,.045);min-height:132px;transition:.18s ease}.card:hover{transform:translateY(-3px);box-shadow:0 16px 32px rgba(15,23,42,.08);border-color:#c7d2fe}.card b{color:var(--ink);font-size:1.02rem}.card p{color:var(--muted);line-height:1.58;margin:.45rem 0 0}.card .icon{font-size:1.45rem;margin-right:.2rem}.track-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.82rem}.track{position:relative;min-height:164px;border-radius:1.15rem;padding:1rem;background:linear-gradient(180deg,#fff,#f8fafc);border:1px solid #dbeafe;box-shadow:0 10px 28px rgba(15,23,42,.055);overflow:hidden}.track:after{content:"";position:absolute;right:-28px;top:-28px;width:95px;height:95px;border-radius:50%;background:rgba(79,70,229,.09)}.track .num{font-weight:950;color:#a5b4fc}.track h4{margin:.45rem 0;color:#111827;font-size:1.05rem}.track p{color:var(--muted);line-height:1.55}.pain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}.pain{background:#fff7ed;border:1px solid #fed7aa;border-radius:1rem;padding:.9rem;color:#7c2d12;font-weight:850}.before-after{display:grid;grid-template-columns:1fr 1fr;gap:.95rem}.ba{border-radius:1.1rem;padding:1.05rem;border:1px solid var(--line)}.ba.before{background:#fff7ed;border-color:#fed7aa}.ba.after{background:#f0fdf4;border-color:#bbf7d0}.ba h4{margin:.1rem 0 .65rem;color:var(--ink)}.ba ul{margin:.2rem 0 0 1.1rem;color:#475569;line-height:1.8}.flow{display:grid;grid-template-columns:repeat(6,1fr);gap:.55rem}.flow div{background:linear-gradient(180deg,#fff,#f8fafc);border:1px solid #c7d2fe;border-radius:1rem;padding:.85rem;text-align:center;box-shadow:0 8px 20px rgba(15,23,42,.04)}.flow b{display:block;color:var(--brand)}.flow span{font-size:.82rem;font-weight:850;color:#312e81}.artifact-wall{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}.artifact{border:1px solid #dbeafe;border-radius:1rem;padding:.9rem;background:linear-gradient(180deg,#fff,#eff6ff);min-height:112px}.artifact b{color:#1e3a8a}.artifact p{color:var(--muted);line-height:1.5}.program-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem}.program{position:relative;border:1px solid #dbeafe;border-radius:1.05rem;background:white;padding:1rem;box-shadow:0 10px 24px rgba(15,23,42,.052);overflow:hidden}.program:before{content:"";position:absolute;left:0;top:0;right:0;height:4px;background:linear-gradient(90deg,var(--brand),var(--brand2))}.program .price{font-weight:950;color:#16a34a;margin:.55rem 0}.program b{color:var(--ink)}.program p{color:var(--muted);line-height:1.58}.bottom-cta{padding:1.5rem;border-radius:1.3rem;background:radial-gradient(circle at right,#1d4ed8,#0f172a 55%,#111827);color:white;box-shadow:0 18px 46px rgba(15,23,42,.18)}.bottom-cta h3{margin:.1rem 0 .4rem;font-size:1.72rem}.bottom-cta p{color:#dbeafe;line-height:1.7;max-width:850px}.warn{border:1px solid #fed7aa;background:#fff7ed;border-radius:1rem;padding:1rem;margin:.8rem 0;color:#7c2d12}.dark{background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1rem;white-space:pre-wrap}.small{font-size:.9rem;color:var(--muted)}
-@media (max-width:960px){.platform-nav{border-radius:1rem;align-items:flex-start;flex-direction:column}.hero-grid{grid-template-columns:1fr}.hero-title{font-size:2.25rem}.visual{min-height:390px}.card-grid,.pain-grid,.program-grid,.track-grid,.before-after{grid-template-columns:1fr}.flow{grid-template-columns:repeat(2,1fr)}.artifact-wall{grid-template-columns:repeat(2,1fr)}.statbar{grid-template-columns:repeat(2,1fr)}.nav-pills span{margin:.15rem .2rem .15rem 0}}
+@media (max-width:960px){.site-shell{position:relative;top:0}.platform-nav{border-radius:1rem;align-items:flex-start;flex-direction:column}.nav-row{grid-template-columns:1fr}.nav-help{white-space:normal}.hero-grid{grid-template-columns:1fr}.hero-title{font-size:2.25rem}.visual{min-height:390px}.card-grid,.pain-grid,.program-grid,.track-grid,.before-after{grid-template-columns:1fr}.flow{grid-template-columns:repeat(2,1fr)}.artifact-wall{grid-template-columns:repeat(2,1fr)}.statbar{grid-template-columns:repeat(2,1fr)}.nav-actions span{margin:.12rem .1rem}.path-ribbon{grid-template-columns:repeat(5,1fr);left:16px;right:16px}.float-card{font-size:.88rem}.fc3{left:95px}}
 </style>
 """,
     unsafe_allow_html=True,
 )
 
 TEXT = {
-    "zh": {"nav":"导航","lang_label":"语言 / Language","home":"首页","paths":"成长路径","skills":"技能训练","portfolio":"作品集","freelance":"自由职业","company":"企业内训","pricing":"报价","faq":"FAQ"},
-    "en": {"nav":"Navigation","lang_label":"语言 / Language","home":"Home","paths":"Growth Paths","skills":"Skill Training","portfolio":"Portfolio","freelance":"Freelance","company":"Company Training","pricing":"Pricing","faq":"FAQ"},
+    "zh": {"nav":"导航","lang_label":"语言","home":"首页","paths":"成长路径","skills":"技能训练","portfolio":"作品集","freelance":"自由职业","company":"企业内训","pricing":"报价","faq":"FAQ"},
+    "en": {"nav":"Navigation","lang_label":"Language","home":"Home","paths":"Growth Paths","skills":"Skill Training","portfolio":"Portfolio","freelance":"Freelance","company":"Company Training","pricing":"Pricing","faq":"FAQ"},
 }
 
 MOTIVE_ROWS = [
@@ -95,17 +98,33 @@ def html_card(icon: str, title: str, body: str):
     return f"<div class='card'><b><span class='icon'>{icon}</span>{title}</b><p>{body}</p></div>"
 
 
-def render_home(lang: str):
+def render_top_nav(lang: str):
     st.markdown(
         """
-<div class='platform-nav'>
-  <div class='brand'><div class='brand-logo'>AI</div><div>AI Skill Growth Platform</div></div>
-  <div class='nav-pills'><span>职场成长</span><span>自由职业</span><span>企业内训</span><span>作品集导向</span></div>
+<div class='site-shell'>
+  <div class='platform-nav'>
+    <div class='brand'><div class='brand-logo'>AI</div><div><div>AI Skill Growth Platform</div><div class='brand-sub'>技能成长 · 作品交付 · 自由职业变现</div></div></div>
+    <div class='nav-actions'><span class='nav-badge'>职场成长</span><span class='nav-badge'>自由职业</span><span class='nav-badge'>企业内训</span><span class='nav-cta'>预约体验课</span></div>
+  </div>
 </div>
 """,
         unsafe_allow_html=True,
     )
+    nav_keys = ["home", "paths", "skills", "portfolio", "freelance", "company", "pricing", "faq"]
+    st.markdown("<div class='nav-panel'><div class='nav-row'><div>", unsafe_allow_html=True)
+    page = st.radio(
+        TEXT[lang]["nav"],
+        nav_keys,
+        horizontal=True,
+        label_visibility="collapsed",
+        format_func=lambda key: TEXT[lang][key],
+        key="top_page_nav",
+    )
+    st.markdown("</div><div class='nav-help'><b>导航</b> / 选择页面</div></div></div>", unsafe_allow_html=True)
+    return page
 
+
+def render_home(lang: str):
     if lang == "zh":
         hero_title = "AI 技能成长<br><span>教育平台</span>"
         hero_copy = "面向职场人和自由职业者：新人上手、在岗提升、升职、转岗、跳槽高薪、自由职业增收，都可以用 AI 建立学习-练习-纠错-作品-变现闭环。"
@@ -145,12 +164,7 @@ def render_home(lang: str):
     )
 
     section("TRACKS", "四条主路径", "首页先让用户找到自己属于哪一类，而不是一上来读大量说明。")
-    tracks = [
-        ("01", "职场新人 / 转岗", "快速补齐岗位基础技能，完成第一个可检查任务。"),
-        ("02", "在岗提升 / 升职", "把日常工作升级成 AI 工作流，形成汇报和复盘能力。"),
-        ("03", "跳槽高薪 / 作品集", "把能力做成证据：作品、流程、表达稿。"),
-        ("04", "自由职业 / 接单", "学可变现技能，做服务包、报价单和交付 SOP。"),
-    ]
+    tracks = [("01", "职场新人 / 转岗", "快速补齐岗位基础技能，完成第一个可检查任务。"),("02", "在岗提升 / 升职", "把日常工作升级成 AI 工作流，形成汇报和复盘能力。"),("03", "跳槽高薪 / 作品集", "把能力做成证据：作品、流程、表达稿。"),("04", "自由职业 / 接单", "学可变现技能，做服务包、报价单和交付 SOP。")]
     st.markdown("<div class='track-grid'>" + "".join(f"<div class='track'><div class='num'>{n}</div><h4>{t}</h4><p>{b}</p></div>" for n, t, b in tracks) + "</div>", unsafe_allow_html=True)
 
     section("WHO", "谁会需要这个平台", "不是只适合新人。凡是需要学习新技能、提升技能、证明能力或把技能变现的人，都有使用场景。")
@@ -158,15 +172,12 @@ def render_home(lang: str):
     st.markdown("<div class='card-grid'>" + "".join(html_card(*c) for c in who_cards) + "</div>", unsafe_allow_html=True)
 
     section("BEFORE / AFTER", "从“学过”变成“能交付”", "美工上要让用户一眼看到转变，不只是课程列表。")
-    st.markdown(
-        """
+    st.markdown("""
 <div class='before-after'>
   <div class='ba before'><h4>普通学习方式</h4><ul><li>看很多教程，但没有真实任务</li><li>不知道自己错在哪里</li><li>学完没有作品，无法证明能力</li><li>自由职业不会包装服务和报价</li></ul></div>
   <div class='ba after'><h4>AI 技能成长方式</h4><ul><li>先定技能目标，再拆成任务</li><li>AI 做第一轮纠错，老师做关键点评</li><li>每个阶段都有可展示作品</li><li>把技能变成服务包、报价和交付 SOP</li></ul></div>
 </div>
-""",
-        unsafe_allow_html=True,
-    )
+""", unsafe_allow_html=True)
 
     section("PAIN", "你真正卡住的地方", "很多人不是没有资料，而是不知道怎么学、怎么练、怎么判断自己做得对不对。")
     pains = ["学了很多教程，还是做不出任务", "没人及时纠错，不知道哪里错", "不会把技能变成作品集", "升职或面试时说不清能力", "自由职业不知道如何报价和交付", "企业培训听完课，没有可检查成果"]
@@ -187,16 +198,13 @@ def render_home(lang: str):
     section("PROGRAMS", "课程产品矩阵", "从体验课到自由职业变现营，再到企业内训，围绕同一个技能成长闭环。")
     st.markdown("<div class='program-grid'>" + "".join(f"<div class='program'><b>{a}</b><div class='price'>{b}</div><p>{c}</p></div>" for a, b, c in PROGRAM_ROWS) + "</div>", unsafe_allow_html=True)
 
-    st.markdown(
-        """
+    st.markdown("""
 <div class='bottom-cta'>
   <h3>先用 2 小时，找到你的下一个技能增长点。</h3>
   <p>选择一个技能目标，现场完成一个微型任务和 AI 学习路径。后续可以进入 5 天技能成长营、自由职业技能变现营或企业内训。</p>
   <div class='cta-row'><span class='btn btn-primary'>🚀 预约体验课</span><span class='btn btn-secondary'>📩 咨询课程方案</span></div>
 </div>
-""",
-        unsafe_allow_html=True,
-    )
+""", unsafe_allow_html=True)
 
 
 def render_paths(lang: str):
@@ -262,12 +270,15 @@ def render_faq(lang: str):
 
 
 def main():
-    lang = st.sidebar.radio(TEXT["zh"]["lang_label"], ["zh", "en"], format_func=lambda x: "中文" if x == "zh" else "English")
-    page = st.sidebar.radio(
-        TEXT[lang]["nav"],
-        ["home", "paths", "skills", "portfolio", "freelance", "company", "pricing", "faq"],
-        format_func=lambda key: TEXT[lang][key],
+    lang = st.radio(
+        "语言",
+        ["zh", "en"],
+        horizontal=True,
+        label_visibility="collapsed",
+        format_func=lambda x: "中文" if x == "zh" else "English",
+        key="lang_nav",
     )
+    page = render_top_nav(lang)
     if page == "home":
         render_home(lang)
     elif page == "paths":
@@ -284,8 +295,7 @@ def main():
         render_pricing(lang)
     else:
         render_faq(lang)
-    st.sidebar.markdown("---")
-    st.sidebar.caption("AI Skill Growth Platform · premium landing v1.4")
+    st.caption("AI Skill Growth Platform · modern navigation v1.5")
 
 
 if __name__ == "__main__":
