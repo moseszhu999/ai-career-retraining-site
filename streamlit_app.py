@@ -10,7 +10,7 @@ st.set_page_config(page_title="AI Skill Growth OS", page_icon="🚀", layout="wi
 st.markdown(
     """
 <style>
-.main .block-container{max-width:1180px;padding-top:.7rem;padding-bottom:4rem}.site-top{border:1px solid #dbeafe;border-radius:1.25rem;background:rgba(255,255,255,.96);box-shadow:0 12px 30px rgba(15,23,42,.06);padding:.9rem 1rem;margin:.3rem 0 1rem;display:flex;justify-content:space-between;gap:1rem;align-items:center}.brand{font-size:1.18rem;font-weight:980;color:#0f172a}.brand small{display:block;color:#64748b;font-size:.82rem;font-weight:850}.pill{display:inline-block;border-radius:999px;padding:.28rem .64rem;font-size:.8rem;font-weight:900;border:1px solid #e2e8f0;background:#f8fafc;color:#475569;margin:.1rem .16rem}.hot{background:linear-gradient(90deg,#4f46e5,#06b6d4);border:none;color:white}.green{background:#dcfce7;color:#166534;border-color:#bbf7d0}.orange{background:#ffedd5;color:#9a3412;border-color:#fed7aa}.blue{background:#dbeafe;color:#1e40af;border-color:#bfdbfe}.purple{background:#ede9fe;color:#5b21b6;border-color:#ddd6fe}.hero{border:1px solid #c7d2fe;border-radius:1.5rem;background:radial-gradient(circle at right,#ecfeff,#eef2ff 45%,#fff);padding:2rem;margin:.8rem 0 1rem}.hero h1{font-size:2.6rem;line-height:1.06;margin:.25rem 0;color:#0f172a}.hero h1 span{background:linear-gradient(90deg,#4f46e5,#06b6d4);-webkit-background-clip:text;color:transparent}.hero p{max-width:860px;color:#475569;line-height:1.75;font-size:1.03rem}.section{font-size:1.45rem;font-weight:950;margin:1.2rem 0 .45rem;color:#0f172a}.sub{color:#64748b;line-height:1.65;margin-bottom:.8rem}.grid2{display:grid;grid-template-columns:1.05fr .95fr;gap:1rem}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}.card{border:1px solid #e2e8f0;border-radius:1.1rem;background:white;padding:1rem;box-shadow:0 8px 20px rgba(15,23,42,.04)}.card h3{margin:.1rem 0 .45rem;color:#111827}.card p{color:#64748b;line-height:1.58}.metric{font-size:2rem;font-weight:980;color:#0f172a}.panel{border:1px solid #dbeafe;border-radius:1.2rem;background:linear-gradient(135deg,#fff,#f8fafc);padding:1.1rem;margin:.9rem 0}.panel h2{margin:.15rem 0;color:#0f172a}.quote{white-space:pre-wrap;background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1rem;line-height:1.65}.timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:.55rem}.timeline div{background:white;border:1px solid #c7d2fe;border-radius:1rem;padding:.8rem;text-align:center}.timeline b{display:block;color:#4f46e5}.progress{height:.65rem;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:.45rem}.bar{height:100%;background:linear-gradient(90deg,#4f46e5,#06b6d4)}.ok{border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:1rem;padding:1rem}.warn{border:1px solid #fed7aa;background:#fff7ed;color:#7c2d12;border-radius:1rem;padding:1rem}.mini{font-size:.85rem;color:#64748b;line-height:1.55}.proof{border:1px solid #e0e7ff;border-radius:1rem;background:white;padding:1rem}.nav-row{display:flex;gap:.5rem;flex-wrap:wrap;margin:.4rem 0 1rem}.decision{border-left:5px solid #6366f1}.muted{opacity:.75}@media(max-width:900px){.site-top{display:block}.grid2,.grid3,.grid4,.timeline{grid-template-columns:1fr}.hero h1{font-size:2rem}.nav-row{display:block}}
+.main .block-container{max-width:1180px;padding-top:.7rem;padding-bottom:4rem}.site-top{border:1px solid #dbeafe;border-radius:1.25rem;background:rgba(255,255,255,.96);box-shadow:0 12px 30px rgba(15,23,42,.06);padding:.9rem 1rem;margin:.3rem 0 1rem;display:flex;justify-content:space-between;gap:1rem;align-items:center}.brand{font-size:1.18rem;font-weight:980;color:#0f172a}.brand small{display:block;color:#64748b;font-size:.82rem;font-weight:850}.pill{display:inline-block;border-radius:999px;padding:.28rem .64rem;font-size:.8rem;font-weight:900;border:1px solid #e2e8f0;background:#f8fafc;color:#475569;margin:.1rem .16rem}.hot{background:linear-gradient(90deg,#4f46e5,#06b6d4);border:none;color:white}.green{background:#dcfce7;color:#166534;border-color:#bbf7d0}.orange{background:#ffedd5;color:#9a3412;border-color:#fed7aa}.blue{background:#dbeafe;color:#1e40af;border-color:#bfdbfe}.purple{background:#ede9fe;color:#5b21b6;border-color:#ddd6fe}.hero{border:1px solid #c7d2fe;border-radius:1.5rem;background:radial-gradient(circle at right,#ecfeff,#eef2ff 45%,#fff);padding:2rem;margin:.8rem 0 1rem}.hero h1{font-size:2.6rem;line-height:1.06;margin:.25rem 0;color:#0f172a}.hero h1 span{background:linear-gradient(90deg,#4f46e5,#06b6d4);-webkit-background-clip:text;color:transparent}.hero p{max-width:860px;color:#475569;line-height:1.75;font-size:1.03rem}.section{font-size:1.45rem;font-weight:950;margin:1.2rem 0 .45rem;color:#0f172a}.sub{color:#64748b;line-height:1.65;margin-bottom:.8rem}.grid2{display:grid;grid-template-columns:1.05fr .95fr;gap:1rem}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}.card{border:1px solid #e2e8f0;border-radius:1.1rem;background:white;padding:1rem;box-shadow:0 8px 20px rgba(15,23,42,.04)}.card h3{margin:.1rem 0 .45rem;color:#111827}.card p{color:#64748b;line-height:1.58}.metric{font-size:2rem;font-weight:980;color:#0f172a}.panel{border:1px solid #dbeafe;border-radius:1.2rem;background:linear-gradient(135deg,#fff,#f8fafc);padding:1.1rem;margin:.9rem 0}.panel h2{margin:.15rem 0;color:#0f172a}.quote{white-space:pre-wrap;background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1rem;line-height:1.65}.timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:.55rem}.timeline div{background:white;border:1px solid #c7d2fe;border-radius:1rem;padding:.8rem;text-align:center}.timeline b{display:block;color:#4f46e5}.progress{height:.65rem;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:.45rem}.bar{height:100%;background:linear-gradient(90deg,#4f46e5,#06b6d4)}.ok{border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:1rem;padding:1rem}.warn{border:1px solid #fed7aa;background:#fff7ed;color:#7c2d12;border-radius:1rem;padding:1rem}.mini{font-size:.85rem;color:#64748b;line-height:1.55}.proof{border:1px solid #e0e7ff;border-radius:1rem;background:white;padding:1rem}.nav-row{display:flex;gap:.5rem;flex-wrap:wrap;margin:.4rem 0 1rem}.decision{border-left:5px solid #6366f1}.muted{opacity:.75}.task-shell{display:grid;grid-template-columns:.85fr 1.35fr .95fr;gap:1rem;align-items:start}.task-rail{border:1px solid #e0e7ff;border-radius:1.1rem;background:#f8fafc;padding:.85rem}.task-mini{border:1px solid #e2e8f0;border-radius:.95rem;background:white;padding:.85rem;margin:.55rem 0}.task-mini.active{border-color:#6366f1;box-shadow:0 8px 20px rgba(99,102,241,.12)}.task-mini b{display:block;color:#0f172a}.editor-panel{border:1px solid #c7d2fe;border-radius:1.2rem;background:white;padding:1rem;box-shadow:0 10px 24px rgba(79,70,229,.06)}.side-stack{display:grid;gap:.85rem}.history{border:1px solid #e2e8f0;border-radius:1rem;background:white;padding:.9rem;max-height:260px;overflow:auto}.history-item{border-bottom:1px solid #f1f5f9;padding:.55rem 0;color:#475569}.history-item:last-child{border-bottom:none}.toolbar{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}.task-status-line{border:1px solid #e0e7ff;background:#f8fafc;border-radius:1rem;padding:.75rem;margin:.75rem 0;color:#475569}@media(max-width:900px){.site-top{display:block}.grid2,.grid3,.grid4,.timeline,.task-shell,.toolbar{grid-template-columns:1fr}.hero h1{font-size:2rem}.nav-row{display:block}}
 </style>
 """,
     unsafe_allow_html=True,
@@ -18,13 +18,13 @@ st.markdown(
 
 TASKS = pd.DataFrame(
     [
-        ["Day 1", "目标拆解", "已完成", 100],
-        ["Day 2", "测试用例作品", "今日主任务", 70],
-        ["Day 3", "复杂需求拆解", "等待点评", 45],
-        ["Day 4", "发表作品", "未解锁", 0],
-        ["Day 5", "30天行动计划", "未解锁", 0],
+        ["Day 1", "目标拆解", "已完成", 100, "5天成长路线图", "把目标拆成5天任务和可检查交付物"],
+        ["Day 2", "测试用例作品", "今日主任务", 70, "测试用例 + Bug报告", "围绕登录页面补齐测试用例和Bug报告模板"],
+        ["Day 3", "复杂需求拆解", "等待点评", 45, "流程 + 异常分支", "把业务需求拆成角色、流程、输入输出和异常分支"],
+        ["Day 4", "发表作品", "未解锁", 0, "3分钟发表稿", "把作品整理成可发表、可面试、可汇报的表达"],
+        ["Day 5", "30天行动计划", "未解锁", 0, "成长计划", "根据前4天成果生成后续行动计划"],
     ],
-    columns=["day", "title", "focus", "progress"],
+    columns=["day", "title", "focus", "progress", "outcome", "brief"],
 )
 
 STATUS_CLASS = {
@@ -40,6 +40,7 @@ def init_state() -> None:
         "role": "访客",
         "user_name": "体验用户",
         "current_view": "dashboard",
+        "active_task_index": 1,
         "task_status": "未开始",
         "draft": "目标：补齐登录页面测试能力\n\n当前草稿：\n1. 正常登录：输入正确用户名和密码，可以登录成功。\n2. 错误密码：提示密码错误。\n3. 空用户名：提示必须输入用户名。\n\n待补充：权限、安全、边界、Bug报告模板。",
         "draft_saved": False,
@@ -51,6 +52,7 @@ def init_state() -> None:
         "consult_summary": "",
         "lead_status": "新线索",
         "last_event": "尚未开始互动",
+        "action_history": ["进入体验后，系统会记录你的关键操作。"],
     }
     for key, value in defaults.items():
         st.session_state.setdefault(key, value)
@@ -64,19 +66,27 @@ def set_view(view: str) -> None:
     st.session_state.current_view = view
 
 
+def log_event(message: str) -> None:
+    stamp = datetime.now().strftime("%H:%M:%S")
+    entry = f"{stamp} · {message}"
+    st.session_state.last_event = message
+    st.session_state.action_history = [entry] + st.session_state.action_history[:9]
+
+
 def login_as(role: str, name: str) -> None:
     st.session_state.logged_in = True
     st.session_state.role = role
     st.session_state.user_name = name or ("Founder" if role == "Founder" else "学员Demo")
     st.session_state.current_view = "dashboard"
-    st.session_state.last_event = f"已登录：{role}"
+    log_event(f"已登录：{role}")
 
 
 def logout() -> None:
-    for key in ["logged_in", "role", "user_name", "current_view"]:
-        if key in st.session_state:
-            del st.session_state[key]
-    init_state()
+    st.session_state.logged_in = False
+    st.session_state.role = "访客"
+    st.session_state.user_name = "体验用户"
+    st.session_state.current_view = "dashboard"
+    log_event("已退出登录")
 
 
 def ai_feedback_for(draft: str) -> str:
@@ -107,7 +117,7 @@ def render_public_top() -> None:
         """
 <div class='site-top'>
   <div class='brand'>AI Skill Growth OS<small>任务驱动 · Agent反馈 · 作品集证明 · 咨询转化</small></div>
-  <div><span class='pill'>Public Site</span><span class='pill hot'>v4.7 Frontend</span></div>
+  <div><span class='pill'>Public Site</span><span class='pill hot'>v4.7.1 Frontend</span></div>
 </div>
 """,
         unsafe_allow_html=True,
@@ -169,12 +179,7 @@ def render_app_top() -> None:
 """,
         unsafe_allow_html=True,
     )
-    nav = [
-        ("dashboard", "工作台"),
-        ("tasks", "我的任务"),
-        ("portfolio", "作品集"),
-        ("consult", "咨询"),
-    ]
+    nav = [("dashboard", "工作台"), ("tasks", "我的任务"), ("portfolio", "作品集"), ("consult", "咨询")]
     if st.session_state.role == "Founder":
         nav = [("dashboard", "Founder看板"), ("queue", "运营队列"), ("portfolio", "作品候选"), ("consult", "咨询线索")]
     cols = st.columns(len(nav) + 1)
@@ -238,41 +243,67 @@ def founder_dashboard() -> None:
         if c1.button("确认进入作品集", type="primary"):
             st.session_state.portfolio_approved = True
             st.session_state.task_status = "Agent已点评"
-            st.session_state.last_event = "Founder确认作品集"
+            log_event("Founder确认作品集")
             st.rerun()
         if c2.button("打回修改"):
             st.session_state.task_status = "AI已反馈"
             st.session_state.submitted = False
-            st.session_state.last_event = "Founder打回修改"
+            log_event("Founder打回修改")
             st.rerun()
 
 
 def tasks_page() -> None:
-    st.markdown("<div class='panel'><span class='pill hot'>My Tasks</span><h2>今天只做一个任务：把草稿改成可检查作品</h2><p>保存、反馈、提交都会改变登录后的状态。</p></div>", unsafe_allow_html=True)
-    st.markdown("<div class='timeline'>" + "".join(f"<div><b>{row['day']}</b><span>{row['title']}</span><br>{chip(row['focus'])}<div class='progress'><div class='bar' style='width:{row['progress']}%'></div></div></div>" for _, row in TASKS.iterrows()) + "</div>", unsafe_allow_html=True)
-    left, right = st.columns([1.1, .9])
+    active = TASKS.iloc[int(st.session_state.active_task_index)]
+    st.markdown("<div class='panel'><span class='pill hot'>My Tasks</span><h2>任务工作台</h2><p>左侧选任务，中间编辑交付物，右侧看反馈、状态和操作历史。这个结构更接近正常 SaaS 应用。</p></div>", unsafe_allow_html=True)
+    st.markdown(f"""
+<div class='grid4'>
+  <div class='card'><span class='mini'>当前任务</span><div class='metric'>{active['day']}</div><p>{active['title']}</p></div>
+  <div class='card'><span class='mini'>任务状态</span><p>{chip(st.session_state.task_status)}</p></div>
+  <div class='card'><span class='mini'>草稿字数</span><div class='metric'>{len(st.session_state.draft)}</div></div>
+  <div class='card'><span class='mini'>作品候选</span><div class='metric'>{1 if st.session_state.portfolio_candidate else 0}</div></div>
+</div>
+""", unsafe_allow_html=True)
+    st.markdown("<div class='task-shell'>", unsafe_allow_html=True)
+    left, mid, right = st.columns([.85, 1.35, .95])
     with left:
-        st.markdown(f"<div class='card'><h3>Day 2 · 测试用例作品</h3><p><b>交付物：</b>测试用例 + Bug报告<br><b>状态：</b>{chip(st.session_state.task_status)}<br><b>下一步：</b>{'等待Agent点评' if st.session_state.submitted else '补充权限、安全、边界后提交'}</p></div>", unsafe_allow_html=True)
-        st.text_area("作品草稿", key="draft", height=260)
-        st.caption(f"草稿字数：{len(st.session_state.draft)}。当前数据仅保存在 session_state。")
+        st.markdown("<div class='task-rail'><h3>任务列表</h3><p class='mini'>点击切换任务。当前版本先用同一个草稿区模拟。</p>", unsafe_allow_html=True)
+        for idx, row in TASKS.iterrows():
+            active_class = " active" if idx == st.session_state.active_task_index else ""
+            st.markdown(f"<div class='task-mini{active_class}'><b>{row['day']} · {row['title']}</b>{chip(row['focus'])}<div class='progress'><div class='bar' style='width:{row['progress']}%'></div></div></div>", unsafe_allow_html=True)
+            if st.button(f"打开 {row['day']}", key=f"open_task_{idx}", use_container_width=True):
+                st.session_state.active_task_index = int(idx)
+                log_event(f"切换任务：{row['day']} {row['title']}")
+                st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
+    with mid:
+        st.markdown(f"""
+<div class='editor-panel'>
+<h3>{active['day']} · {active['title']}</h3>
+<p><b>任务说明：</b>{active['brief']}<br><b>交付物：</b>{active['outcome']}<br><b>状态：</b>{chip(st.session_state.task_status)}</p>
+</div>
+""", unsafe_allow_html=True)
+        st.text_area("作品草稿", key="draft", height=310)
+        st.caption("当前数据仅保存在 session_state；后续再把保存动作接到 Supabase。")
+        st.markdown("<div class='toolbar'>", unsafe_allow_html=True)
         c1, c2, c3 = st.columns(3)
-        if c1.button("保存草稿", type="primary"):
+        if c1.button("保存草稿", type="primary", use_container_width=True):
             st.session_state.draft_saved = True
             st.session_state.saved_at = datetime.now().strftime("%H:%M:%S")
             st.session_state.task_status = "进行中"
-            st.session_state.last_event = f"草稿已保存 {st.session_state.saved_at}"
+            log_event(f"草稿已保存 {st.session_state.saved_at}")
             st.rerun()
-        if c2.button("请求AI反馈"):
+        if c2.button("请求AI反馈", use_container_width=True):
             st.session_state.ai_feedback = ai_feedback_for(st.session_state.draft)
             st.session_state.task_status = "AI已反馈"
-            st.session_state.last_event = "AI反馈已生成"
+            log_event("AI反馈已生成")
             st.rerun()
-        if c3.button("提交给Agent"):
+        if c3.button("提交给Agent", use_container_width=True):
             st.session_state.submitted = True
             st.session_state.portfolio_candidate = True
             st.session_state.task_status = "待Agent点评"
-            st.session_state.last_event = "已提交Agent，作品集候选+1"
+            log_event("已提交Agent，作品集候选+1")
             st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
         if st.session_state.submitted:
             st.markdown("<div class='ok'><b>已提交</b><br>当前任务已进入待Agent点评队列，作品集页会出现候选。</div>", unsafe_allow_html=True)
         elif st.session_state.draft_saved:
@@ -280,9 +311,13 @@ def tasks_page() -> None:
         else:
             st.markdown("<div class='warn'><b>下一步</b><br>先保存草稿，再请求AI反馈，最后提交Agent。</div>", unsafe_allow_html=True)
     with right:
-        feedback = st.session_state.ai_feedback or "还没有请求AI反馈。\n\n点击左侧“请求AI反馈”后，这里会根据当前草稿生成反馈。"
+        st.markdown("<div class='side-stack'>", unsafe_allow_html=True)
+        feedback = st.session_state.ai_feedback or "还没有请求AI反馈。\n\n点击“请求AI反馈”后，这里会根据当前草稿生成反馈。"
         st.markdown(f"<div class='quote'>{feedback}</div>", unsafe_allow_html=True)
         st.markdown("<div class='card'><h3>完成标准</h3><p>1. 交付物明确<br>2. 覆盖权限、安全、边界<br>3. 可进入作品集表达</p></div>", unsafe_allow_html=True)
+        st.markdown("<div class='history'><h3>操作历史</h3>" + "".join(f"<div class='history-item'>{item}</div>" for item in st.session_state.action_history) + "</div>", unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 
 def portfolio_page() -> None:
@@ -309,7 +344,7 @@ def consult_page() -> None:
         goal = st.selectbox("你最想解决什么？", ["学新技能", "提升现有技能", "做作品集", "升职表达", "换工作 / 高薪跳槽", "自由职业接单", "企业内训"])
     package, reason, steps = recommend_package(identity, goal)
     st.markdown(f"<div class='card'><h3>推荐路径：{package}</h3><p>{reason}</p><p>{' → '.join(steps)}</p></div>", unsafe_allow_html=True)
-    with st.form("consult_form_v470"):
+    with st.form("consult_form_v471"):
         name = st.text_input("姓名 / 称呼")
         contact = st.text_input("联系方式，选填")
         note = st.text_area("补充说明")
@@ -317,7 +352,7 @@ def consult_page() -> None:
     if ok:
         summary = f"【咨询摘要】\n时间：{datetime.now().strftime('%Y-%m-%d %H:%M')}\n姓名：{name or '未填写'}\n联系方式：{contact or '未填写'}\n身份：{identity}\n目标：{goal}\n推荐路径：{package}\n推荐理由：{reason}\n建议步骤：{' → '.join(steps)}\n补充：{note or '无'}"
         st.session_state.consult_summary = summary
-        st.session_state.last_event = "咨询摘要已生成，Founder线索+1"
+        log_event("咨询摘要已生成，Founder线索+1")
         st.markdown(f"<div class='quote'>{summary}</div>", unsafe_allow_html=True)
         st.download_button("下载咨询摘要", data=summary, file_name="consult_summary.txt", mime="text/plain")
         st.success("已生成咨询摘要。切换Founder后首页会显示咨询线索。")
@@ -359,4 +394,4 @@ else:
         else:
             consult_page()
 
-st.caption("AI Skill Growth OS · Normal Website Frontend Flow · v4.7.0")
+st.caption("AI Skill Growth OS · SaaS-style Task Workbench · v4.7.1")
