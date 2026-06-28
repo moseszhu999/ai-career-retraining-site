@@ -29,7 +29,7 @@ CSS = """
 st.markdown(CSS, unsafe_allow_html=True)
 
 NAV = {"home":"首页","workspace":"学习工作台","trial":"2小时体验课","sop":"跟进SOP","paths":"成长路径","skills":"技能训练","portfolio":"作品集","freelance":"自由职业","company":"企业内训","pricing":"报价","booking":"预约咨询","faq":"FAQ"}
-STATUS_CHIP = {"未开始":"chip-gray","进行中":"chip-blue","已提交":"chip-orange","AI已反馈":"chip-blue","待老师点评":"chip-orange","已点评":"chip-green","已入作品集":"chip-green","风险":"chip-red","等待":"chip-gray"}
+STATUS_CHIP = {"未开始":"chip-gray","进行中":"chip-blue","已提交":"chip-orange","AI已反馈":"chip-blue","待老师点评":"chip-orange","Agent已点评":"chip-green","已点评":"chip-green","已入作品集":"chip-green","风险":"chip-red","等待":"chip-gray"}
 
 CREATE_TABLE_SQL = """create table if not exists public.courses (
   course_id text primary key,
@@ -90,14 +90,10 @@ create table if not exists public.reviews (
 );"""
 
 COURSE_SEED_SQL = """insert into public.courses(course_id, name, audience, promise, is_active) values
-('growth_5d', '5 天 AI 技能成长营', '职场新人 / 在岗提升 / 升职准备 / 转岗跳槽', '3 个可展示作品 + AI 反馈记录 + 老师点评 + 30 天行动计划', true),
+('growth_5d', '5 天 AI 技能成长营', '职场新人 / 在岗提升 / 升职准备 / 转岗跳槽', '3 个可展示作品 + AI 反馈记录 + Agent 点评 + 30 天行动计划', true),
 ('freelance_5d', '5 天自由职业技能变现营', '自由职业 / 副业接单者', '1 个服务包 + 3 个样品案例 + 报价单 + 获客话术 + 交付 SOP', true),
 ('enterprise_dept', '企业部门 AI 训练营', '企业内训部门 / 新人培养 / 部门负责人', '部门任务模板 + 评分标准 + 员工练习包 + 培训复盘', true)
-on conflict (course_id) do update set
-name = excluded.name,
-audience = excluded.audience,
-promise = excluded.promise,
-is_active = excluded.is_active;"""
+on conflict (course_id) do update set name = excluded.name, audience = excluded.audience, promise = excluded.promise, is_active = excluded.is_active;"""
 
 TASK_TEMPLATE_SEED_SQL = """insert into public.task_templates(task_key, course_id, day, title, outcome, prompt, standard, sort_order) values
 ('g_day1','growth_5d','Day 1','定目标 + 拆任务','技能成长路线图','你是职业技能教练。请把我的目标拆成 5 天训练任务，并说明每天交付物。','目标明确；任务可执行；交付物可检查。',1),
@@ -108,14 +104,7 @@ TASK_TEMPLATE_SEED_SQL = """insert into public.task_templates(task_key, course_i
 ('f_day1','freelance_5d','Day 1','选择可售卖技能','服务方向定位','请帮我把一个技能转成可售卖服务方向，说明目标客户、痛点和交付物。','客户明确；痛点具体；交付边界清楚。',1),
 ('f_day2','freelance_5d','Day 2','样品案例 1','第一个可展示样品','请根据目标客户场景，帮我设计一个可展示样品案例。','样品能展示能力；客户能看懂价值。',2),
 ('e_1','enterprise_dept','模块 1','部门高频任务清单','AI 训练任务地图','请把部门高频任务整理成可训练任务清单，并标出可用 AI 辅助的环节。','任务真实；频率高；能训练。',1)
-on conflict (task_key) do update set
-course_id=excluded.course_id,
-day=excluded.day,
-title=excluded.title,
-outcome=excluded.outcome,
-prompt=excluded.prompt,
-standard=excluded.standard,
-sort_order=excluded.sort_order;"""
+on conflict (task_key) do update set course_id=excluded.course_id, day=excluded.day, title=excluded.title, outcome=excluded.outcome, prompt=excluded.prompt, standard=excluded.standard, sort_order=excluded.sort_order;"""
 
 RLS_OFF_SQL = """alter table public.courses disable row level security;
 alter table public.task_templates disable row level security;
@@ -218,17 +207,22 @@ def db_insert_review(instance_id: str, reviewer: str, score: int, conclusion: st
     try:
         stamp = datetime.now().strftime("%Y%m%d%H%M%S")
         review_id = f"rev_{safe_id(instance_id)}_{stamp}"
-        row = {"review_id": review_id, "instance_id": instance_id, "reviewer": reviewer.strip() or "老师", "score": int(score), "conclusion": conclusion, "review_text": review_text.strip()}
+        row = {"review_id": review_id, "instance_id": instance_id, "reviewer": reviewer.strip() or "Agent老师", "score": int(score), "conclusion": conclusion, "review_text": review_text.strip()}
         get_supabase_client().table("reviews").insert(row).execute()
         return True, f"已写入 reviews：{review_id}", review_id
     except Exception as exc:
         return False, f"写入 reviews 失败：{exc}", ""
 
-def db_submit_teacher_review(instance_id: str, reviewer: str, score: int, conclusion: str, review_text: str, portfolio: bool) -> tuple[bool, str]:
+def db_submit_review(instance_id: str, reviewer: str, score: int, conclusion: str, review_text: str, portfolio: bool, agent: bool = False) -> tuple[bool, str]:
     ok, msg, review_id = db_insert_review(instance_id, reviewer, score, conclusion, review_text)
     if not ok:
         return False, msg
-    new_status = "已入作品集" if portfolio else "已点评"
+    if portfolio:
+        new_status = "已入作品集"
+    elif agent:
+        new_status = "Agent已点评"
+    else:
+        new_status = "已点评"
     updates = {"teacher_review": review_text.strip(), "score": int(score), "status": new_status, "risk": "已完成", "portfolio": bool(portfolio)}
     ok2, msg2 = db_update_task_instance(instance_id, updates)
     if not ok2:
@@ -239,8 +233,6 @@ def create_real_enrollment(student_name: str, course_id: str, owner_email: str =
     student_name = student_name.strip()
     if not student_name:
         return False, "请先输入学员名。", ""
-    if not db_ready():
-        return False, "未配置 Supabase Secrets。", ""
     ok, msg, tasks = db_tasks_for_course(course_id)
     if not ok:
         return False, msg, ""
@@ -291,11 +283,69 @@ def merge_instances_with_templates(instances: pd.DataFrame, tasks: pd.DataFrame)
     keep = [c for c in ["course_id", "task_key", "day", "title", "outcome", "prompt", "standard", "sort_order"] if c in tasks.columns]
     return instances.merge(tasks[keep], on=["course_id", "task_key"], how="left")
 
+def agent_review(row: pd.Series) -> dict[str, Any]:
+    draft = str(val(row, "draft", "")).strip()
+    standard = str(val(row, "standard", "")).strip()
+    outcome = str(val(row, "outcome", "")).strip()
+    title = str(val(row, "title", val(row, "task_key", "任务")))
+    points = [p.strip() for p in re.split(r"[；;、，,。\n]", standard) if p.strip()]
+    length_score = min(35, len(draft) // 12)
+    structure_score = 0
+    for marker in ["1", "一", "步骤", "目标", "问题", "改进", "结论", "方案", "测试", "风险"]:
+        if marker in draft:
+            structure_score += 4
+    structure_score = min(25, structure_score)
+    coverage_hits = 0
+    for p in points:
+        key = p[:2]
+        if key and key in draft:
+            coverage_hits += 1
+    coverage_score = min(30, coverage_hits * 10)
+    base = 10 if draft else 0
+    score = max(0, min(100, base + length_score + structure_score + coverage_score))
+    if not draft:
+        conclusion = "退回重做"
+        advice = "当前没有提交有效草稿，请先完成第一版作品。"
+        portfolio = False
+    elif score >= 82:
+        conclusion = "通过"
+        advice = "作品结构和完成度较好，可以进入下一任务；建议进一步压缩表达并补充可验证结果。"
+        portfolio = True
+    elif score >= 65:
+        conclusion = "需要修改"
+        advice = "作品已经具备雏形，但还需要补充标准中的遗漏点，增强步骤、边界条件和可检查结果。"
+        portfolio = False
+    else:
+        conclusion = "退回重做"
+        advice = "作品目前偏粗，需要按任务标准重写：先列目标，再列步骤，再列输出物和检查标准。"
+        portfolio = False
+    review_text = f"""【AI Agent 老师点评】
+任务：{title}
+交付物：{outcome or '未填写'}
+自动评分：{score}/100
+结论：{conclusion}
+
+优点：
+- 已提交可被检查的第一版内容。
+- 能够围绕当前任务进行表达，具备继续修改的基础。
+
+主要问题：
+- 与评分标准的逐项对应还不够清晰。
+- 需要补充更明确的步骤、边界、异常情况或结果证明。
+
+下一步修改建议：
+- {advice}
+- 按“目标 → 步骤 → 输出物 → 检查标准 → 风险/遗漏”重新整理。
+- 修改后保留第二版，方便形成学习轨迹和作品集证据。
+
+Agent 说明：本点评由规则型 Agent 自动生成，用于一审与高频反馈；高价值项目可由真人老师抽检。"""
+    return {"score": score, "conclusion": conclusion, "review_text": review_text, "portfolio": portfolio}
+
 def render_top_nav() -> str:
     st.markdown("""
     <div class='nav'><div class='nav-inner'>
-    <div class='brand'><div class='logo'>AI</div><div>AI Skill Growth Platform<small>技能成长 · 真实老师点评 · v4.0</small></div></div>
-    <div class='badges'><span class='badge'>学员提交</span><span class='badge'>AI反馈</span><span class='badge'>老师点评</span><span class='badge cta'>真实闭环</span></div>
+    <div class='brand'><div class='logo'>AI</div><div>AI Skill Growth Platform<small>技能成长 · Agent 老师闭环 · v4.1</small></div></div>
+    <div class='badges'><span class='badge'>学员提交</span><span class='badge'>Agent一审</span><span class='badge'>自动评分</span><span class='badge cta'>真实闭环</span></div>
     </div></div>
     """, unsafe_allow_html=True)
     st.markdown("<div class='nav-panel'>", unsafe_allow_html=True)
@@ -303,28 +353,28 @@ def render_top_nav() -> str:
     st.markdown("</div>", unsafe_allow_html=True)
     return page
 
-def render_home() -> None:
-    st.markdown("""
-    <div class='hero'>
-    <span class='eyebrow'>AI Skill Growth Platform</span>
-    <h1>AI 技能成长<br><span>教育平台</span></h1>
-    <p><b>用 AI 更快学会新技能，并做出可展示、可交付、可变现的成果。</b><br>
-    v4.0：真实老师点评端。学员提交草稿后，老师可以写入 reviews，并回写任务评分、点评、状态和作品集标记。</p>
-    <span class='pill'>课程模板</span><span class='pill'>报名</span><span class='pill'>任务实例</span><span class='pill'>老师点评</span>
-    </div>
-    """, unsafe_allow_html=True)
-    flow = [("01", "课程"), ("02", "报名"), ("03", "任务"), ("04", "提交"), ("05", "AI反馈"), ("06", "老师点评")]
-    section("METHOD", "真实学习闭环已经成型", "当前先关闭 RLS 跑通原型，后续再加登录和权限。")
-    st.markdown("<div class='flow'>" + "".join(f"<div><b>{n}</b><span>{t}</span></div>" for n, t in flow) + "</div>", unsafe_allow_html=True)
-    offers = [("2 小时体验课", "99 / 199 元", "完成一个微型任务，拿到 AI 路径和一版作品。"), ("5 天技能成长营", "3999 元建议", "形成 3 个可展示作品、反馈记录和老师点评。"), ("自由职业技能变现营", "4999 元建议", "形成服务包、样品、报价和交付 SOP。"), ("企业内训", "3 万元起", "把部门高频任务改造成可训练、可评分的 AI 工作流。")]
-    st.markdown("<div class='grid4'>" + "".join(html_card("🚀", title + " · " + price, body, "offer") for title, price, body in offers) + "</div>", unsafe_allow_html=True)
-
 def render_diagnostics() -> None:
     status = {"SUPABASE_URL": "已配置" if configured("SUPABASE_URL") else "未配置", "SUPABASE_ANON_KEY": "已配置" if configured("SUPABASE_ANON_KEY") else "未配置", "当前模式": "真实数据库" if db_ready() else "模拟模式"}
     cols = st.columns(3)
     for col, item in zip(cols, status.items()):
         name, value = item
         col.metric(name, value)
+
+def render_home() -> None:
+    st.markdown("""
+    <div class='hero'>
+    <span class='eyebrow'>AI Skill Growth Platform</span>
+    <h1>AI 技能成长<br><span>Agent 教育平台</span></h1>
+    <p><b>从“真人老师点评型 LMS”跃迁到“Agent 驱动型技能训练平台”。</b><br>
+    v4.1：Agent 老师读取学员任务，自动评分、生成结构化点评、写入 reviews，并回写 task_instances。</p>
+    <span class='pill'>课程模板</span><span class='pill'>报名</span><span class='pill'>任务实例</span><span class='pill'>Agent 老师</span>
+    </div>
+    """, unsafe_allow_html=True)
+    flow = [("01", "课程"), ("02", "报名"), ("03", "任务"), ("04", "提交"), ("05", "Agent点评"), ("06", "作品集")]
+    section("METHOD", "Agent 代替真人老师完成一审", "真人老师从高频点评中退出，转为抽检、仲裁和企业高价值点评。")
+    st.markdown("<div class='flow'>" + "".join(f"<div><b>{n}</b><span>{t}</span></div>" for n, t in flow) + "</div>", unsafe_allow_html=True)
+    cards = [("Agent 老师", "自动读取任务、草稿和评分标准，生成结构化点评。"), ("真人老师", "保留抽检、仲裁、高价值项目点评。"), ("运营看板", "查看任务状态、待处理、作品集和训练质量。")]
+    st.markdown("<div class='grid3'>" + "".join(html_card("🤖", a, b, "card green") for a, b in cards) + "</div>", unsafe_allow_html=True)
 
 def render_real_loop() -> None:
     section("REAL LOOP", "创建报名与任务实例", "从 courses 和 task_templates 创建真实 enrollments / task_instances。")
@@ -349,12 +399,11 @@ def render_real_loop() -> None:
             st.dataframe(tasks[cols], use_container_width=True, hide_index=True)
     if courses.empty:
         return
-    st.markdown("### 创建真实学员")
-    with st.form("create_enrollment_v40"):
+    with st.form("create_enrollment_v41"):
         student_name = st.text_input("学员 / 小组名称", value="真实学员A")
         course_id = st.selectbox("选择课程", courses["course_id"].tolist())
         owner_email = st.text_input("学员邮箱，可空")
-        coach_email = st.text_input("老师邮箱，可空")
+        coach_email = st.text_input("Agent / 老师邮箱，可空")
         submitted = st.form_submit_button("创建报名并生成任务实例")
     if submitted:
         ok, msg, eid = create_real_enrollment(student_name, course_id, owner_email, coach_email)
@@ -369,118 +418,119 @@ def render_real_loop() -> None:
     if not instances.empty:
         st.dataframe(instances, use_container_width=True, hide_index=True)
 
-def render_real_student() -> None:
-    section("REAL STUDENT", "真实学员端", "学员读取真实任务，提交草稿，生成模拟 AI 反馈，并提交老师点评。")
+def load_merged_instances(status: str | None = None) -> tuple[bool, str, pd.DataFrame]:
+    ok_i, msg_i, instances = db_task_instances(status=status)
+    ok_t, msg_t, tasks = db_select("task_templates")
+    if not ok_i:
+        return False, msg_i, pd.DataFrame()
+    merged = merge_instances_with_templates(instances, tasks if ok_t else pd.DataFrame())
+    return True, msg_i, merged
+
+def render_student() -> None:
+    section("REAL STUDENT", "真实学员端", "学员读取真实任务，提交草稿，生成模拟 AI 反馈，然后交给 Agent 老师点评。")
     render_diagnostics()
     if not db_ready():
         st.info("未配置 Supabase Secrets。")
         return
-    ok_i, msg_i, instances = db_task_instances()
-    ok_t, msg_t, tasks = db_select("task_templates")
-    if not ok_i:
-        st.error(msg_i)
+    ok, msg, merged = load_merged_instances()
+    if not ok:
+        st.error(msg)
         return
-    if instances.empty:
+    if merged.empty:
         st.warning("task_instances 为空。先到“创建报名与任务实例”创建一个学员。")
         return
-    merged = merge_instances_with_templates(instances, tasks if ok_t else pd.DataFrame())
     students = sorted(merged["student"].dropna().unique().tolist())
-    student = st.selectbox("选择真实学员", students, key="student_select_v40")
+    student = st.selectbox("选择真实学员", students, key="student_select_v41")
     sdf = merged[merged["student"] == student].copy()
-    status_rank = {"进行中": 0, "已提交": 1, "AI已反馈": 2, "待老师点评": 3, "未开始": 4, "已点评": 5, "已入作品集": 6}
+    status_rank = {"进行中": 0, "已提交": 1, "AI已反馈": 2, "待老师点评": 3, "未开始": 4, "Agent已点评": 5, "已入作品集": 6}
     sdf["_rank"] = sdf["status"].map(status_rank).fillna(9)
     sdf = sdf.sort_values(["_rank", "updated_at" if "updated_at" in sdf.columns else "instance_id"], ascending=[True, False])
     st.dataframe(sdf.drop(columns=["_rank"], errors="ignore"), use_container_width=True, hide_index=True)
     labels = [f"{row['instance_id']}｜{val(row, 'status')}｜{val(row, 'day', '')}｜{val(row, 'title', row['task_key'])}" for _, row in sdf.iterrows()]
-    selected_label = st.selectbox("选择要处理的任务", labels, key="task_select_student_v40")
+    selected_label = st.selectbox("选择要处理的任务", labels, key="task_select_student_v41")
     instance_id = selected_label.split("｜", 1)[0]
     row = sdf[sdf["instance_id"] == instance_id].iloc[0]
-    st.markdown(f"<div class='state-card'><b>{val(row, 'day', '')}｜{val(row, 'title', row['task_key'])}</b><p>实例：{row['instance_id']}<br>课程：{row['course_id']}　任务：{row['task_key']}<br>状态：{chip(val(row, 'status'))}　版本：{val(row, 'version', '未提交')}</p><p><b>交付物：</b>{val(row, 'outcome', '')}</p><p><b>标准：</b>{val(row, 'standard', '')}</p></div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='state-card'><b>{val(row, 'day', '')}｜{val(row, 'title', row['task_key'])}</b><p>实例：{row['instance_id']}<br>状态：{chip(val(row, 'status'))}　版本：{val(row, 'version', '未提交')}</p><p><b>交付物：</b>{val(row, 'outcome', '')}</p><p><b>标准：</b>{val(row, 'standard', '')}</p></div>", unsafe_allow_html=True)
     if val(row, "prompt", ""):
         st.code(str(val(row, "prompt")), language="text")
     draft = st.text_area("作品草稿 draft", value=str(val(row, "draft", "")), height=220, key=f"draft_{instance_id}")
     if val(row, "ai_feedback", ""):
         st.info("AI反馈：\n" + str(val(row, "ai_feedback")))
     if val(row, "teacher_review", ""):
-        st.success("老师点评：\n" + str(val(row, "teacher_review")))
+        st.success("Agent点评：\n" + str(val(row, "teacher_review")))
     c1, c2, c3, c4 = st.columns(4)
     if c1.button("保存草稿并标记已提交", type="primary", key=f"save_{instance_id}"):
         ok, msg = db_update_task_instance(instance_id, {"draft": draft, "status": "已提交", "version": "第一版", "risk": "等待AI反馈"})
         st.success(msg) if ok else st.error(msg)
-        if ok:
-            st.rerun()
+        if ok: st.rerun()
     if c2.button("生成模拟AI反馈", key=f"ai_{instance_id}"):
         feedback = f"AI反馈：已检查任务 {row['task_key']}。请对照评分标准补充遗漏，把输出改成可执行格式，并保留修改前后版本。"
         ok, msg = db_update_task_instance(instance_id, {"ai_feedback": feedback, "status": "AI已反馈", "risk": "需按AI反馈修改"})
         st.success(msg) if ok else st.error(msg)
-        if ok:
-            st.rerun()
-    if c3.button("提交老师点评", key=f"teacher_{instance_id}"):
-        ok, msg = db_update_task_instance(instance_id, {"status": "待老师点评", "risk": "待人工判断"})
+        if ok: st.rerun()
+    if c3.button("提交给Agent老师", key=f"agent_queue_{instance_id}"):
+        ok, msg = db_update_task_instance(instance_id, {"status": "待老师点评", "risk": "等待Agent点评"})
         st.success(msg) if ok else st.error(msg)
-        if ok:
-            st.rerun()
+        if ok: st.rerun()
     if c4.button("标记进行中", key=f"progress_{instance_id}"):
         ok, msg = db_update_task_instance(instance_id, {"status": "进行中", "risk": "正常"})
         st.success(msg) if ok else st.error(msg)
-        if ok:
-            st.rerun()
+        if ok: st.rerun()
 
-def render_real_teacher() -> None:
-    section("REAL TEACHER", "v4.0 真实老师点评端", "老师读取待点评任务，写入 reviews，并回写 task_instances。")
+def render_agent_teacher() -> None:
+    section("AGENT TEACHER", "v4.1 Agent 老师端", "Agent 自动读取待点评任务，生成评分与结构化点评，写入 reviews 并回写 task_instances。")
     render_diagnostics()
     if not db_ready():
         st.info("未配置 Supabase Secrets。")
         return
-    status_filter = st.selectbox("筛选状态", ["待老师点评", "AI已反馈", "已提交", "已点评", "已入作品集", "全部"], index=0)
+    status_filter = st.selectbox("筛选状态", ["待老师点评", "AI已反馈", "已提交", "进行中", "Agent已点评", "已入作品集", "全部"], index=0)
     selected_status = None if status_filter == "全部" else status_filter
-    ok_i, msg_i, instances = db_task_instances(status=selected_status)
-    ok_t, msg_t, tasks = db_select("task_templates")
-    if not ok_i:
-        st.error(msg_i)
+    ok, msg, merged = load_merged_instances(status=selected_status)
+    if not ok:
+        st.error(msg)
         return
-    st.success(msg_i)
-    if instances.empty:
-        st.warning("当前没有符合条件的任务。让学员端先提交草稿并点“提交老师点评”。")
+    st.success(msg)
+    if merged.empty:
+        st.warning("当前没有符合条件的任务。让学员端先提交草稿并点“提交给Agent老师”。")
         return
-    merged = merge_instances_with_templates(instances, tasks if ok_t else pd.DataFrame())
     view_cols = [c for c in ["student", "course_id", "task_key", "day", "title", "status", "version", "score", "risk", "updated_at"] if c in merged.columns]
     st.dataframe(merged[view_cols], use_container_width=True, hide_index=True)
     labels = [f"{row['instance_id']}｜{val(row, 'student')}｜{val(row, 'status')}｜{val(row, 'title', row['task_key'])}" for _, row in merged.iterrows()]
-    selected_label = st.selectbox("选择要点评的任务", labels, key="teacher_select_v40")
+    selected_label = st.selectbox("选择 Agent 要点评的任务", labels, key="agent_select_v41")
     instance_id = selected_label.split("｜", 1)[0]
     row = merged[merged["instance_id"] == instance_id].iloc[0]
     st.markdown(f"<div class='state-card'><b>{val(row, 'student')}｜{val(row, 'title', row['task_key'])}</b><p>实例：{row['instance_id']}<br>状态：{chip(val(row, 'status'))}<br>交付物：{val(row, 'outcome', '')}<br>标准：{val(row, 'standard', '')}</p></div>", unsafe_allow_html=True)
     st.markdown("#### 学员草稿")
-    st.text_area("draft", value=str(val(row, "draft", "")), height=220, disabled=True, key=f"teacher_draft_{instance_id}")
+    st.text_area("draft", value=str(val(row, "draft", "")), height=200, disabled=True, key=f"agent_draft_{instance_id}")
     if val(row, "ai_feedback", ""):
         st.info("AI反馈：\n" + str(val(row, "ai_feedback")))
-    with st.form(f"teacher_review_form_{instance_id}"):
-        reviewer = st.text_input("点评老师", value="老师A")
-        score = st.slider("评分", 0, 100, int(val(row, "score", 0) or 0))
-        conclusion = st.selectbox("结论", ["通过", "需要修改", "退回重做", "收入作品集"])
-        default_review = "优点：\n改进点：\n下一步："
-        current_review = str(val(row, "teacher_review", "")) or default_review
-        review_text = st.text_area("老师点评", value=current_review, height=180)
-        portfolio = st.checkbox("收入作品集", value=bool(val(row, "portfolio", False)) or conclusion == "收入作品集")
-        submitted = st.form_submit_button("写入 reviews，并回写任务状态")
-    if submitted:
-        if not review_text.strip():
-            st.error("请先填写老师点评。")
-            return
-        ok, msg = db_submit_teacher_review(instance_id, reviewer, score, conclusion, review_text, portfolio)
+    review = agent_review(row)
+    st.markdown("#### Agent 预览")
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Agent评分", review["score"])
+    c2.metric("结论", review["conclusion"])
+    c3.metric("作品集建议", "收入" if review["portfolio"] else "暂不收入")
+    editable_review = st.text_area("Agent 点评内容，可人工微调后写入", value=review["review_text"], height=260, key=f"agent_review_text_{instance_id}")
+    col_a, col_b = st.columns(2)
+    if col_a.button("Agent 一键写入 reviews + 回写任务", type="primary", key=f"agent_submit_{instance_id}"):
+        ok, msg = db_submit_review(instance_id, "AI Agent 老师", int(review["score"]), str(review["conclusion"]), editable_review, bool(review["portfolio"]), agent=True)
         st.success(msg) if ok else st.error(msg)
-        if ok:
-            st.rerun()
-    ok_r, msg_r, reviews = db_select("reviews")
-    if ok_r and not reviews.empty and "instance_id" in reviews.columns:
-        recent = reviews[reviews["instance_id"] == instance_id]
-        if not recent.empty:
-            st.markdown("#### 该任务历史点评")
-            st.dataframe(recent, use_container_width=True, hide_index=True)
+        if ok: st.rerun()
+    if col_b.button("标记需要真人抽检", key=f"human_check_{instance_id}"):
+        ok, msg = db_update_task_instance(instance_id, {"risk": "需要真人抽检", "status": "待老师点评"})
+        st.success(msg) if ok else st.error(msg)
+        if ok: st.rerun()
 
-def render_real_ops() -> None:
-    section("REAL OPS", "真实运营看板", "聚合 Supabase 的 task_instances，查看状态、风险和作品集。")
+def render_human_review_backup() -> None:
+    section("HUMAN CHECK", "真人老师抽检 / 备用", "真人老师不再做高频点评，只处理抽检、争议和企业高价值任务。")
+    ok, msg, merged = load_merged_instances(status="待老师点评") if db_ready() else (False, "未配置 Supabase Secrets。", pd.DataFrame())
+    if not ok:
+        st.info(msg)
+        return
+    st.dataframe(merged, use_container_width=True, hide_index=True)
+
+def render_ops() -> None:
+    section("REAL OPS", "真实运营看板", "聚合 Supabase 的 task_instances，查看 Agent 点评结果。")
     if not db_ready():
         st.info("未配置 Supabase Secrets。")
         return
@@ -494,8 +544,8 @@ def render_real_ops() -> None:
         return
     c1, c2, c3, c4 = st.columns(4)
     c1.metric("任务实例", len(df))
-    c2.metric("待老师点评", int((df["status"] == "待老师点评").sum()) if "status" in df.columns else 0)
-    c3.metric("已点评/作品集", int((df["status"].isin(["已点评", "已入作品集"])).sum()) if "status" in df.columns else 0)
+    c2.metric("待Agent点评", int((df["status"] == "待老师点评").sum()) if "status" in df.columns else 0)
+    c3.metric("Agent已点评", int((df["status"] == "Agent已点评").sum()) if "status" in df.columns else 0)
     c4.metric("作品集", int(df["portfolio"].fillna(False).astype(bool).sum()) if "portfolio" in df.columns else 0)
     if "status" in df.columns:
         st.bar_chart(df["status"].value_counts())
@@ -504,28 +554,20 @@ def render_real_ops() -> None:
 def render_sql_tools() -> None:
     section("SQL", "建表 / Seed / RLS 开关", "当前原型阶段建议先关闭 RLS。")
     tabs = st.tabs(["建表 SQL", "courses seed", "task_templates seed", "关闭 RLS"])
-    with tabs[0]:
-        st.code(CREATE_TABLE_SQL, language="sql")
-    with tabs[1]:
-        st.code(COURSE_SEED_SQL, language="sql")
-    with tabs[2]:
-        st.code(TASK_TEMPLATE_SEED_SQL, language="sql")
-    with tabs[3]:
-        st.code(RLS_OFF_SQL, language="sql")
+    with tabs[0]: st.code(CREATE_TABLE_SQL, language="sql")
+    with tabs[1]: st.code(COURSE_SEED_SQL, language="sql")
+    with tabs[2]: st.code(TASK_TEMPLATE_SEED_SQL, language="sql")
+    with tabs[3]: st.code(RLS_OFF_SQL, language="sql")
 
 def render_workspace() -> None:
-    subhero("V4.0 REAL TEACHER REVIEW", "学习工作台：真实老师点评闭环版", "学员端提交草稿，老师端写入 reviews 并回写 task_instances，运营端查看真实状态。")
-    tabs = st.tabs(["真实学员端", "真实老师点评端", "真实运营看板", "创建报名与任务实例", "SQL / Seed / RLS"])
-    with tabs[0]:
-        render_real_student()
-    with tabs[1]:
-        render_real_teacher()
-    with tabs[2]:
-        render_real_ops()
-    with tabs[3]:
-        render_real_loop()
-    with tabs[4]:
-        render_sql_tools()
+    subhero("V4.1 AGENT TEACHER LOOP", "学习工作台：Agent 老师闭环版", "Agent 取代真人老师高频点评，自动写 reviews 并回写 task_instances。")
+    tabs = st.tabs(["真实学员端", "Agent老师端", "真人抽检备用", "真实运营看板", "创建报名与任务实例", "SQL / Seed / RLS"])
+    with tabs[0]: render_student()
+    with tabs[1]: render_agent_teacher()
+    with tabs[2]: render_human_review_backup()
+    with tabs[3]: render_ops()
+    with tabs[4]: render_real_loop()
+    with tabs[5]: render_sql_tools()
 
 def render_trial() -> None:
     subhero("2-HOUR TRIAL", "AI 技能成长 2 小时体验课", "低门槛入口产品。目标是在 2 小时内帮用户完成一个真实小任务。")
@@ -534,8 +576,8 @@ def render_trial() -> None:
 
 def render_followup_sop() -> None:
     subhero("SALES SOP", "线索跟进 SOP", "飞书或下载线索后，销售按固定动作推进。")
-    statuses = [("新线索", "5 分钟内响应"), ("已联系", "发送第一条回复"), ("已约时间", "确定体验课时间"), ("已付款", "确认体验课"), ("已上课", "进入课后转化"), ("已转化", "进入训练营或企业方案"), ("未转化", "记录原因，7 天后触达")]
-    st.markdown("<div class='grid4'>" + "".join(html_card("📌", a, b, "card soft") for a, b in statuses) + "</div>", unsafe_allow_html=True)
+    rows = [("新线索", "5 分钟内响应"), ("已联系", "发送第一条回复"), ("已约时间", "确定体验课时间"), ("已付款", "确认体验课"), ("已上课", "进入课后转化"), ("已转化", "进入训练营或企业方案"), ("未转化", "记录原因，7 天后触达")]
+    st.markdown("<div class='grid4'>" + "".join(html_card("📌", a, b, "card soft") for a, b in rows) + "</div>", unsafe_allow_html=True)
 
 def render_paths() -> None:
     subhero("GROWTH PATHS", "成长路径", "平台先帮用户选路径，再拆成任务。")
@@ -543,12 +585,12 @@ def render_paths() -> None:
     st.dataframe(pd.DataFrame(rows, columns=["场景", "目标", "训练重点"]), use_container_width=True, hide_index=True)
 
 def render_skills() -> None:
-    subhero("SKILL TRAINING", "技能训练", "AI 负责高频反馈，老师负责最终判断。")
-    rows = [("学新技能", "AI 生成学习路径、解释概念、给例子"), ("做任务", "把学习目标变成真实工作任务"), ("被纠错", "AI 第一轮反馈遗漏、逻辑、格式、风险"), ("再修改", "根据反馈形成第二版、第三版成果"), ("做作品", "变成能给老板、客户或面试官看的作品"), ("会表达", "说明自己怎么学、怎么做、怎么提升结果")]
+    subhero("SKILL TRAINING", "技能训练", "AI Agent 负责高频反馈，真人只做抽检和仲裁。")
+    rows = [("学新技能", "AI 生成学习路径、解释概念、给例子"), ("做任务", "把学习目标变成真实工作任务"), ("Agent一审", "自动评分、指出遗漏、给出修改路径"), ("再修改", "根据反馈形成第二版、第三版成果"), ("做作品", "变成能给老板、客户或面试官看的作品"), ("会表达", "说明自己怎么学、怎么做、怎么提升结果")]
     st.markdown("<div class='grid3'>" + "".join(html_card("🧠", a, b) for a, b in rows) + "</div>", unsafe_allow_html=True)
 
 def render_portfolio() -> None:
-    subhero("PORTFOLIO", "作品集", "作品集来自已点评或已入作品集的真实 task_instances。")
+    subhero("PORTFOLIO", "作品集", "作品集来自 Agent 已点评并建议收入的真实 task_instances。")
     if not db_ready():
         st.info("配置 Supabase 后可查看真实作品集。")
         return
@@ -572,12 +614,12 @@ def render_freelance() -> None:
 
 def render_company() -> None:
     subhero("COMPANY TRAINING", "企业内训", "企业需要的不只是 AI 讲座，而是新人上手和部门技能训练体系。")
-    rows = [("新人上手", "学习路径、任务练习、AI 反馈和老师点评标准化。"), ("在岗提升", "把部门高频任务做成 AI 学习与工作流模板。"), ("部门模板", "沉淀日报、周报、会议纪要、客户回复、PPT、数据说明模板。"), ("合规边界", "企业数据脱敏，关键输出必须人工审核。")]
+    rows = [("新人上手", "学习路径、任务练习、AI 反馈和 Agent 点评标准化。"), ("在岗提升", "把部门高频任务做成 AI 学习与工作流模板。"), ("部门模板", "沉淀日报、周报、会议纪要、客户回复、PPT、数据说明模板。"), ("合规边界", "企业数据脱敏，关键输出可由真人抽检。")]
     st.markdown("<div class='grid4'>" + "".join(html_card("🏢", a, b) for a, b in rows) + "</div>", unsafe_allow_html=True)
 
 def render_pricing() -> None:
-    subhero("PRICING", "报价与产品入口", "价格不是按讲师小时数，而是按训练结果。")
-    rows = [("2 小时体验课", "99 / 199 元"), ("5 天技能成长营", "3999 元建议"), ("自由职业技能变现营", "4999 元建议"), ("企业内训", "3 万元起")]
+    subhero("PRICING", "报价与产品入口", "价格不是按讲师小时数，而是按训练结果和 Agent 训练规模。")
+    rows = [("2 小时体验课", "99 / 199 元"), ("5 天技能成长营", "3999 元建议"), ("自由职业技能变现营", "4999 元建议"), ("企业 Agent 内训", "3 万元起")]
     st.markdown("<div class='grid4'>" + "".join(html_card("💰", a, b, "offer") for a, b in rows) + "</div>", unsafe_allow_html=True)
 
 def render_booking() -> None:
@@ -586,7 +628,7 @@ def render_booking() -> None:
     status_cls = "green" if configured_webhook else "orange"
     status_text = "已配置：提交后会自动发送线索。" if configured_webhook else "未配置：线索不会自动保存，请下载 TXT/CSV。"
     st.markdown(f"<div class='card {status_cls}'><b>Webhook 状态</b><p>{status_text}</p></div>", unsafe_allow_html=True)
-    with st.form("booking_form_v40"):
+    with st.form("booking_form_v41"):
         name = st.text_input("姓名 / 称呼")
         contact = st.text_input("联系方式（微信 / 邮箱 / 手机，任选）")
         identity = st.selectbox("你现在属于哪类人？", ["职场新人", "在岗提升", "升职准备", "转岗 / 跳槽", "自由职业 / 副业接单", "企业培训负责人", "小微老板"])
@@ -615,36 +657,24 @@ def render_booking() -> None:
 
 def render_faq() -> None:
     subhero("FAQ", "常见问题", "把风险边界说清楚，比夸大承诺更能建立信任。")
-    qs = [("这是不是只适合新人？", "不是。新人、想升职的人、转岗的人、自由职业者、想带团队的人都适合。"), ("这是不是 AI 办公提效课？", "不是。提效只是副产品，核心是学习新技能、提升技能，并做出可展示成果。"), ("会不会承诺就业、涨薪、接单收入或证书？", "不承诺。平台交付技能路径、作品集、服务包和表达能力，不做官方职业资格或收入保证。"), ("AI 会不会替代老师？", "不会。AI 做第一轮解释和反馈，老师负责任务设计、标准把关和关键点评。")]
+    qs = [("这是不是没有真人老师了？", "高频一审由 Agent 完成，真人老师保留抽检、仲裁和企业高价值点评。"), ("Agent 点评可靠吗？", "当前是规则型 Agent，用于跑通产品闭环；后续可接大模型和企业知识库。"), ("会不会承诺就业、涨薪、接单收入？", "不承诺。平台交付技能路径、作品集、服务包和表达能力。"), ("为什么要用 Agent？", "因为高频反馈是教育成本最大的环节，Agent 可以把反馈成本压低，让训练规模扩大。")]
     st.markdown("<div class='grid2'>" + "".join(html_card("❓", q, a) for q, a in qs) + "</div>", unsafe_allow_html=True)
 
 def main() -> None:
     page = render_top_nav()
-    if page == "home":
-        render_home()
-    elif page == "workspace":
-        render_workspace()
-    elif page == "trial":
-        render_trial()
-    elif page == "sop":
-        render_followup_sop()
-    elif page == "paths":
-        render_paths()
-    elif page == "skills":
-        render_skills()
-    elif page == "portfolio":
-        render_portfolio()
-    elif page == "freelance":
-        render_freelance()
-    elif page == "company":
-        render_company()
-    elif page == "pricing":
-        render_pricing()
-    elif page == "booking":
-        render_booking()
-    else:
-        render_faq()
-    st.caption("AI Skill Growth Platform · real teacher review loop prototype v4.0")
+    if page == "home": render_home()
+    elif page == "workspace": render_workspace()
+    elif page == "trial": render_trial()
+    elif page == "sop": render_followup_sop()
+    elif page == "paths": render_paths()
+    elif page == "skills": render_skills()
+    elif page == "portfolio": render_portfolio()
+    elif page == "freelance": render_freelance()
+    elif page == "company": render_company()
+    elif page == "pricing": render_pricing()
+    elif page == "booking": render_booking()
+    else: render_faq()
+    st.caption("AI Skill Growth Platform · Agent teacher review loop prototype v4.1")
 
 if __name__ == "__main__":
     main()
