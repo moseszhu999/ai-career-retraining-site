@@ -10,31 +10,24 @@ import streamlit as st
 
 st.set_page_config(page_title="AI 技能成长教育平台", page_icon="🚀", layout="wide")
 
-st.markdown(
-    """
+CSS = """
 <style>
-:root{--ink:#0f172a;--muted:#64748b;--brand:#4f46e5;--brand2:#06b6d4;--line:#e2e8f0;--green:#16a34a}
-.main .block-container{max-width:1180px;padding-top:.7rem;padding-bottom:5.5rem}
-[data-testid="stSidebar"],[data-testid="collapsedControl"]{display:none}
-.nav{position:sticky;top:.45rem;z-index:999;margin-bottom:1rem}.nav-inner{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.72rem .95rem;border:1px solid #c7d2fe;border-radius:1.25rem;background:rgba(255,255,255,.92);backdrop-filter:blur(18px);box-shadow:0 14px 34px rgba(15,23,42,.08)}.brand{display:flex;gap:.62rem;align-items:center;font-weight:950;color:#111827}.logo{width:36px;height:36px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(135deg,var(--brand),var(--brand2));color:white}.brand small{display:block;color:var(--muted);font-weight:800}.badges{display:flex;gap:.45rem;flex-wrap:wrap}.badge{padding:.36rem .7rem;border-radius:999px;background:#f8fafc;border:1px solid var(--line);font-weight:900;color:#475569;font-size:.82rem}.badge.cta{background:linear-gradient(90deg,var(--brand),#7c3aed);color:white;border:none}
-.nav-panel{margin:.65rem 0 1.15rem;padding:.55rem;border:1px solid #e0e7ff;border-radius:1.2rem;background:#f8fafc;box-shadow:0 10px 26px rgba(15,23,42,.05)}div[data-testid="stRadio"]>label{display:none}div[role="radiogroup"]{display:flex;flex-wrap:wrap;gap:.42rem}div[role="radiogroup"] label{border:1px solid #dbeafe!important;border-radius:999px!important;background:white!important;padding:.38rem .74rem!important;box-shadow:0 4px 12px rgba(15,23,42,.035)}div[role="radiogroup"] label p{font-weight:900!important;color:#334155!important;font-size:.9rem!important}div[role="radiogroup"] label:has(input:checked){background:linear-gradient(90deg,#4f46e5,#06b6d4)!important;border-color:#4f46e5!important}div[role="radiogroup"] label:has(input:checked) p{color:white!important}
-.hero{padding:2.25rem;border:1px solid #c7d2fe;border-radius:1.65rem;background:radial-gradient(circle at 86% 12%,#cffafe 0,#eef2ff 32%,#f8fafc 72%);box-shadow:0 24px 70px rgba(15,23,42,.10);overflow:hidden}.hero-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:1.8rem;align-items:center}.eyebrow{display:inline-block;font-size:.78rem;letter-spacing:.13em;color:#3730a3;font-weight:950;background:white;border:1px solid #c7d2fe;border-radius:999px;padding:.32rem .65rem}.hero h1{margin:.7rem 0 .8rem;font-size:3.15rem;line-height:1.02;color:var(--ink);font-weight:980}.hero h1 span{background:linear-gradient(90deg,var(--brand),var(--brand2));-webkit-background-clip:text;color:transparent}.hero p{font-size:1.12rem;color:#475569;line-height:1.78}.hero b{color:#312e81}.btn-row{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.1rem}.btn{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:.78rem 1.08rem;font-weight:950}.primary{background:linear-gradient(90deg,var(--brand),#7c3aed);color:white;box-shadow:0 12px 25px rgba(79,70,229,.28)}.secondary{background:white;color:#3730a3;border:1px solid #c7d2fe}.pill{display:inline-block;border-radius:999px;background:white;color:#3730a3;border:1px solid #c7d2fe;padding:.28rem .62rem;margin:.15rem;font-weight:850;font-size:.83rem}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-top:1.08rem}.stat{background:white;border:1px solid #e0e7ff;border-radius:1rem;padding:.78rem;text-align:center}.stat b{display:block;font-size:1.48rem;color:var(--brand)}.stat span{font-size:.82rem;color:var(--muted);font-weight:850}
-.visual{position:relative;min-height:455px;border:1px solid #dbeafe;border-radius:1.45rem;background:linear-gradient(160deg,#fff,#eef2ff 54%,#ecfeff);overflow:hidden;box-shadow:0 18px 36px rgba(30,41,59,.08)}.dash{position:absolute;left:30px;right:30px;top:28px;bottom:28px;border-radius:1.2rem;background:rgba(255,255,255,.76);border:1px solid #dbeafe;box-shadow:0 18px 40px rgba(15,23,42,.12);padding:1rem}.dash-head{display:flex;justify-content:space-between;align-items:center;font-weight:950}.avatar{width:38px;height:38px;border-radius:14px;display:inline-grid;place-items:center;background:linear-gradient(135deg,var(--brand),var(--brand2));color:white;margin-right:.55rem}.live{padding:.28rem .55rem;border-radius:999px;background:#dcfce7;color:#166534;font-size:.78rem}.journey{display:grid;grid-template-columns:repeat(5,1fr);gap:.42rem;margin:.8rem 0}.journey div{border:1px solid #c7d2fe;background:white;border-radius:.85rem;padding:.55rem .3rem;text-align:center}.journey b{display:block;color:var(--brand);font-size:.82rem}.journey span{font-size:.72rem;font-weight:900;color:#312e81}.ai-box{margin-top:.85rem;background:#0f172a;border-radius:1rem;color:#e2e8f0;padding:.95rem}.ai-box b{color:#93c5fd}.prompt{border:1px solid #334155;background:#111827;border-radius:.8rem;padding:.72rem;color:#cbd5e1;line-height:1.55}.mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:.55rem;margin-top:.75rem}.mini{background:white;border:1px solid #e0e7ff;border-radius:.9rem;padding:.7rem;font-weight:930;color:#111827}.mini small{display:block;color:#64748b;font-weight:750;margin-top:.22rem}.progress{position:absolute;left:22px;right:22px;bottom:20px;background:linear-gradient(90deg,#312e81,#0369a1);color:white;border-radius:1rem;padding:.8rem}.bar{height:9px;background:rgba(255,255,255,.25);border-radius:999px;margin-top:.55rem;overflow:hidden}.bar span{display:block;width:72%;height:100%;background:linear-gradient(90deg,#86efac,#67e8f9)}
-section{margin:2.2rem 0 .95rem}.kicker{font-size:.78rem;font-weight:950;letter-spacing:.14em;color:var(--brand);text-transform:uppercase}.title{font-size:1.72rem;font-weight:950;color:var(--ink);line-height:1.22}.sub{color:var(--muted);line-height:1.75;max-width:850px}.subhero{border:1px solid #c7d2fe;border-radius:1.35rem;padding:1.35rem;background:radial-gradient(circle at right,#ecfeff,#eef2ff 46%,#fff);box-shadow:0 16px 36px rgba(15,23,42,.07);margin:1.2rem 0}.subhero h2{margin:.2rem 0 .5rem;color:var(--ink);font-size:2rem}.subhero p{color:#475569;line-height:1.75}.label{display:inline-block;border-radius:999px;background:white;border:1px solid #c7d2fe;color:#3730a3;font-weight:950;padding:.25rem .6rem;font-size:.78rem}
-.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:.95rem}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}.card{border:1px solid var(--line);border-radius:1.08rem;background:white;padding:1rem;box-shadow:0 8px 22px rgba(15,23,42,.045);min-height:132px}.card b{color:var(--ink)}.card p{color:var(--muted);line-height:1.58}.soft{background:linear-gradient(180deg,#fff,#f8fafc);border-color:#dbeafe}.orange{background:#fff7ed;border-color:#fed7aa;color:#7c2d12}.green{background:#f0fdf4;border-color:#bbf7d0}.dark{background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1rem;white-space:pre-wrap}.strip{display:grid;grid-template-columns:repeat(4,1fr);gap:.85rem;margin:1rem 0 1.2rem}.metric{border:1px solid #e0e7ff;background:white;border-radius:1.05rem;padding:1rem;box-shadow:0 10px 24px rgba(15,23,42,.05)}.metric b{display:block;font-size:1.6rem;color:var(--brand)}.metric span{color:#64748b;font-weight:850;font-size:.86rem}.flow{display:grid;grid-template-columns:repeat(6,1fr);gap:.55rem}.flow div{background:white;border:1px solid #c7d2fe;border-radius:1rem;padding:.85rem;text-align:center}.flow b{display:block;color:var(--brand)}.flow span{font-weight:850;color:#312e81;font-size:.82rem}
-.offer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}.offer{position:relative;border:1px solid #dbeafe;border-radius:1.25rem;background:white;padding:1.15rem;box-shadow:0 14px 34px rgba(15,23,42,.07);min-height:292px}.offer.featured{border:2px solid #4f46e5;box-shadow:0 22px 44px rgba(79,70,229,.16);transform:translateY(-4px)}.offer:before{content:"";position:absolute;left:0;top:0;right:0;height:5px;background:linear-gradient(90deg,var(--brand),var(--brand2))}.tag{display:inline-block;border-radius:999px;background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe;padding:.24rem .55rem;font-size:.76rem;font-weight:950}.offer.featured .tag{background:#4f46e5;color:white}.price{font-size:1.45rem;font-weight:980;color:#16a34a}.offer ul{margin:.45rem 0 3.2rem 1rem;color:#475569;line-height:1.7}.offer-btn{position:absolute;left:1.15rem;right:1.15rem;bottom:1.05rem;text-align:center;border-radius:999px;padding:.68rem .8rem;font-weight:950;background:#0f172a;color:white}.offer.featured .offer-btn{background:linear-gradient(90deg,var(--brand),#7c3aed)}
-.form-card,.diagnosis{border:1px solid #dbeafe;background:white;border-radius:1.25rem;padding:1.15rem;box-shadow:0 14px 34px rgba(15,23,42,.07)}.diagnosis{background:linear-gradient(180deg,#fff,#eef2ff);border-color:#c7d2fe}.summary{border-radius:1rem;background:#0f172a;color:#e2e8f0;padding:1rem;line-height:1.7;white-space:pre-wrap}.lead-note{border:1px solid #bbf7d0;background:#f0fdf4;color:#14532d;border-radius:1rem;padding:1rem;margin-top:1rem;font-weight:850}.mail-link{display:inline-block;border-radius:999px;background:linear-gradient(90deg,#4f46e5,#06b6d4);color:white!important;text-decoration:none;padding:.7rem 1rem;font-weight:950;margin-top:.7rem}.mobile-sticky{display:none}
-@media(max-width:960px){.nav{position:relative}.nav-inner{align-items:flex-start;flex-direction:column}.badges{display:none}.hero-grid,.grid2,.grid3,.grid4,.strip,.offer-grid{grid-template-columns:1fr}.flow{grid-template-columns:repeat(2,1fr)}.visual{min-height:450px}.offer.featured{transform:none}.stats{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:640px){.main .block-container{padding-left:.75rem;padding-right:.75rem;padding-bottom:6.2rem}.nav-panel{overflow-x:auto}.nav-panel div[role="radiogroup"]{flex-wrap:nowrap;overflow-x:auto}.nav-panel div[role="radiogroup"] label{white-space:nowrap}.hero{padding:1.1rem;border-radius:1.2rem}.hero h1{font-size:2rem}.hero p{font-size:1rem}.btn-row{display:grid;grid-template-columns:1fr}.btn{width:100%}.dash{left:14px;right:14px;top:14px;bottom:54px;padding:.75rem}.journey{gap:.25rem}.journey span{font-size:.62rem}.mini-grid{grid-template-columns:1fr}.progress{left:14px;right:14px;bottom:12px}.offer{min-height:0}.offer ul{margin-bottom:1rem}.offer-btn{position:static;margin-top:.75rem}.mobile-sticky{display:flex;position:fixed;left:.7rem;right:.7rem;bottom:.7rem;z-index:1000;gap:.5rem;background:rgba(15,23,42,.92);backdrop-filter:blur(16px);border-radius:1rem;padding:.55rem;box-shadow:0 18px 44px rgba(15,23,42,.35)}.mobile-sticky span{flex:1;text-align:center;border-radius:.8rem;padding:.68rem .5rem;color:white;font-weight:950}.mobile-sticky .m1{background:linear-gradient(90deg,#4f46e5,#06b6d4)}.mobile-sticky .m2{background:rgba(255,255,255,.12)}}
+:root{--ink:#0f172a;--muted:#64748b;--brand:#4f46e5;--brand2:#06b6d4;--line:#e2e8f0}
+.main .block-container{max-width:1180px;padding-top:.7rem;padding-bottom:5.5rem}[data-testid="stSidebar"],[data-testid="collapsedControl"]{display:none}
+.nav{position:sticky;top:.45rem;z-index:999;margin-bottom:1rem}.nav-inner{display:flex;justify-content:space-between;gap:1rem;align-items:center;padding:.72rem .95rem;border:1px solid #c7d2fe;border-radius:1.25rem;background:rgba(255,255,255,.93);box-shadow:0 14px 34px rgba(15,23,42,.08)}.brand{display:flex;gap:.62rem;align-items:center;font-weight:950;color:#111827}.logo{width:36px;height:36px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(135deg,var(--brand),var(--brand2));color:white}.brand small{display:block;color:var(--muted);font-weight:800}.badges{display:flex;gap:.45rem;flex-wrap:wrap}.badge{padding:.36rem .7rem;border-radius:999px;background:#f8fafc;border:1px solid var(--line);font-weight:900;color:#475569;font-size:.82rem}.badge.cta{background:linear-gradient(90deg,var(--brand),#7c3aed);color:white;border:none}.nav-panel{margin:.65rem 0 1.15rem;padding:.55rem;border:1px solid #e0e7ff;border-radius:1.2rem;background:#f8fafc;box-shadow:0 10px 26px rgba(15,23,42,.05)}div[data-testid="stRadio"]>label{display:none}div[role="radiogroup"]{display:flex;flex-wrap:wrap;gap:.42rem}div[role="radiogroup"] label{border:1px solid #dbeafe!important;border-radius:999px!important;background:white!important;padding:.38rem .74rem!important}div[role="radiogroup"] label p{font-weight:900!important;color:#334155!important;font-size:.9rem!important}div[role="radiogroup"] label:has(input:checked){background:linear-gradient(90deg,#4f46e5,#06b6d4)!important}div[role="radiogroup"] label:has(input:checked) p{color:white!important}
+.hero,.subhero,.workspace-hero{border:1px solid #c7d2fe;border-radius:1.45rem;background:radial-gradient(circle at right,#ecfeff,#eef2ff 46%,#fff);box-shadow:0 18px 44px rgba(15,23,42,.08);padding:1.35rem;margin:1.15rem 0}.hero{padding:2.1rem}.hero h1{font-size:3rem;line-height:1.05;margin:.55rem 0;color:var(--ink);font-weight:980}.hero h1 span{background:linear-gradient(90deg,var(--brand),var(--brand2));-webkit-background-clip:text;color:transparent}.hero p,.subhero p{color:#475569;line-height:1.75}.eyebrow,.label{display:inline-block;font-size:.78rem;letter-spacing:.12em;color:#3730a3;font-weight:950;background:white;border:1px solid #c7d2fe;border-radius:999px;padding:.3rem .65rem}.btn{display:inline-flex;border-radius:999px;padding:.78rem 1.08rem;font-weight:950;margin:.25rem}.primary{background:linear-gradient(90deg,var(--brand),#7c3aed);color:white}.secondary{background:white;color:#3730a3;border:1px solid #c7d2fe}.pill{display:inline-block;border-radius:999px;background:white;color:#3730a3;border:1px solid #c7d2fe;padding:.28rem .62rem;margin:.15rem;font-weight:850;font-size:.83rem}.kicker{font-size:.78rem;font-weight:950;letter-spacing:.14em;color:var(--brand);text-transform:uppercase;margin-top:1.8rem}.title{font-size:1.65rem;font-weight:950;color:var(--ink)}.sub{color:var(--muted);line-height:1.75;max-width:850px}.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:.95rem}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}.card,.offer,.task-panel,.student-card,.portfolio-card{border:1px solid var(--line);border-radius:1.08rem;background:white;padding:1rem;box-shadow:0 8px 22px rgba(15,23,42,.045);min-height:120px}.card p,.portfolio-card p{color:var(--muted);line-height:1.58}.soft{background:#f8fafc;border-color:#dbeafe}.green{background:#f0fdf4;border-color:#bbf7d0}.orange{background:#fff7ed;border-color:#fed7aa}.dark{background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1rem;white-space:pre-wrap}.flow{display:grid;grid-template-columns:repeat(6,1fr);gap:.55rem}.flow div{background:white;border:1px solid #c7d2fe;border-radius:1rem;padding:.85rem;text-align:center}.flow b{display:block;color:var(--brand)}.flow span{font-weight:850;color:#312e81;font-size:.82rem}.offer{position:relative;border-color:#dbeafe;min-height:270px}.offer.featured{border:2px solid #4f46e5}.tag,.status-chip{display:inline-block;border-radius:999px;padding:.24rem .58rem;font-size:.76rem;font-weight:950}.tag{background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe}.price{font-size:1.35rem;font-weight:980;color:#16a34a}.offer-btn{position:absolute;left:1rem;right:1rem;bottom:1rem;text-align:center;border-radius:999px;padding:.62rem;background:#0f172a;color:white;font-weight:950}.form-card,.diagnosis{border:1px solid #dbeafe;background:white;border-radius:1.25rem;padding:1.15rem;box-shadow:0 14px 34px rgba(15,23,42,.07)}.summary{border-radius:1rem;background:#0f172a;color:#e2e8f0;padding:1rem;line-height:1.7;white-space:pre-wrap}.lead-note,.ai-feedback{border:1px solid #bbf7d0;background:#f0fdf4;color:#14532d;border-radius:1rem;padding:1rem;margin-top:1rem;font-weight:850}.mail-link{display:inline-block;border-radius:999px;background:linear-gradient(90deg,#4f46e5,#06b6d4);color:white!important;text-decoration:none;padding:.7rem 1rem;font-weight:950;margin-top:.7rem}.mobile-sticky{display:none}
+.workspace-head{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start}.day-card{border:1px solid #dbeafe;border-radius:1.05rem;background:white;padding:.92rem;min-height:118px;box-shadow:0 8px 18px rgba(15,23,42,.045)}.day-card.active{border:2px solid #4f46e5;background:#eef2ff}.day-card.done{background:#f0fdf4;border-color:#bbf7d0}.chip-green{background:#dcfce7;color:#166534}.chip-blue{background:#dbeafe;color:#1e40af}.chip-orange{background:#ffedd5;color:#9a3412}.chip-gray{background:#f1f5f9;color:#475569}.teacher-box{border:1px solid #fed7aa;background:#fff7ed;color:#7c2d12;border-radius:1rem;padding:1rem;font-weight:850}.copy-note{font-size:.82rem;color:#64748b;font-weight:850;margin:.25rem 0 .5rem}.progress-wrap{height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden}.progress-bar{height:100%;background:linear-gradient(90deg,#4f46e5,#06b6d4)}
+@media(max-width:960px){.nav{position:relative}.nav-inner,.workspace-head{align-items:flex-start;flex-direction:column}.badges{display:none}.grid2,.grid3,.grid4{grid-template-columns:1fr}.flow{grid-template-columns:repeat(2,1fr)}}@media(max-width:640px){.main .block-container{padding-left:.75rem;padding-right:.75rem;padding-bottom:6.2rem}.nav-panel{overflow-x:auto}.nav-panel div[role="radiogroup"]{flex-wrap:nowrap;overflow-x:auto}.hero h1{font-size:2rem}.mobile-sticky{display:flex;position:fixed;left:.7rem;right:.7rem;bottom:.7rem;z-index:1000;gap:.5rem;background:rgba(15,23,42,.92);border-radius:1rem;padding:.55rem}.mobile-sticky span{flex:1;text-align:center;border-radius:.8rem;padding:.68rem .5rem;color:white;font-weight:950}.mobile-sticky .m1{background:linear-gradient(90deg,#4f46e5,#06b6d4)}}
 </style>
-""", unsafe_allow_html=True)
+"""
+st.markdown(CSS, unsafe_allow_html=True)
 
-TEXT = {"zh":{"nav":"导航","home":"首页","trial":"2小时体验课","sop":"跟进SOP","paths":"成长路径","skills":"技能训练","portfolio":"作品集","freelance":"自由职业","company":"企业内训","pricing":"报价","booking":"预约咨询","faq":"FAQ"}}
-MOTIVE_ROWS=[("新人上手","从不会到能做","学习岗位基础技能，完成第一个可检查任务"),("在岗提升","从能做到账户价值更高","把重复任务做成 AI 工作流，提升交付质量"),("升职准备","从执行者到负责人","学会分析、汇报、复盘和带新人"),("转岗换工作","从旧岗位到新岗位","补齐新岗位技能，形成可展示作品集"),("跳槽高薪","从会说到有证据","用作品、流程和表达证明能力"),("自由职业增收","从会技能到能接单赚钱","学习可出售技能，形成服务包、报价和交付作品"),("小团队管理","从自己干到带团队","把团队高频任务标准化、模板化")]
-ROLE_ROWS=[("行政 / 人事","会议纪要、制度、SOP、招聘沟通、数据说明"),("销售 / 商务","客户画像、跟进话术、方案初稿、报价说明、成交复盘"),("客服 / 售后","问题分类、回复模板、知识库、满意度复盘"),("运营 / 市场","活动方案、内容日历、数据复盘、转化话术"),("老师 / 培训师","课程设计、练习设计、反馈、发表会、教学复盘"),("IT / 项目人员","需求理解、测试用例、Bug 报告、日报周报、发表说明"),("自由职业者","获客定位、服务包设计、报价单、交付 SOP、客户沟通、案例展示"),("小微老板","市场调研、文案、报价、客户沟通、流程清单")]
-SKILL_ROWS=[("学新技能","用 AI 生成学习路径、解释概念、给例子、拆练习"),("做任务","把学习目标变成真实工作任务，而不是只看教程"),("被纠错","让 AI 做第一轮反馈：遗漏、逻辑、格式、表达、风险"),("再修改","根据反馈修改，形成第二版、第三版成果"),("做作品","把练习变成能给老板、客户或面试官看的作品"),("变服务","把技能包装成自由职业服务包、报价和交付流程"),("会表达","能说明自己怎么学、怎么做、怎么用 AI 提升结果")]
-FREELANCE_ROWS=[("选技能","选择能变现的技能方向：文案、PPT、运营、自动化、课程设计、数据说明等"),("做样品","用 AI 辅助完成 2-3 个可展示样品，而不是只写能力介绍"),("包装服务","把技能变成清楚的服务包：交付内容、周期、边界、价格"),("获客表达","写主页简介、私信话术、报价说明、案例说明"),("交付流程","形成需求确认、初稿、修改、验收、复盘的 SOP"),("提价路径","从低价单到标准化服务，再到高价值项目")]
+TEXT = {"zh": {"nav":"导航","home":"首页","workspace":"学习工作台","trial":"2小时体验课","sop":"跟进SOP","paths":"成长路径","skills":"技能训练","portfolio":"作品集","freelance":"自由职业","company":"企业内训","pricing":"报价","booking":"预约咨询","faq":"FAQ"}}
 
+MOTIVE_ROWS=[("新人上手","从不会到能做","学习岗位基础技能，完成第一个可检查任务"),("在岗提升","从能做到价值更高","把重复任务做成 AI 工作流，提升交付质量"),("升职准备","从执行者到负责人","学会分析、汇报、复盘和带新人"),("转岗换工作","从旧岗位到新岗位","补齐新岗位技能，形成可展示作品集"),("自由职业增收","从会技能到能接单","形成服务包、报价和交付作品")]
+ROLE_ROWS=[("行政 / 人事","会议纪要、制度、SOP、招聘沟通、数据说明"),("销售 / 商务","客户画像、跟进话术、方案初稿、报价说明、成交复盘"),("运营 / 市场","活动方案、内容日历、数据复盘、转化话术"),("IT / 项目人员","需求理解、测试用例、Bug 报告、日报周报、发表说明"),("自由职业者","服务包设计、报价单、交付 SOP、客户沟通、案例展示"),("小微老板","市场调研、文案、报价、客户沟通、流程清单")]
+SKILL_ROWS=[("学新技能","用 AI 生成学习路径、解释概念、给例子、拆练习"),("做任务","把学习目标变成真实工作任务，而不是只看教程"),("被纠错","让 AI 做第一轮反馈：遗漏、逻辑、格式、表达、风险"),("再修改","根据反馈修改，形成第二版、第三版成果"),("做作品","把练习变成能给老板、客户或面试官看的作品"),("会表达","能说明自己怎么学、怎么做、怎么用 AI 提升结果")]
+FREELANCE_ROWS=[("选技能","选择能变现的技能方向"),("做样品","用 AI 辅助完成 2-3 个可展示样品"),("包装服务","把技能变成清楚的服务包"),("获客表达","写主页简介、私信话术、报价说明"),("交付流程","形成需求确认、初稿、修改、验收、复盘 SOP"),("提价路径","从低价单到标准化服务，再到高价值项目")]
 
 def get_secret(name: str, default: str = "") -> str:
     try:
@@ -42,140 +35,122 @@ def get_secret(name: str, default: str = "") -> str:
     except Exception:
         return default
 
-
 def format_webhook_payload(lead: dict, provider: str) -> dict:
-    text = lead.get("summary", "")
-    provider = (provider or "generic").lower().strip()
-    if provider in {"feishu", "lark"}:
-        return {"msg_type": "text", "content": {"text": text}}
-    if provider in {"wecom", "wechat_work", "qywx", "enterprise_wechat"}:
-        return {"msgtype": "text", "text": {"content": text}}
+    text=lead.get("summary",""); provider=(provider or "generic").lower().strip()
+    if provider in {"feishu","lark"}: return {"msg_type":"text","content":{"text":text}}
+    if provider in {"wecom","wechat_work","qywx","enterprise_wechat"}: return {"msgtype":"text","text":{"content":text}}
     return lead
 
-
-def post_lead_to_webhook(lead: dict) -> tuple[bool, str]:
-    url = get_secret("LEAD_WEBHOOK_URL")
-    provider = get_secret("WEBHOOK_PROVIDER", "generic")
-    if not url:
-        return False, "未配置 LEAD_WEBHOOK_URL，线索仅在本页生成，可下载后手动跟进。"
+def post_lead_to_webhook(lead: dict) -> tuple[bool,str]:
+    url=get_secret("LEAD_WEBHOOK_URL"); provider=get_secret("WEBHOOK_PROVIDER","generic")
+    if not url: return False,"未配置 LEAD_WEBHOOK_URL，线索仅在本页生成，可下载后手动跟进。"
     try:
-        payload = format_webhook_payload(lead, provider)
-        data = json.dumps(payload, ensure_ascii=False).encode("utf-8")
-        req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json; charset=utf-8"}, method="POST")
-        with urllib.request.urlopen(req, timeout=8) as resp:
+        data=json.dumps(format_webhook_payload(lead,provider),ensure_ascii=False).encode("utf-8")
+        req=urllib.request.Request(url,data=data,headers={"Content-Type":"application/json; charset=utf-8"},method="POST")
+        with urllib.request.urlopen(req,timeout=8) as resp:
             return 200 <= resp.status < 300, f"已按 {provider} 格式发送，Webhook 返回状态：{resp.status}"
     except Exception as exc:
-        return False, f"Webhook 发送失败：{exc}"
-
+        return False,f"Webhook 发送失败：{exc}"
 
 def section(kicker: str, title: str, sub: str = ""):
-    st.markdown(f"<section><div class='kicker'>{kicker}</div><div class='title'>{title}</div><div class='sub'>{sub}</div></section>", unsafe_allow_html=True)
-
+    st.markdown(f"<div class='kicker'>{kicker}</div><div class='title'>{title}</div><div class='sub'>{sub}</div>", unsafe_allow_html=True)
 
 def subhero(label: str, title: str, body: str):
     st.markdown(f"<div class='subhero'><span class='label'>{label}</span><h2>{title}</h2><p>{body}</p></div>", unsafe_allow_html=True)
 
-
 def html_card(icon: str, title: str, body: str, cls: str = "card") -> str:
     return f"<div class='{cls}'><b>{icon} {title}</b><p>{body}</p></div>"
 
-
 def render_top_nav(lang: str):
-    st.markdown("""<div class='nav'><div class='nav-inner'><div class='brand'><div class='logo'>AI</div><div>AI Skill Growth Platform<small>技能成长 · 作品交付 · 自由职业变现</small></div></div><div class='badges'><span class='badge'>职场成长</span><span class='badge'>自由职业</span><span class='badge'>企业内训</span><span class='badge cta'>预约体验课</span></div></div></div>""", unsafe_allow_html=True)
-    nav_keys=["home","trial","sop","paths","skills","portfolio","freelance","company","pricing","booking","faq"]
+    st.markdown("""<div class='nav'><div class='nav-inner'><div class='brand'><div class='logo'>AI</div><div>AI Skill Growth Platform<small>技能成长 · 作品交付 · 学习工作台</small></div></div><div class='badges'><span class='badge'>职场成长</span><span class='badge'>学习任务</span><span class='badge'>作品集</span><span class='badge cta'>预约体验课</span></div></div></div>""", unsafe_allow_html=True)
+    nav_keys=["home","workspace","trial","sop","paths","skills","portfolio","freelance","company","pricing","booking","faq"]
     st.markdown("<div class='nav-panel'>", unsafe_allow_html=True)
-    page=st.radio(TEXT[lang]["nav"], nav_keys, horizontal=True, label_visibility="collapsed", format_func=lambda key:TEXT[lang][key], key="top_page_nav")
+    page=st.radio(TEXT[lang]["nav"],nav_keys,horizontal=True,label_visibility="collapsed",format_func=lambda key:TEXT[lang][key],key="top_page_nav")
     st.markdown("</div>", unsafe_allow_html=True)
     return page
 
-
-def render_hero():
-    st.markdown("""<div class='hero'><div class='hero-grid'><div><div class='eyebrow'>AI Skill Growth Platform</div><h1>AI 技能成长<br><span>教育平台</span></h1><p><b>用 AI 更快学会新技能，并做出可展示、可交付、可变现的成果。</b><br>面向职场人和自由职业者：新人上手、在岗提升、升职、转岗、跳槽高薪、自由职业增收，都可以用 AI 建立学习-练习-纠错-作品-变现闭环。</p><div class='btn-row'><span class='btn primary'>🚀 预约 2 小时体验课</span><span class='btn secondary'>📚 查看课程产品</span></div><div><span class='pill'>新人上手</span><span class='pill'>在岗提升</span><span class='pill'>升职跳槽</span><span class='pill'>自由职业接单</span><span class='pill'>企业内训</span></div><div class='stats'><div class='stat'><b>5</b><span>步成长闭环</span></div><div class='stat'><b>3+</b><span>可展示作品</span></div><div class='stat'><b>2h</b><span>低门槛体验</span></div><div class='stat'><b>B/C</b><span>个人+企业</span></div></div></div><div class='visual'><div class='dash'><div class='dash-head'><div><span class='avatar'>AI</span>Skill Growth Dashboard</div><span class='live'>Live Coach</span></div><div class='journey'><div><b>01</b><span>定目标</span></div><div><b>02</b><span>学技能</span></div><div><b>03</b><span>做任务</span></div><div><b>04</b><span>出作品</span></div><div><b>05</b><span>变价值</span></div></div><div class='ai-box'><b>AI Skill Coach</b><div class='prompt'><strong>今日任务：</strong>把“想学 PPT 汇报”拆成 3 个练习任务，并生成可提交作品标准。</div></div><div class='mini-grid'><div class='mini'>📦 作品集<small>能展示，不空谈</small></div><div class='mini'>💼 服务包<small>能报价，能交付</small></div><div class='mini'>🎤 表达稿<small>升职 / 面试 / 接单</small></div><div class='mini'>✅ 反馈记录<small>AI 纠错 + 人工点评</small></div></div></div><div class='progress'><div style='display:flex;justify-content:space-between;font-weight:950'><span>Skill Growth Progress</span><span>72%</span></div><div class='bar'><span></span></div></div></div></div></div>""", unsafe_allow_html=True)
-
-
 def render_offer_section():
     section("PROGRAMS","选择你的技能成长入口","每个产品对应一个清晰目标和交付结果。")
-    offers=[("低门槛开始","2 小时体验课","99 / 199 元","适合还没想清楚学什么的人",["现场选择一个技能目标","完成一个微型任务","拿到一版 AI 学习路径"],"预约体验"),("主推","5 天技能成长营","3999 元建议","适合想升职、转岗、跳槽的人",["1 套技能成长路线图","3 个可展示作品","1 份升职/面试表达稿"],"进入主课"),("自由职业","5 天技能变现营","4999 元建议","适合想接单、副业、涨价的人",["1 个可报价服务包","3 个样品案例","获客话术 + 交付 SOP"],"学会接单"),("进阶小班","4 周技能跃迁小班","8000–20000 元","适合目标明确、需要深度打磨的人",["围绕一个方向深度训练","完善作品集和表达","形成后续 30 天行动计划"],"申请小班"),("企业版","企业 AI 技能内训","3 万元起","适合企业新人培养和部门提升",["部门技能地图","任务练习模板","AI 工作流与点评标准"],"咨询企业方案"),("入门营","1 天技能入门营","699 元建议","适合先体验完整学习闭环的人",["拆解一个真实任务","完成一次 AI 反馈修改","形成一个可提交结果"],"参加入门营")]
-    html="<div class='offer-grid'>"
-    for tag,title,price,fit,bullets,button in offers:
+    offers=[("低门槛开始","2 小时体验课","99 / 199 元","现场完成一个微型任务，拿到一版 AI 学习路径。"),("主推","5 天技能成长营","3999 元建议","形成 3 个可展示作品、反馈记录和表达稿。"),("自由职业","5 天技能变现营","4999 元建议","形成服务包、报价单、样品案例和交付 SOP。"),("企业版","企业 AI 技能内训","3 万元起","把部门高频任务改造成可训练、可评分的 AI 工作流。")]
+    html="<div class='grid4'>"
+    for tag,title,price,body in offers:
         cls="offer featured" if tag=="主推" else "offer"
-        html+=f"<div class='{cls}'><span class='tag'>{tag}</span><h3>{title}</h3><div class='price'>{price}</div><p style='color:#64748b;font-weight:850'>{fit}</p><ul>"+"".join(f"<li>{b}</li>" for b in bullets)+f"</ul><div class='offer-btn'>{button}</div></div>"
-    html+="</div>"
-    st.markdown(html, unsafe_allow_html=True)
-    st.markdown("""<div class='grid2' style='margin-top:1rem'><div class='card green'><b>为什么这个产品更容易被购买？</b><p>它不是卖“AI 很厉害”，而是卖明确结果：学会一个技能、完成真实任务、获得 AI 反馈、形成作品集、用于升职/转岗/跳槽/接单。</p></div><div class='card orange'><b>合规边界</b><p>不承诺就业、不承诺涨薪、不承诺接单收入、不做官方证书。平台只交付训练过程、作品成果、服务包和表达能力。</p></div></div>""", unsafe_allow_html=True)
-
+        html+=f"<div class='{cls}'><span class='tag'>{tag}</span><h3>{title}</h3><div class='price'>{price}</div><p>{body}</p><div class='offer-btn'>查看方案</div></div>"
+    st.markdown(html+"</div>", unsafe_allow_html=True)
 
 def render_home(lang: str):
-    render_hero()
-    st.markdown("""<div class='strip'><div class='metric'><b>4</b><span>主路径：新人、升职、跳槽、自由职业</span></div><div class='metric'><b>6</b><span>训练闭环：目标、学习、任务、反馈、作品、价值</span></div><div class='metric'><b>3+</b><span>每期沉淀可展示作品</span></div><div class='metric'><b>1</b><span>个人技能增长与变现路径</span></div></div>""", unsafe_allow_html=True)
-    section("TRACKS","四条主路径","先让用户找到自己属于哪一类。")
-    tracks=[("01","职场新人 / 转岗","快速补齐岗位基础技能，完成第一个可检查任务。"),("02","在岗提升 / 升职","把日常工作升级成 AI 工作流，形成汇报和复盘能力。"),("03","跳槽高薪 / 作品集","把能力做成证据：作品、流程、表达稿。"),("04","自由职业 / 接单","学可变现技能，做服务包、报价单和交付 SOP。")]
-    st.markdown("<div class='grid4'>"+"".join(f"<div class='card soft'><b>{n} {t}</b><p>{b}</p></div>" for n,t,b in tracks)+"</div>", unsafe_allow_html=True)
-    section("WHO","谁会需要这个平台","凡是需要学习新技能、提升技能、证明能力或把技能变现的人，都有使用场景。")
-    who=[("🌱","新人上手","从不会到能做，完成第一个可检查任务。"),("📈","在岗提升","把重复任务变成 AI 工作流，提升交付质量。"),("🧗","升职准备","从执行者升级为能分析、汇报、复盘的人。"),("🔁","转岗跳槽","补齐新岗位技能，用作品证明能力。"),("💼","自由职业增收","把技能包装成服务包、报价和交付 SOP。"),("🏢","企业内训","把新人培养和在岗提升做成标准化体系。")]
-    st.markdown("<div class='grid3'>"+"".join(html_card(*c) for c in who)+"</div>", unsafe_allow_html=True)
+    st.markdown("""<div class='hero'><span class='eyebrow'>AI Skill Growth Platform</span><h1>AI 技能成长<br><span>教育平台</span></h1><p><b>用 AI 更快学会新技能，并做出可展示、可交付、可变现的成果。</b><br>面向职场新人、在岗提升者、升职准备者、转岗/跳槽者、自由职业者、小微老板和企业内训部门。</p><span class='btn primary'>🚀 预约 2 小时体验课</span><span class='btn secondary'>🧑‍💻 进入学习工作台</span><div><span class='pill'>今天学什么</span><span class='pill'>今天做什么</span><span class='pill'>AI 如何反馈</span><span class='pill'>老师如何点评</span><span class='pill'>作品集沉淀</span></div></div>""", unsafe_allow_html=True)
     section("METHOD","AI 技能成长闭环","把学习从“看资料”变成“有目标、有任务、有反馈、有作品、有价值”的训练流程。")
-    flow=[("01","定目标"),("02","学技能"),("03","做任务"),("04","AI 反馈"),("05","出作品"),("06","变价值")]
+    flow=[("01","定目标"),("02","学技能"),("03","做任务"),("04","AI 反馈"),("05","出作品"),("06","老师点评")]
     st.markdown("<div class='flow'>"+"".join(f"<div><b>{n}</b><span>{t}</span></div>" for n,t in flow)+"</div>", unsafe_allow_html=True)
     section("ARTIFACTS","作品墙示例","学完不是听懂，而是能拿出东西。")
-    artifacts=[("销售","客户画像 + 跟进话术 + 成交复盘"),("运营","活动方案 + 内容日历 + 数据复盘"),("行政","会议纪要 + 行动项表 + SOP"),("IT / 测试","需求理解 + 测试用例 + Bug 报告"),("培训师","课程设计 + 练习任务 + Q&A 脚本"),("自由职业","服务包 + 报价单 + 样品案例 + 交付 SOP"),("求职转岗","AI 化简历 + 岗位作品 + 面试表达稿"),("小微老板","客户调研 + 销售文案 + 流程清单")]
-    st.markdown("<div class='grid4'>"+"".join(f"<div class='card soft'><b>{a}</b><p>{b}</p></div>" for a,b in artifacts)+"</div>", unsafe_allow_html=True)
+    artifacts=[("销售","客户画像 + 跟进话术 + 成交复盘"),("运营","活动方案 + 内容日历 + 数据复盘"),("行政","会议纪要 + 行动项表 + SOP"),("IT / 测试","需求理解 + 测试用例 + Bug 报告"),("自由职业","服务包 + 报价单 + 样品案例"),("企业内训","任务包 + 评分标准 + 成果发表")]
+    st.markdown("<div class='grid3'>"+"".join(f"<div class='card soft'><b>{a}</b><p>{b}</p></div>" for a,b in artifacts)+"</div>", unsafe_allow_html=True)
     render_offer_section()
 
+def render_learning_workspace(lang: str):
+    subhero("V3.1 STUDENT WORKSPACE","学习工作台：模拟登录后的学员页面","先不接真实登录、不接真实 OpenAI API、不做复杂后端。核心是让学员一进来就知道今天学什么、做什么任务、做到什么标准、怎么用 AI、怎么提交作品、老师怎么点评。")
+    st.markdown("""<div class='workspace-hero'><div class='workspace-head'><div><span class='label'>模拟学员账号</span><h2>张同学 · Day 2 / 5</h2><p>当前课程：5 天 AI 技能成长营。学习目标：用 AI 完成测试用例、Bug 报告和项目发表作品。当前状态：作品 1 进行中。</p></div><div class='student-card'><b>学习完成度</b><p>整体进度：40%</p><div class='progress-wrap'><div class='progress-bar' style='width:40%'></div></div><p><span class='status-chip chip-blue'>作品 1 进行中</span> <span class='status-chip chip-orange'>老师点评：待提交</span></p></div></div></div>""", unsafe_allow_html=True)
+    section("STUDENT","学员信息卡","平台要让用户马上看到当前课程、当前阶段、学习目标和下一步动作。")
+    c=st.columns(4); c[0].metric("学员","张同学"); c[1].metric("当前课程","5 天成长营"); c[2].metric("当前阶段","Day 2 / 5"); c[3].metric("状态","作品 1 进行中")
+    section("PATH","5 天学习路径","每一天都对应一个可交付结果，而不是普通课程目录。")
+    days=[("Day 1","定目标 + 拆任务","已完成","done"),("Day 2","作品 1：基础任务","进行中","active"),("Day 3","作品 2：复杂任务","未开始",""),("Day 4","作品 3：展示任务","未开始",""),("Day 5","复盘 + 后续路径","未开始","")]
+    st.markdown("<div class='grid3'>"+"".join(f"<div class='day-card {cls}'><b>{d}</b><p>{t}</p><span class='status-chip chip-gray'>{s}</span></div>" for d,t,s,cls in days)+"</div>", unsafe_allow_html=True)
+    left,right=st.columns([1.05,.95])
+    with left:
+        section("TODAY","今日任务","今日任务：完成作品 1：基础任务作品。")
+        st.markdown("""<div class='task-panel'><h3>完成作品 1：基础任务作品</h3><ol><li>阅读任务说明</li><li>查看优秀示例</li><li>使用 AI 提示词生成第一版</li><li>粘贴你的第一版作品</li><li>查看 AI 反馈</li><li>修改成第二版</li><li>提交给老师点评</li></ol></div>""", unsafe_allow_html=True)
+        section("STANDARD","做到什么标准","先给标准，再让学员做，避免只生成一堆空话。")
+        st.markdown("""<div class='task-panel'><ul><li><b>目标清楚：</b>能看出测试对象、功能范围和提交结果。</li><li><b>结构完整：</b>覆盖正常流程、异常流程、边界输入、安全与权限。</li><li><b>可执行：</b>测试步骤、输入数据、预期结果能被别人照着执行。</li><li><b>有遗漏检查：</b>主动说明还需要补充哪些信息。</li><li><b>有 Bug 报告模板：</b>包含标题、环境、步骤、实际结果、预期结果、严重程度。</li></ul></div>""", unsafe_allow_html=True)
+    with right:
+        section("PROMPT","AI 提示词区","给学员一个可复制提示词，先让 AI 做第一轮高频反馈。")
+        prompt_text="""你是一个严格的软件测试教练。
+请根据以下登录页面需求，设计测试用例。
+要求覆盖正常登录、错误密码、空字段、输入格式、权限与安全、异常提示。
+同时输出遗漏点和 Bug 报告模板。
+需求如下：
+【粘贴需求】"""
+        st.markdown("<div class='copy-note'>复制下面提示词，到你常用的 AI 工具里使用。</div>", unsafe_allow_html=True); st.code(prompt_text, language="text")
+        section("TEACHER","老师点评状态","AI 负责高频反馈，老师负责最终判断。")
+        teacher_status=st.selectbox("老师点评",["待提交","待点评","已点评"],index=0)
+        chip="chip-orange" if teacher_status=="待提交" else "chip-blue" if teacher_status=="待点评" else "chip-green"
+        st.markdown(f"<div class='teacher-box'>老师点评：<span class='status-chip {chip}'>{teacher_status}</span><br>提交第二版后，老师根据任务标准给最终点评。</div>", unsafe_allow_html=True)
+    section("SUBMIT","作品提交框","先用文本框模拟提交。后续可以接入数据库、文件上传、老师点评后台和真实 AI API。")
+    draft=st.text_area("粘贴你的第一版作品",height=220,placeholder="例如：登录页面测试用例列表、Bug 报告模板、遗漏点检查……",key="student_first_draft")
+    if st.button("查看模拟 AI 反馈",type="primary"):
+        if draft.strip():
+            st.markdown("""<div class='ai-feedback'><b>模拟 AI 反馈</b><br>✅ 目标基本清楚：你已经围绕登录页面展开。<br>⚠️ 结构还需要更完整：建议把测试用例分成正常登录、异常输入、权限安全、提示文案、兼容性五类。<br>⚠️ 有遗漏：目前缺少账号锁定、验证码、连续错误密码、SQL 注入/脚本输入、不同角色权限等场景。<br>⚠️ 空话较多：把“检查是否正常”改成具体步骤、输入数据和预期结果。<br>➡️ 下一版修改：用表格输出「编号 / 场景 / 前置条件 / 步骤 / 测试数据 / 预期结果 / 优先级」，并补 1 个 Bug 报告示例。</div>""", unsafe_allow_html=True)
+        else: st.warning("请先粘贴第一版作品，再查看模拟 AI 反馈。")
+    section("PORTFOLIO","作品集进度","学习结果最终要沉淀为可展示作品。")
+    items=[("作品 1：基础任务作品","测试用例 + Bug 报告模板","进行中","chip-blue"),("作品 2：复杂任务作品","复杂需求拆解 + 异常场景补全","未开始","chip-gray"),("作品 3：展示 / 发表作品","项目发表说明 + 成果表达稿","未开始","chip-gray")]
+    st.markdown("<div class='grid3'>"+"".join(f"<div class='portfolio-card'><h4>{t}</h4><p>{d}</p><span class='status-chip {cls}'>{s}</span></div>" for t,d,s,cls in items)+"</div>", unsafe_allow_html=True)
+    section("NEXT","下一步该学什么","工作台的下一步不是继续看课，而是推动用户完成第二版作品并进入老师点评。")
+    st.markdown("""<div class='grid3'><div class='card green'><b>1. 修改第二版</b><p>根据 AI 反馈补全遗漏场景，把空话改成可执行步骤。</p></div><div class='card soft'><b>2. 提交老师点评</b><p>老师判断是否达到作品标准，并指出业务上的关键缺口。</p></div><div class='card soft'><b>3. 进入 Day 3</b><p>把基础任务升级成复杂任务，形成第二个作品。</p></div></div>""", unsafe_allow_html=True)
 
 def render_trial(lang: str):
-    subhero("2-HOUR TRIAL","AI 技能成长 2 小时体验课","这是当前最适合先卖的入口产品。目标不是讲很多理论，而是在 2 小时内帮用户完成一个真实小任务，拿到一个小作品和后续学习路径。")
-    st.markdown("""<div class='grid3'><div class='card green'><b>推荐价格</b><p><span style='font-size:1.7rem;font-weight:950;color:#16a34a'>99 / 199 元</span><br>先降低决策门槛，用真实体验建立信任。</p></div><div class='card soft'><b>适合谁</b><p>想学新技能、升职表达、转岗跳槽、做作品集、自由职业接单、企业内训负责人。</p></div><div class='card soft'><b>体验课核心承诺</b><p>2 小时内不空谈，必须完成一个微型任务，并形成可继续打磨的成果。</p></div></div>""", unsafe_allow_html=True)
-    section("FLOW","2 小时体验课流程","把时间切成明确阶段，避免体验课变成闲聊。")
-    steps=[("0-10 分钟","目标诊断","确认身份、目标、当前卡点和想拿到的成果。"),("10-25 分钟","任务拆解","把目标拆成一个今天能完成的微型真实任务。"),("25-65 分钟","AI 辅助完成第一版","现场用 AI 生成初稿、结构、代码、文案、PPT 或 SOP。"),("65-95 分钟","AI 反馈与修改","让 AI 做第一轮纠错，再根据业务标准修改。"),("95-115 分钟","作品定稿","形成一个可展示的小作品或作品框架。"),("115-120 分钟","后续路径","给出 5 天 / 4 周训练建议和是否适合继续学习。")]
-    st.markdown("<div class='grid3'>"+"".join(f"<div class='card soft'><b>{t}</b><p><b>{a}</b><br>{b}</p></div>" for t,a,b in steps)+"</div>", unsafe_allow_html=True)
-    section("DELIVERABLES","用户带走什么","体验课结束时要有可复制、可截图、可继续加工的东西。")
-    deliverables=[("🎯","1 个技能目标","明确要学什么、为什么学、学到什么程度。"),("🧩","1 个微型任务","把抽象目标变成一个今天能做的小任务。"),("📦","1 个小作品","如 PPT 结构、测试用例、销售话术、服务包草稿、日报模板。"),("✅","1 次反馈记录","保留 AI 纠错和修改前后对比。"),("🧭","1 份后续路径","推荐 5 天营、自由职业营、4 周小班或企业内训。"),("💬","1 段表达稿","用于面试、升职汇报、客户沟通或作品介绍。")]
-    st.markdown("<div class='grid3'>"+"".join(html_card(*d) for d in deliverables)+"</div>", unsafe_allow_html=True)
-    section("EXAMPLES","体验课任务示例","不同用户不用同一套话术，必须按目标出任务。")
-    examples=[("升职准备","把最近一个工作成果整理成 3 页汇报 PPT 大纲，并生成上司可能追问的问题。"),("转岗跳槽","根据目标岗位，做一个小型岗位作品案例和面试表达稿。"),("自由职业","把一个技能包装成服务包：交付内容、报价边界、样品案例、获客私信。"),("企业内训","把部门一个高频任务改造成 AI 工作流训练模板。"),("IT / 测试","根据一个登录页面，写测试用例、遗漏点检查和 Bug 报告模板。"),("日语商务","根据客户场景，写一封日语商务邮件并做敬语/结构修正。")]
-    st.markdown("<div class='grid3'>"+"".join(f"<div class='card soft'><b>{a}</b><p>{b}</p></div>" for a,b in examples)+"</div>", unsafe_allow_html=True)
-    section("CONVERSION","体验课后怎么转化","体验课不是终点，而是判断用户适合哪条后续路径。")
-    st.markdown("""<div class='grid3'><div class='offer'><span class='tag'>主推转化</span><h3>5 天技能成长营</h3><div class='price'>3999 元建议</div><p>适合升职、转岗、跳槽、作品集打磨。</p><ul><li>3 个可展示作品</li><li>学习路径</li><li>表达稿</li></ul><div class='offer-btn'>体验后推荐</div></div><div class='offer'><span class='tag'>自由职业</span><h3>5 天技能变现营</h3><div class='price'>4999 元建议</div><p>适合副业、接单、涨价。</p><ul><li>服务包</li><li>报价单</li><li>获客话术</li></ul><div class='offer-btn'>体验后推荐</div></div><div class='offer'><span class='tag'>企业版</span><h3>企业 AI 技能内训</h3><div class='price'>3 万元起</div><p>适合新人培养、部门工作流升级。</p><ul><li>任务包</li><li>评分标准</li><li>成果发表</li></ul><div class='offer-btn'>咨询企业方案</div></div></div>""", unsafe_allow_html=True)
-
+    subhero("2-HOUR TRIAL","AI 技能成长 2 小时体验课","低门槛入口产品。目标不是讲很多理论，而是在 2 小时内帮用户完成一个真实小任务，拿到一个小作品和后续学习路径。")
+    cards=[("推荐价格","99 / 199 元：降低决策门槛，用真实体验建立信任。"),("适合谁","想学新技能、升职表达、转岗跳槽、做作品集、自由职业接单、企业内训负责人。"),("核心承诺","2 小时内不空谈，必须完成一个微型任务，并形成可继续打磨的成果。")]
+    st.markdown("<div class='grid3'>"+"".join(html_card("✅",a,b,"card green") for a,b in cards)+"</div>", unsafe_allow_html=True)
+    section("FLOW","2 小时体验课流程","目标诊断 → 任务拆解 → AI 辅助第一版 → AI 反馈修改 → 作品定稿 → 后续路径。")
 
 def render_followup_sop(lang: str):
-    subhero("SALES SOP","飞书线索跟进 SOP / 成交话术","飞书收到线索只是开始。这个页面把收到线索后的 5 分钟回复、邀约体验课、付款确认、课后转化和未成交复盘整理成固定流程。")
-    section("STATUS","线索状态看板","飞书群里收到线索后，先给每条线索一个状态。")
-    statuses=[("新线索","刚提交，还未联系。5 分钟内必须响应。"),("已联系","已发送第一条回复，等待对方回应。"),("已约时间","已确定体验课时间。"),("已付款","已收 99/199 元体验课费用。"),("已上课","体验课已完成，进入课后转化。"),("已转化","转入 5 天营 / 自由职业营 / 企业方案。"),("未转化","记录原因，7 天后可二次触达。")]
+    subhero("SALES SOP","飞书线索跟进 SOP / 成交话术","飞书收到线索只是开始。这个页面指导销售如何跟进、邀约、收款、转化和复盘。")
+    statuses=[("新线索","5 分钟内响应"),("已联系","发送第一条回复"),("已约时间","确定体验课时间"),("已付款","确认 99/199 体验课"),("已上课","进入课后转化"),("已转化","进入 5 天营/企业方案"),("未转化","记录原因，7 天后触达")]
     st.markdown("<div class='grid4'>"+"".join(f"<div class='card soft'><b>{a}</b><p>{b}</p></div>" for a,b in statuses)+"</div>", unsafe_allow_html=True)
-
-    section("5-MIN REPLY","5 分钟内第一条回复","目标不是长篇销售，而是确认用户目标并引导到 2 小时体验课。")
-    first_messages=[("通用版","你好，我看到你的预约信息了。你现在的目标是「XXX」，比较适合先做一次 2 小时 AI 技能成长体验课。体验课里我们会帮你完成一个真实小任务，并给你一份后续学习路径。"),("自由职业版","你好，我看到了你的预约。你现在更像是想把「XXX」变成可接单服务。建议先做一次 2 小时体验课，我们会帮你把技能拆成服务包、样品和报价边界。"),("企业内训版","你好，我看到你关注企业内训。我们可以先用 30 分钟确认部门场景，再安排一次 2 小时样板体验，现场把一个高频任务做成 AI 训练模板。")]
-    st.markdown("<div class='grid3'>"+"".join(f"<div class='card green'><b>{a}</b><p>{b}</p></div>" for a,b in first_messages)+"</div>", unsafe_allow_html=True)
-
-    section("QUALIFY","3 个判断问题","不要一上来讲课程，先判断用户是否适合体验课。")
-    questions=[("目标确认","你这次最想解决的是学一个新技能、升职表达、转岗跳槽，还是自由职业接单？"),("成果确认","如果 2 小时体验课结束，你最希望拿到什么：PPT 大纲、测试用例、服务包、话术、邮件模板，还是学习路径？"),("时间确认","你更适合本周晚上、周末，还是工作日白天做 2 小时体验？")]
-    st.markdown("<div class='grid3'>"+"".join(html_card("❓",a,b) for a,b in questions)+"</div>", unsafe_allow_html=True)
-
-    section("BOOKING SCRIPT","邀约与付款话术","明确体验课价格、交付物和下一步动作。")
-    booking_cards=[("99 元体验价","我们先按 99 元体验课走。2 小时里只做一件事：帮你把「XXX」拆成一个真实任务，并完成第一版作品。"),("199 元标准价","如果你希望我提前看你的材料，并课后给一份更完整的学习路径，可以按 199 元标准体验课。"),("约时间","你看这两个时间哪个方便：周三晚上 8:00-10:00，或者周六下午 2:00-4:00？")]
-    st.markdown("<div class='grid3'>"+"".join(f"<div class='card soft'><b>{a}</b><p>{b}</p></div>" for a,b in booking_cards)+"</div>", unsafe_allow_html=True)
-
-    section("AFTER CLASS","体验课后转化话术","体验课结束后不要马上硬推，先总结成果，再给下一步方案。")
-    after_cards=[("总结成果","今天我们已经完成了：1 个目标、1 个任务、1 个初版作品、1 次反馈修改。这个方向是可以继续打磨的。"),("转 5 天营","如果你想把这个能力做成 3 个可展示作品，建议进入 5 天技能成长营。目标是形成作品集和表达稿。"),("转自由职业营","如果你想把这个能力变成接单服务，建议进入 5 天自由职业技能变现营。重点是服务包、报价单、样品和交付 SOP。"),("转企业内训","如果这个任务是部门共性问题，可以升级成企业内训：我们把它做成任务包、评分标准和成果发表机制。")]
-    st.markdown("<div class='grid4'>"+"".join(f"<div class='card green'><b>{a}</b><p>{b}</p></div>" for a,b in after_cards)+"</div>", unsafe_allow_html=True)
-
-    section("OBJECTIONS","常见异议处理","不要争辩，回到体验课低门槛和明确交付。")
-    objections=[("我再考虑一下","可以。你不用现在决定大课。建议先做 2 小时体验课，成本很低，做完你会知道这个方向是否值得继续。"),("我没时间","那更适合体验课。我们只拿 2 小时完成一个小任务，不要求你先学很多理论。"),("我怕 AI 课没用","这不是纯 AI 工具课。体验课一定要完成一个你的真实任务，不完成作品就没有意义。"),("价格能不能便宜","体验课已经是低门槛验证价。真正重要的是你能不能通过 2 小时看到可继续打磨的结果。")]
-    st.markdown("<div class='grid4'>"+"".join(f"<div class='card orange'><b>{a}</b><p>{b}</p></div>" for a,b in objections)+"</div>", unsafe_allow_html=True)
-
     section("RECORD","飞书跟进记录模板","每条线索至少记录这些字段，后面才能复盘。")
-    template='''【线索跟进记录】\n姓名/称呼：\n联系方式：\n身份：新人 / 在岗 / 升职 / 跳槽 / 自由职业 / 企业\n目标技能：\n推荐产品：2小时体验课 / 5天成长营 / 自由职业营 / 企业内训\n跟进状态：新线索 / 已联系 / 已约时间 / 已付款 / 已上课 / 已转化 / 未转化\n下次动作：\n备注：'''
-    st.markdown(f"<div class='dark'>{template}</div>", unsafe_allow_html=True)
-
+    st.markdown("""<div class='dark'>【线索跟进记录】
+姓名/称呼：
+联系方式：
+身份：新人 / 在岗 / 升职 / 跳槽 / 自由职业 / 企业
+目标技能：
+推荐产品：2小时体验课 / 5天成长营 / 自由职业营 / 企业内训
+跟进状态：新线索 / 已联系 / 已约时间 / 已付款 / 已上课 / 已转化 / 未转化
+下次动作：
+备注：</div>""", unsafe_allow_html=True)
 
 def render_paths(lang: str):
     subhero("GROWTH PATHS","成长路径","平台先帮你选路径，再把路径拆成任务。")
-    cards=[("🌱","新人上手","先做出第一个可检查成果。"),("📈","在岗提升","把高频工作变成 AI 工作流。"),("🧗","升职准备","训练分析、汇报、复盘、带新人。"),("🔁","转岗跳槽","用作品集证明能力。"),("💼","自由职业","把技能转成服务包和交付流程。"),("🏢","企业培养","把培训做成可复制体系。")]
-    st.markdown("<div class='grid3'>"+"".join(html_card(*c) for c in cards)+"</div>", unsafe_allow_html=True)
     st.dataframe(pd.DataFrame([{"场景":a,"目标":b,"训练重点":c} for a,b,c in MOTIVE_ROWS]), use_container_width=True, hide_index=True)
-
 
 def render_skills(lang: str):
     subhero("SKILL TRAINING","技能训练","AI 把学习过程变成训练闭环：定目标、学概念、做任务、收反馈、改作品、能表达。")
@@ -184,52 +159,40 @@ def render_skills(lang: str):
     st.markdown("<div class='grid3'>"+"".join(html_card("🧠",a,b) for a,b in SKILL_ROWS)+"</div>", unsafe_allow_html=True)
     st.dataframe(pd.DataFrame([{"方向":a,"可训练技能":b} for a,b in ROLE_ROWS]), use_container_width=True, hide_index=True)
 
-
 def render_portfolio(lang: str):
     subhero("PORTFOLIO","作品集","升职、转岗、跳槽、接单时，最有说服力的是能被检查的作品。")
     showcase=[("销售作品包","客户画像 / 跟进话术 / 方案初稿 / 成交复盘"),("运营作品包","活动方案 / 内容日历 / 数据复盘 / 转化话术"),("IT / 测试作品包","需求理解 / 测试用例 / Bug 报告 / 发表说明"),("自由职业作品包","服务包 / 报价单 / 样品案例 / 交付 SOP")]
     st.markdown("<div class='grid2'>"+"".join(html_card("📦",a,b,"card soft") for a,b in showcase)+"</div><div class='card green'><b>作品集的作用</b><p>把“我学过”变成“我能交付”。</p></div>", unsafe_allow_html=True)
-
 
 def render_freelance(lang: str):
     subhero("FREELANCE","自由职业者：学新技能，赚更多钱","不是保证收入，而是训练你把技能包装成可出售服务。")
     st.markdown("<div class='grid3'>"+"".join(html_card("💼",a,b) for a,b in FREELANCE_ROWS)+"</div>", unsafe_allow_html=True)
     st.markdown("<div class='dark'>技能学习 → 样品作品 → 服务包 → 报价单 → 获客话术 → 交付 SOP → 复盘提价</div>", unsafe_allow_html=True)
 
-
 def render_company(lang: str):
     subhero("COMPANY TRAINING","企业内训","企业需要的不只是 AI 讲座，而是新人上手、在岗提升和部门技能训练体系。")
-    items=[("新人上手","学习路径、任务练习、AI 反馈和老师点评标准化。"),("在岗提升","把部门高频任务做成 AI 学习与工作流模板。"),("转岗培养","围绕新岗位能力做作品集和成果发表。"),("部门模板","沉淀日报、周报、会议纪要、客户回复、PPT、数据说明模板。"),("评价标准","让主管能判断员工是否真的能交付。"),("合规边界","企业数据脱敏，关键输出必须人工审核。")]
-    st.markdown("<div class='grid3'>"+"".join(html_card("🏢",a,b) for a,b in items)+"</div><div class='card orange'><b>数据安全</b><p>企业数据必须脱敏；不上传商业秘密、客户隐私、合同原文、财务敏感数据。关键输出必须人工审核。</p></div>", unsafe_allow_html=True)
-
+    items=[("新人上手","学习路径、任务练习、AI 反馈和老师点评标准化。"),("在岗提升","把部门高频任务做成 AI 学习与工作流模板。"),("部门模板","沉淀日报、周报、会议纪要、客户回复、PPT、数据说明模板。"),("合规边界","企业数据脱敏，关键输出必须人工审核。")]
+    st.markdown("<div class='grid4'>"+"".join(html_card("🏢",a,b) for a,b in items)+"</div><div class='card orange'><b>数据安全</b><p>企业数据必须脱敏；不上传商业秘密、客户隐私、合同原文、财务敏感数据。</p></div>", unsafe_allow_html=True)
 
 def render_pricing(lang: str):
     subhero("PRICING","报价与产品入口","价格不是按讲师小时数，而是按训练结果：路径、任务、反馈、作品、服务包、表达能力。")
     render_offer_section()
 
-
 def render_booking(lang: str):
-    subhero("BOOKING","预约体验课 / 咨询方案","大陆场景优先支持飞书、企业微信、腾讯云函数、阿里云函数、自建后端。填写后可生成咨询摘要，也可自动发送到你配置的 Webhook。")
-    provider = get_secret("WEBHOOK_PROVIDER", "未配置")
-    webhook_configured = bool(get_secret("LEAD_WEBHOOK_URL"))
-    status_class = "green" if webhook_configured else "orange"
-    status_text = f"已配置：提交后会按 {provider} 格式自动发送线索。" if webhook_configured else "未配置：线索不会自动保存，请下载 TXT/CSV 或用邮件发送。"
-    st.markdown(f"<div class='card {status_class}'><b>Webhook 状态</b><p>{status_text}</p></div>", unsafe_allow_html=True)
-    left, right = st.columns([1.05,.95])
+    subhero("BOOKING","预约体验课 / 咨询方案","填写后可生成咨询摘要，也可自动发送到你配置的 Webhook。")
+    provider=get_secret("WEBHOOK_PROVIDER","未配置"); configured=bool(get_secret("LEAD_WEBHOOK_URL"))
+    st.markdown(f"<div class='card {'green' if configured else 'orange'}'><b>Webhook 状态</b><p>{'已配置：提交后会按 '+provider+' 格式自动发送线索。' if configured else '未配置：线索不会自动保存，请下载 TXT/CSV 或用邮件发送。'}</p></div>", unsafe_allow_html=True)
+    left,right=st.columns([1.05,.95])
     with left:
-        st.markdown("<div class='form-card'><h3>预约信息</h3><p style='color:#64748b;line-height:1.7'>支持下载 TXT/CSV、邮件发送；配置 LEAD_WEBHOOK_URL 后，可提交到飞书机器人、企业微信机器人或普通后端接口。</p></div>", unsafe_allow_html=True)
         with st.form("booking_form"):
-            name=st.text_input("姓名 / 称呼")
-            contact=st.text_input("联系方式（微信 / 邮箱 / 手机，任选）")
+            name=st.text_input("姓名 / 称呼"); contact=st.text_input("联系方式（微信 / 邮箱 / 手机，任选）")
             identity=st.selectbox("你现在属于哪类人？",["职场新人","在岗提升","升职准备","转岗 / 跳槽","自由职业 / 副业接单","企业培训负责人","小微老板"])
             goal=st.selectbox("你最想解决什么？",["学新技能","提升现有技能","做作品集","升职表达","换工作 / 高薪跳槽","自由职业接单","企业内训"])
             skill=st.text_input("想学习或提升的具体技能",placeholder="例如：PPT汇报、销售话术、测试用例、Java项目、自由职业服务包")
             time_budget=st.selectbox("你愿意投入的时间",["2 小时体验","1 天入门","5 天训练营","4 周小班","企业内训待沟通"])
-            note=st.text_area("补充说明",placeholder="你的背景、现在卡在哪里、希望最终拿到什么成果")
-            submitted=st.form_submit_button("生成并提交咨询摘要")
+            note=st.text_area("补充说明"); submitted=st.form_submit_button("生成并提交咨询摘要")
     with right:
-        st.markdown("<div class='diagnosis'><h3>大陆优先推荐</h3><ul><li>飞书机器人：WEBHOOK_PROVIDER = feishu</li><li>企业微信机器人：WEBHOOK_PROVIDER = wecom</li><li>腾讯云函数 / 阿里云函数 / 自建接口：WEBHOOK_PROVIDER = generic</li><li>腾讯文档、金山表单：可先用 CSV 导入</li></ul></div>", unsafe_allow_html=True)
-        st.markdown("<div class='lead-note'>建议从 2 小时体验课开始：先完成一个微型任务，再决定是否进入完整训练营。</div>", unsafe_allow_html=True)
+        st.markdown("<div class='diagnosis'><h3>大陆优先推荐</h3><ul><li>飞书机器人：WEBHOOK_PROVIDER = feishu</li><li>企业微信机器人：WEBHOOK_PROVIDER = wecom</li><li>腾讯云函数 / 阿里云函数 / 自建接口：WEBHOOK_PROVIDER = generic</li></ul></div>", unsafe_allow_html=True)
     if submitted:
         timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         lead={"timestamp":timestamp,"name":name,"contact":contact,"identity":identity,"goal":goal,"skill":skill,"time_budget":time_budget,"note":note,"source":"streamlit_site"}
@@ -247,44 +210,35 @@ def render_booking(lang: str):
 1. 先把“{skill or goal}”拆成 1 个微型任务。
 2. 体验课中完成一次 AI 辅助学习、练习和反馈。
 3. 之后根据结果选择 5 天技能成长营、自由职业技能变现营或企业内训。"""
-        lead["summary"]=summary
-        if "leads" not in st.session_state:
-            st.session_state["leads"]=[]
-        st.session_state["leads"].append(lead)
-        ok,msg=post_lead_to_webhook(lead)
-        st.success("咨询摘要已生成。")
-        st.info(msg)
-        if ok:
-            st.success("线索已发送到 Webhook。")
-        st.markdown(f"<div class='summary'>{summary}</div>", unsafe_allow_html=True)
-        csv_df=pd.DataFrame([lead])
-        col1,col2=st.columns(2)
-        with col1:
-            st.download_button("下载 TXT 摘要",data=summary,file_name="ai_skill_growth_lead.txt",mime="text/plain")
-        with col2:
-            st.download_button("下载 CSV 线索",data=csv_df.to_csv(index=False).encode("utf-8-sig"),file_name="ai_skill_growth_lead.csv",mime="text/csv")
-        owner_email=get_secret("OWNER_EMAIL")
-        mailto=f"mailto:{owner_email}?subject="+quote("AI技能成长咨询摘要")+"&body="+quote(summary)
-        st.markdown(f"<a class='mail-link' href='{mailto}'>用邮件发送摘要</a>", unsafe_allow_html=True)
+        lead["summary"]=summary; st.session_state.setdefault("leads",[]).append(lead); ok,msg=post_lead_to_webhook(lead)
+        st.success("咨询摘要已生成。"); st.info(msg); st.markdown(f"<div class='summary'>{summary}</div>", unsafe_allow_html=True)
+        df=pd.DataFrame([lead]); st.download_button("下载 TXT 摘要",data=summary,file_name="ai_skill_growth_lead.txt",mime="text/plain"); st.download_button("下载 CSV 线索",data=df.to_csv(index=False).encode("utf-8-sig"),file_name="ai_skill_growth_lead.csv",mime="text/csv")
+        owner_email=get_secret("OWNER_EMAIL"); mailto=f"mailto:{owner_email}?subject="+quote("AI技能成长咨询摘要")+"&body="+quote(summary); st.markdown(f"<a class='mail-link' href='{mailto}'>用邮件发送摘要</a>", unsafe_allow_html=True)
     if st.session_state.get("leads"):
-        section("SESSION LEADS","本次会话线索","这些线索保存在当前浏览会话中；关闭或重启后可能消失。正式保存请配置大陆可用 Webhook。")
-        leads_df=pd.DataFrame(st.session_state["leads"])
-        st.dataframe(leads_df.drop(columns=["summary"], errors="ignore"), use_container_width=True, hide_index=True)
-        st.download_button("下载本次会话全部线索 CSV", data=leads_df.to_csv(index=False).encode("utf-8-sig"), file_name="ai_skill_growth_session_leads.csv", mime="text/csv")
+        section("SESSION LEADS","本次会话线索","这些线索保存在当前浏览会话中；关闭或重启后可能消失。")
+        leads_df=pd.DataFrame(st.session_state["leads"]); st.dataframe(leads_df.drop(columns=["summary"],errors="ignore"),use_container_width=True,hide_index=True)
     section("WEBHOOK CONFIG","大陆可用配置示例","在 Streamlit Cloud 的 App settings / Secrets 中加入以下配置。")
-    st.code('LEAD_WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/xxxx"\nWEBHOOK_PROVIDER = "feishu"\nOWNER_EMAIL = "your-email@example.com"\n\n# 或企业微信机器人\n# LEAD_WEBHOOK_URL = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxxx"\n# WEBHOOK_PROVIDER = "wecom"\n\n# 或腾讯云函数 / 阿里云函数 / 自建后端\n# WEBHOOK_PROVIDER = "generic"', language="toml")
+    st.code('''LEAD_WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/xxxx"
+WEBHOOK_PROVIDER = "feishu"
+OWNER_EMAIL = "your-email@example.com"
 
+# 或企业微信机器人
+# LEAD_WEBHOOK_URL = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxxx"
+# WEBHOOK_PROVIDER = "wecom"
+
+# 或腾讯云函数 / 阿里云函数 / 自建后端
+# WEBHOOK_PROVIDER = "generic"''', language="toml")
 
 def render_faq(lang: str):
     subhero("FAQ","常见问题","把风险边界说清楚，比夸大承诺更能建立信任。")
-    qs=[("这是不是只适合新人？","不是。新人、想升职的人、转岗的人、跳槽高薪的人、自由职业者、想带团队的人都适合。"),("自由职业者能学什么？","学可出售技能，做样品，包装服务包，写报价，设计获客话术和交付 SOP。"),("这是不是 AI 办公提效课？","不是。提效只是副产品，核心是学习新技能、提升技能，并做出可展示成果。"),("会不会承诺就业、涨薪、接单收入或证书？","不承诺。平台交付技能路径、作品集、服务包和表达能力，不做官方职业资格或收入保证。"),("为什么不做 K12 或补习？","K12 学科补习监管风险高，本项目只做成人职业技能成长、自由职业技能训练和企业内训。"),("AI 会不会替代老师？","不会。AI 做第一轮解释和反馈，老师负责任务设计、标准把关和关键点评。")]
+    qs=[("这是不是只适合新人？","不是。新人、想升职的人、转岗的人、跳槽高薪的人、自由职业者、想带团队的人都适合。"),("这是不是 AI 办公提效课？","不是。提效只是副产品，核心是学习新技能、提升技能，并做出可展示成果。"),("会不会承诺就业、涨薪、接单收入或证书？","不承诺。平台交付技能路径、作品集、服务包和表达能力，不做官方职业资格或收入保证。"),("AI 会不会替代老师？","不会。AI 做第一轮解释和反馈，老师负责任务设计、标准把关和关键点评。")]
     st.markdown("<div class='grid2'>"+"".join(html_card("❓",q,a) for q,a in qs)+"</div>", unsafe_allow_html=True)
-
 
 def main():
     lang=st.radio("语言",["zh"],horizontal=True,label_visibility="collapsed",format_func=lambda x:"中文",key="lang_nav")
     page=render_top_nav(lang)
     if page=="home": render_home(lang)
+    elif page=="workspace": render_learning_workspace(lang)
     elif page=="trial": render_trial(lang)
     elif page=="sop": render_followup_sop(lang)
     elif page=="paths": render_paths(lang)
@@ -295,9 +249,8 @@ def main():
     elif page=="pricing": render_pricing(lang)
     elif page=="booking": render_booking(lang)
     else: render_faq(lang)
-    st.markdown("<div class='mobile-sticky'><span class='m1'>预约体验课</span><span class='m2'>咨询方案</span></div>", unsafe_allow_html=True)
-    st.caption("AI Skill Growth Platform · sales follow-up SOP v2.5")
-
+    st.markdown("<div class='mobile-sticky'><span class='m1'>预约体验课</span><span>学习工作台</span></div>", unsafe_allow_html=True)
+    st.caption("AI Skill Growth Platform · learner workspace prototype v3.1")
 
 if __name__=="__main__":
     main()
