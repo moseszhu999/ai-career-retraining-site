@@ -12,44 +12,22 @@ st.set_page_config(
 st.markdown(
     """
 <style>
-.main .block-container{max-width:1120px;padding-top:1rem;padding-bottom:3rem}
-.hero{padding:2.2rem;border:1px solid #c7d2fe;border-radius:1.35rem;background:linear-gradient(135deg,#eef2ff 0%,#f8fafc 58%,#ecfeff 100%);box-shadow:0 14px 38px rgba(15,23,42,.08);margin-bottom:1rem}
-.hero h1{margin:0 0 .75rem 0;font-size:2.75rem;line-height:1.08;color:#0f172a}.hero p{font-size:1.1rem;color:#475569;line-height:1.72;max-width:920px}.eyebrow{font-size:.8rem;letter-spacing:.13em;color:#4f46e5;font-weight:900;text-transform:uppercase}.hero b{color:#312e81}
-.card{border:1px solid #e2e8f0;border-radius:1rem;background:#fff;padding:1rem;box-shadow:0 8px 22px rgba(15,23,42,.04);min-height:132px;margin-bottom:.8rem}.card b{color:#0f172a}.card p{color:#64748b;line-height:1.58}.card strong{color:#4338ca}
-.loop{display:grid;grid-template-columns:repeat(5,1fr);gap:.65rem;margin:1rem 0}.loop div{border:1px solid #c7d2fe;background:#fff;border-radius:1rem;padding:.85rem;text-align:center}.loop b{display:block;color:#4f46e5}.loop span{font-weight:850;color:#312e81;font-size:.82rem}
-.cta{border:1px solid #bbf7d0;background:#f0fdf4;border-radius:1.2rem;padding:1.2rem;margin:1.2rem 0;box-shadow:0 8px 24px rgba(15,23,42,.04)}.cta h3{margin-top:0;color:#14532d}.cta b{color:#166534}
-.warn{border:1px solid #fed7aa;background:#fff7ed;border-radius:1rem;padding:1rem;margin:.8rem 0;color:#7c2d12}.dark{background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1rem;white-space:pre-wrap}.small{font-size:.9rem;color:#64748b}
-@media (max-width:900px){.loop{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:2rem}}
+:root{
+  --ink:#0f172a;--muted:#64748b;--brand:#4f46e5;--brand2:#06b6d4;--green:#22c55e;--soft:#eef2ff;--line:#e2e8f0;
+}
+.main .block-container{max-width:1160px;padding-top:1rem;padding-bottom:3rem}
+section{margin:2.1rem 0}.section-kicker{font-size:.82rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--brand);margin-bottom:.2rem}.section-title{font-size:1.7rem;font-weight:950;color:var(--ink);line-height:1.22;margin:.1rem 0 .35rem}.section-sub{color:var(--muted);font-size:1rem;line-height:1.75;max-width:820px}
+.hero-wrap{padding:2.1rem;border:1px solid #c7d2fe;border-radius:1.55rem;background:radial-gradient(circle at 82% 16%,#cffafe 0,#eef2ff 34%,#f8fafc 76%);box-shadow:0 18px 50px rgba(15,23,42,.09);margin-bottom:1.2rem}.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:1.6rem;align-items:center}.eyebrow{font-size:.78rem;letter-spacing:.13em;color:var(--brand);font-weight:950;text-transform:uppercase}.hero-title{margin:.4rem 0 .75rem;font-size:3.08rem;line-height:1.03;color:var(--ink);font-weight:980}.hero-title span{background:linear-gradient(90deg,var(--brand),var(--brand2));-webkit-background-clip:text;color:transparent}.hero-copy{font-size:1.12rem;color:#475569;line-height:1.75;max-width:720px}.hero-copy b{color:#312e81}.cta-row{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.1rem}.btn{display:inline-block;border-radius:999px;padding:.78rem 1.08rem;font-weight:900;text-decoration:none}.btn-primary{background:linear-gradient(90deg,var(--brand),#7c3aed);color:white;box-shadow:0 10px 22px rgba(79,70,229,.25)}.btn-secondary{background:white;color:#3730a3;border:1px solid #c7d2fe}.hero-tags{margin-top:1rem}.pill{display:inline-block;border-radius:999px;background:white;color:#3730a3;border:1px solid #c7d2fe;padding:.28rem .62rem;margin:.15rem;font-weight:850;font-size:.83rem}.visual{position:relative;min-height:390px;border:1px solid #dbeafe;border-radius:1.4rem;background:linear-gradient(160deg,#fff,#eef2ff 55%,#ecfeff);overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.85)}.visual:before{content:"";position:absolute;width:230px;height:230px;border-radius:50%;background:rgba(79,70,229,.12);right:-60px;top:-60px}.visual:after{content:"";position:absolute;width:190px;height:190px;border-radius:50%;background:rgba(6,182,212,.16);left:-50px;bottom:-50px}.screen{position:absolute;left:34px;right:34px;top:35px;padding:1rem;border-radius:1rem;background:#0f172a;color:#e2e8f0;box-shadow:0 18px 36px rgba(15,23,42,.25);z-index:2}.screen b{color:#93c5fd}.screen-line{height:9px;background:#334155;border-radius:999px;margin:.55rem 0}.screen-line.short{width:65%}.float-card{position:absolute;z-index:3;background:white;border:1px solid #e2e8f0;border-radius:1rem;padding:.85rem;box-shadow:0 14px 30px rgba(15,23,42,.13);color:var(--ink);font-weight:900}.float-card small{display:block;color:var(--muted);font-weight:700;margin-top:.25rem}.fc1{left:26px;bottom:118px}.fc2{right:28px;bottom:74px}.fc3{left:145px;bottom:24px}.path-ribbon{position:absolute;left:34px;right:34px;top:210px;display:grid;grid-template-columns:repeat(5,1fr);gap:.45rem;z-index:3}.path-ribbon div{background:white;border:1px solid #c7d2fe;border-radius:.8rem;padding:.6rem .4rem;text-align:center}.path-ribbon b{display:block;color:var(--brand);font-size:.85rem}.path-ribbon span{display:block;color:#312e81;font-size:.75rem;font-weight:900}.statbar{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-top:1rem}.stat{background:white;border:1px solid #e0e7ff;border-radius:1rem;padding:.8rem;text-align:center}.stat b{display:block;font-size:1.5rem;color:var(--brand)}.stat span{font-size:.82rem;color:var(--muted);font-weight:800}
+.card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem}.card{border:1px solid var(--line);border-radius:1.08rem;background:white;padding:1rem;box-shadow:0 8px 22px rgba(15,23,42,.045);min-height:132px}.card b{color:var(--ink);font-size:1.02rem}.card p{color:var(--muted);line-height:1.58;margin:.45rem 0 0}.card .icon{font-size:1.45rem;margin-right:.2rem}.pain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}.pain{background:#fff7ed;border:1px solid #fed7aa;border-radius:1rem;padding:.9rem;color:#7c2d12;font-weight:850}.flow{display:grid;grid-template-columns:repeat(6,1fr);gap:.55rem}.flow div{background:linear-gradient(180deg,#fff,#f8fafc);border:1px solid #c7d2fe;border-radius:1rem;padding:.85rem;text-align:center}.flow b{display:block;color:var(--brand)}.flow span{font-size:.82rem;font-weight:850;color:#312e81}.artifact-wall{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}.artifact{border:1px solid #dbeafe;border-radius:1rem;padding:.9rem;background:linear-gradient(180deg,#fff,#eff6ff);min-height:112px}.artifact b{color:#1e3a8a}.artifact p{color:var(--muted);line-height:1.5}.program-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem}.program{border:1px solid #dbeafe;border-radius:1.05rem;background:white;padding:1rem;box-shadow:0 8px 20px rgba(15,23,42,.045)}.program .price{font-weight:950;color:#16a34a;margin:.45rem 0}.program b{color:var(--ink)}.bottom-cta{padding:1.4rem;border-radius:1.25rem;background:linear-gradient(135deg,#0f172a,#312e81);color:white}.bottom-cta h3{margin:.1rem 0 .4rem;font-size:1.65rem}.bottom-cta p{color:#dbeafe;line-height:1.7}.table-note{color:var(--muted);font-size:.94rem;line-height:1.7}.warn{border:1px solid #fed7aa;background:#fff7ed;border-radius:1rem;padding:1rem;margin:.8rem 0;color:#7c2d12}.dark{background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1rem;white-space:pre-wrap}.small{font-size:.9rem;color:var(--muted)}
+@media (max-width:960px){.hero-grid{grid-template-columns:1fr}.hero-title{font-size:2.25rem}.visual{min-height:360px}.card-grid,.pain-grid,.program-grid{grid-template-columns:1fr}.flow{grid-template-columns:repeat(2,1fr)}.artifact-wall{grid-template-columns:repeat(2,1fr)}.statbar{grid-template-columns:repeat(2,1fr)}}
 </style>
 """,
     unsafe_allow_html=True,
 )
 
 TEXT = {
-    "zh": {
-        "nav": "导航",
-        "lang_label": "语言 / Language",
-        "home": "首页",
-        "paths": "成长路径",
-        "skills": "技能训练",
-        "portfolio": "作品集",
-        "freelance": "自由职业",
-        "company": "企业内训",
-        "pricing": "报价",
-        "faq": "FAQ",
-    },
-    "en": {
-        "nav": "Navigation",
-        "lang_label": "语言 / Language",
-        "home": "Home",
-        "paths": "Growth Paths",
-        "skills": "Skill Training",
-        "portfolio": "Portfolio",
-        "freelance": "Freelance",
-        "company": "Company Training",
-        "pricing": "Pricing",
-        "faq": "FAQ",
-    },
+    "zh": {"nav":"导航","lang_label":"语言 / Language","home":"首页","paths":"成长路径","skills":"技能训练","portfolio":"作品集","freelance":"自由职业","company":"企业内训","pricing":"报价","faq":"FAQ"},
+    "en": {"nav":"Navigation","lang_label":"语言 / Language","home":"Home","paths":"Growth Paths","skills":"Skill Training","portfolio":"Portfolio","freelance":"Freelance","company":"Company Training","pricing":"Pricing","faq":"FAQ"},
 }
 
 MOTIVE_ROWS = [
@@ -101,213 +79,172 @@ PROGRAM_ROWS = [
     ("企业内训", "3 万元起", "把新人培养、在岗提升和部门技能训练做成 AI 工作流"),
 ]
 
-DELIVERABLES = [
-    ("🧭", "技能成长路线图", "明确要学什么、为什么学、学到什么程度。"),
-    ("🧪", "任务练习闭环", "学习、练习、AI 反馈、修改、提交。"),
-    ("📦", "3 个可展示作品", "用作品证明自己学会了，而不是只说会。"),
-    ("⚙️", "个人 AI 学习工作流", "以后学新技能可以继续复用。"),
-    ("💼", "自由职业服务包", "把技能包装成可报价、可交付的服务。"),
-    ("🎤", "成果发表稿", "能向老板、客户或面试官说明自己的能力。"),
-    ("🧾", "升职 / 转岗 / 接单表达", "把技能成长写进简历、面试、主页和客户沟通。"),
-]
-
 
 def pick(lang: str, zh: str, en: str) -> str:
     return zh if lang == "zh" else en
 
 
-def card(icon: str, title: str, body: str):
-    st.markdown(f"<div class='card'><b>{icon} {title}</b><p>{body}</p></div>", unsafe_allow_html=True)
+def section(kicker: str, title: str, sub: str = ""):
+    st.markdown(f"<section><div class='section-kicker'>{kicker}</div><div class='section-title'>{title}</div><div class='section-sub'>{sub}</div></section>", unsafe_allow_html=True)
 
 
-def hero(lang: str):
-    title = pick(lang, "AI 技能成长教育平台", "AI Skill Growth Education Platform")
-    subtitle = pick(
-        lang,
-        "面向职场人和自由职业者：新人上手、在岗提升、升职、转岗、跳槽高薪、自由职业增收，都可以用 AI 建立学习-练习-纠错-作品-变现闭环。",
-        "For professionals and freelancers: onboarding, upskilling, promotion, role switching, higher-paying jobs, and freelance income growth can all be supported by an AI-powered learn-practice-feedback-portfolio-monetization loop.",
-    )
-    st.markdown(
-        f"<div class='hero'><div class='eyebrow'>AI Skill Growth Platform</div><h1>🚀 {title}</h1><p><b>{pick(lang, '用 AI 更快学会新技能，并做出可展示、可交付、可变现的成果。', 'Use AI to learn new skills faster and produce visible, deliverable, monetizable outcomes.')}</b><br>{subtitle}</p></div>",
-        unsafe_allow_html=True,
-    )
-
-
-def growth_loop(lang: str):
-    labels = [
-        ("01", pick(lang, "定目标", "Set goal")),
-        ("02", pick(lang, "学技能", "Learn")),
-        ("03", pick(lang, "做任务", "Practice")),
-        ("04", pick(lang, "出作品", "Portfolio")),
-        ("05", pick(lang, "变价值", "Monetize")),
-    ]
-    st.markdown("<div class='loop'>" + "".join(f"<div><b>{n}</b><span>{t}</span></div>" for n, t in labels) + "</div>", unsafe_allow_html=True)
+def html_card(icon: str, title: str, body: str):
+    return f"<div class='card'><b><span class='icon'>{icon}</span>{title}</b><p>{body}</p></div>"
 
 
 def render_home(lang: str):
-    hero(lang)
-    growth_loop(lang)
-
-    st.markdown(pick(lang, "### 平台只做一件事", "### The platform does one thing"))
-    st.markdown(
-        pick(
-            lang,
-            "不是 AI 工具课，不是 Prompt 课，也不是单纯办公提效。核心是：**用 AI 帮职场人和自由职业者学习新技能、提升技能，并形成可展示、可交付、可变现的成果。**",
-            "Not a tool course, not a prompt course, and not just office productivity. The core promise: **help professionals and freelancers learn or improve skills with AI, then produce visible, deliverable, monetizable outcomes.**",
-        )
-    )
-
-    st.markdown(pick(lang, "### 谁会需要", "### Who needs this"))
-    st.dataframe(
-        pd.DataFrame(
-            [
-                {pick(lang, "场景", "Scenario"): a, pick(lang, "目标", "Goal"): b, pick(lang, "训练重点", "Training focus"): c}
-                for a, b, c in MOTIVE_ROWS
-            ]
-        ),
-        use_container_width=True,
-        hide_index=True,
-    )
-
-    st.markdown(pick(lang, "### 最终带走什么", "### What participants take away"))
-    cols = st.columns(3)
-    for i, (icon, title, body) in enumerate(DELIVERABLES):
-        with cols[i % 3]:
-            card(icon, title, body)
+    if lang == "zh":
+        hero_title = "AI 技能成长<br><span>教育平台</span>"
+        hero_copy = "面向职场人和自由职业者：新人上手、在岗提升、升职、转岗、跳槽高薪、自由职业增收，都可以用 AI 建立学习-练习-纠错-作品-变现闭环。"
+        cta1, cta2 = "预约 2 小时体验课", "查看课程产品"
+    else:
+        hero_title = "AI Skill Growth<br><span>Education Platform</span>"
+        hero_copy = "For professionals and freelancers: onboarding, upskilling, promotion, role switching, higher-paying jobs, and freelance income growth can all be supported by an AI-powered learn-practice-feedback-portfolio-monetization loop."
+        cta1, cta2 = "Book a 2-hour demo", "View programs"
 
     st.markdown(
-        "<div class='cta'>"
-        + pick(
-            lang,
-            "<h3>首个转化目标</h3><p><b>2 小时体验课：</b>选择一个技能目标，现场完成一个微型任务和 AI 学习路径。</p><p><b>主产品：</b>5 天技能成长营 / 5 天自由职业技能变现营，形成作品、服务包或升职转岗表达。</p>",
-            "<h3>First conversion target</h3><p><b>2-hour demo:</b> choose a skill goal and complete one micro task plus an AI learning path.</p><p><b>Main product:</b> a 5-day skill growth camp or freelance monetization camp that creates artifacts, service packages, or promotion/job-switch narratives.</p>",
-        )
-        + "</div>",
+        f"""
+<div class='hero-wrap'>
+  <div class='hero-grid'>
+    <div>
+      <div class='eyebrow'>AI Skill Growth Platform</div>
+      <h1 class='hero-title'>{hero_title}</h1>
+      <p class='hero-copy'><b>{pick(lang, '用 AI 更快学会新技能，并做出可展示、可交付、可变现的成果。', 'Use AI to learn new skills faster and produce visible, deliverable, monetizable outcomes.')}</b><br>{hero_copy}</p>
+      <div class='cta-row'><span class='btn btn-primary'>{cta1}</span><span class='btn btn-secondary'>{cta2}</span></div>
+      <div class='hero-tags'><span class='pill'>新人上手</span><span class='pill'>在岗提升</span><span class='pill'>升职跳槽</span><span class='pill'>自由职业接单</span><span class='pill'>企业内训</span></div>
+      <div class='statbar'><div class='stat'><b>5</b><span>步成长闭环</span></div><div class='stat'><b>3+</b><span>可展示作品</span></div><div class='stat'><b>2h</b><span>低门槛体验</span></div><div class='stat'><b>B/C</b><span>个人+企业</span></div></div>
+    </div>
+    <div class='visual'>
+      <div class='screen'><b>AI Skill Coach</b><div class='screen-line'></div><div class='screen-line short'></div><div class='screen-line'></div><div class='screen-line short'></div></div>
+      <div class='path-ribbon'><div><b>01</b><span>定目标</span></div><div><b>02</b><span>学技能</span></div><div><b>03</b><span>做任务</span></div><div><b>04</b><span>出作品</span></div><div><b>05</b><span>变价值</span></div></div>
+      <div class='float-card fc1'>📦 作品集<small>能展示，不空谈</small></div>
+      <div class='float-card fc2'>💼 服务包<small>能报价，能交付</small></div>
+      <div class='float-card fc3'>🎤 表达稿<small>升职 / 面试 / 接单</small></div>
+    </div>
+  </div>
+</div>
+""",
         unsafe_allow_html=True,
     )
 
+    section("WHO", "谁会需要这个平台", "不是只适合新人。凡是需要学习新技能、提升技能、证明能力或把技能变现的人，都有使用场景。")
+    who_cards = [
+        ("🌱", "新人上手", "从不会到能做，完成第一个可检查任务。"),
+        ("📈", "在岗提升", "把重复任务变成 AI 工作流，提升交付质量。"),
+        ("🧗", "升职准备", "从执行者升级为能分析、汇报、复盘的人。"),
+        ("🔁", "转岗跳槽", "补齐新岗位技能，用作品证明能力。"),
+        ("💼", "自由职业增收", "把技能包装成服务包、报价和交付 SOP。"),
+        ("🏢", "企业内训", "把新人培养和在岗提升做成标准化体系。"),
+    ]
+    st.markdown("<div class='card-grid'>" + "".join(html_card(*c) for c in who_cards) + "</div>", unsafe_allow_html=True)
 
-def render_paths(lang: str):
-    st.markdown(pick(lang, "## 成长路径", "## Growth paths"))
-    st.markdown(pick(lang, "同一套 AI 学习方法，可以服务不同阶段的职场人和自由职业者。", "The same AI learning method can serve professionals and freelancers at different stages."))
-    st.dataframe(
-        pd.DataFrame(
-            [
-                {pick(lang, "场景", "Scenario"): a, pick(lang, "目标", "Goal"): b, pick(lang, "训练重点", "Training focus"): c}
-                for a, b, c in MOTIVE_ROWS
-            ]
-        ),
-        use_container_width=True,
-        hide_index=True,
-    )
+    section("PAIN", "你真正卡住的地方", "很多人不是没有资料，而是不知道怎么学、怎么练、怎么判断自己做得对不对。")
+    pains = ["学了很多教程，还是做不出任务", "没人及时纠错，不知道哪里错", "不会把技能变成作品集", "升职或面试时说不清能力", "自由职业不知道如何报价和交付", "企业培训听完课，没有可检查成果"]
+    st.markdown("<div class='pain-grid'>" + "".join(f"<div class='pain'>⚠️ {p}</div>" for p in pains) + "</div>", unsafe_allow_html=True)
 
+    section("METHOD", "AI 技能成长闭环", "把学习从“看资料”变成“有目标、有任务、有反馈、有作品、有价值”的训练流程。")
+    flow = [("01", "定目标"), ("02", "学技能"), ("03", "做任务"), ("04", "AI 反馈"), ("05", "出作品"), ("06", "变价值")]
+    st.markdown("<div class='flow'>" + "".join(f"<div><b>{n}</b><span>{t}</span></div>" for n, t in flow) + "</div>", unsafe_allow_html=True)
 
-def render_skills(lang: str):
-    st.markdown(pick(lang, "## 技能训练", "## Skill training"))
-    st.markdown(pick(lang, "AI 的价值不是替你偷懒，而是把学习变成可训练闭环。", "AI's value is not doing less work. It turns learning into a trainable loop."))
-    cols = st.columns(3)
-    for i, (name, desc) in enumerate(SKILL_ROWS):
-        with cols[i % 3]:
-            card("🧠", name, desc)
+    section("OUTCOME", "最终带走什么", "成果必须能被老板、面试官、客户或自己复盘检查。")
+    outcomes = [
+        ("🧭", "技能成长路线图", "明确要学什么、学到什么程度。"),
+        ("🧪", "任务练习闭环", "学习、练习、AI 反馈、修改、提交。"),
+        ("📦", "3 个可展示作品", "用作品证明自己学会了。"),
+        ("⚙️", "个人 AI 学习工作流", "以后学新技能可以继续复用。"),
+        ("💼", "自由职业服务包", "把技能包装成可报价、可交付服务。"),
+        ("🧾", "升职/转岗/接单表达", "用于简历、面试、主页和客户沟通。"),
+    ]
+    st.markdown("<div class='card-grid'>" + "".join(html_card(*c) for c in outcomes) + "</div>", unsafe_allow_html=True)
 
-    st.markdown(pick(lang, "### 可训练岗位 / 变现技能", "### Trainable job / monetizable skills"))
-    st.dataframe(
-        pd.DataFrame([{pick(lang, "方向", "Track"): a, pick(lang, "可训练技能", "Trainable skills"): b} for a, b in ROLE_ROWS]),
-        use_container_width=True,
-        hide_index=True,
-    )
-
-
-def render_portfolio(lang: str):
-    st.markdown(pick(lang, "## 作品集", "## Portfolio"))
-    st.markdown(pick(lang, "升职、转岗、跳槽、接单时，最有说服力的不是一句“我会 AI”，而是可检查作品。", "For promotion, role switching, job hunting, and freelancing, the most convincing proof is not saying 'I know AI'—it is reviewable work artifacts."))
-    examples = [
+    section("ARTIFACTS", "作品墙示例", "首页要让用户马上看到：学完不是听懂，而是能拿出东西。")
+    artifacts = [
         ("销售", "客户画像 + 跟进话术 + 成交复盘"),
         ("运营", "活动方案 + 内容日历 + 数据复盘"),
         ("行政", "会议纪要 + 行动项表 + SOP"),
         ("IT / 测试", "需求理解 + 测试用例 + Bug 报告"),
         ("培训师", "课程设计 + 练习任务 + Q&A 脚本"),
-        ("自由职业者", "服务包 + 报价单 + 样品案例 + 交付 SOP"),
+        ("自由职业", "服务包 + 报价单 + 样品案例 + 交付 SOP"),
         ("求职转岗", "AI 化简历 + 岗位作品 + 面试表达稿"),
+        ("小微老板", "客户调研 + 销售文案 + 流程清单"),
     ]
-    st.dataframe(
-        pd.DataFrame([{pick(lang, "方向", "Track"): a, pick(lang, "作品示例", "Artifact examples"): b} for a, b in examples]),
-        use_container_width=True,
-        hide_index=True,
+    st.markdown("<div class='artifact-wall'>" + "".join(f"<div class='artifact'><b>{a}</b><p>{b}</p></div>" for a, b in artifacts) + "</div>", unsafe_allow_html=True)
+
+    section("PROGRAMS", "课程产品矩阵", "从体验课到自由职业变现营，再到企业内训，围绕同一个技能成长闭环。")
+    st.markdown("<div class='program-grid'>" + "".join(f"<div class='program'><b>{a}</b><div class='price'>{b}</div><p>{c}</p></div>" for a, b, c in PROGRAM_ROWS) + "</div>", unsafe_allow_html=True)
+
+    st.markdown(
+        """
+<div class='bottom-cta'>
+  <h3>先用 2 小时，找到你的下一个技能增长点。</h3>
+  <p>选择一个技能目标，现场完成一个微型任务和 AI 学习路径。后续可以进入 5 天技能成长营、自由职业技能变现营或企业内训。</p>
+  <div class='cta-row'><span class='btn btn-primary'>预约体验课</span><span class='btn btn-secondary'>咨询课程方案</span></div>
+</div>
+""",
+        unsafe_allow_html=True,
     )
+
+
+def render_paths(lang: str):
+    st.markdown("## 成长路径")
+    st.markdown("同一套 AI 学习方法，可以服务不同阶段的职场人和自由职业者。")
+    st.dataframe(pd.DataFrame([{"场景": a, "目标": b, "训练重点": c} for a, b, c in MOTIVE_ROWS]), use_container_width=True, hide_index=True)
+
+
+def render_skills(lang: str):
+    st.markdown("## 技能训练")
+    st.markdown("AI 的价值不是替你偷懒，而是把学习变成可训练闭环。")
+    cols = st.columns(3)
+    for i, (name, desc) in enumerate(SKILL_ROWS):
+        with cols[i % 3]:
+            st.markdown(html_card("🧠", name, desc), unsafe_allow_html=True)
+    st.markdown("### 可训练岗位 / 变现技能")
+    st.dataframe(pd.DataFrame([{"方向": a, "可训练技能": b} for a, b in ROLE_ROWS]), use_container_width=True, hide_index=True)
+
+
+def render_portfolio(lang: str):
+    st.markdown("## 作品集")
+    st.markdown("升职、转岗、跳槽、接单时，最有说服力的不是一句“我会 AI”，而是可检查作品。")
+    examples = [("销售", "客户画像 + 跟进话术 + 成交复盘"), ("运营", "活动方案 + 内容日历 + 数据复盘"), ("行政", "会议纪要 + 行动项表 + SOP"), ("IT / 测试", "需求理解 + 测试用例 + Bug 报告"), ("培训师", "课程设计 + 练习任务 + Q&A 脚本"), ("自由职业者", "服务包 + 报价单 + 样品案例 + 交付 SOP"), ("求职转岗", "AI 化简历 + 岗位作品 + 面试表达稿")]
+    st.dataframe(pd.DataFrame([{"方向": a, "作品示例": b} for a, b in examples]), use_container_width=True, hide_index=True)
 
 
 def render_freelance(lang: str):
-    st.markdown(pick(lang, "## 自由职业者：学新技能，赚更多钱", "## Freelancers: learn new skills, earn more"))
-    st.markdown(pick(lang, "自由职业者的问题不是只缺技能，而是缺一整套从技能到收入的路径。", "Freelancers do not only need skills. They need a path from skill to income."))
-    st.dataframe(
-        pd.DataFrame([{pick(lang, "阶段", "Stage"): a, pick(lang, "训练内容", "Training content"): b} for a, b in FREELANCE_ROWS]),
-        use_container_width=True,
-        hide_index=True,
-    )
-    st.markdown(
-        "<div class='dark'>"
-        + pick(
-            lang,
-            "技能学习 → 样品作品 → 服务包 → 报价单 → 获客话术 → 交付 SOP → 复盘提价",
-            "Skill learning → sample artifacts → service package → quote sheet → client outreach script → delivery SOP → review and price-up path",
-        )
-        + "</div>",
-        unsafe_allow_html=True,
-    )
+    st.markdown("## 自由职业者：学新技能，赚更多钱")
+    st.markdown("自由职业者的问题不是只缺技能，而是缺一整套从技能到收入的路径。")
+    st.dataframe(pd.DataFrame([{"阶段": a, "训练内容": b} for a, b in FREELANCE_ROWS]), use_container_width=True, hide_index=True)
+    st.markdown("<div class='dark'>技能学习 → 样品作品 → 服务包 → 报价单 → 获客话术 → 交付 SOP → 复盘提价</div>", unsafe_allow_html=True)
 
 
 def render_company(lang: str):
-    st.markdown(pick(lang, "## 企业内训", "## Company training"))
-    st.markdown(pick(lang, "企业需要的不只是 AI 讲座，而是新人上手、在岗提升和部门技能训练体系。", "Companies need more than an AI lecture: they need onboarding, upskilling, and department skill-training systems."))
+    st.markdown("## 企业内训")
+    st.markdown("企业需要的不只是 AI 讲座，而是新人上手、在岗提升和部门技能训练体系。")
     cols = st.columns(3)
-    items = [
-        ("新人上手", "把学习路径、任务练习、AI 反馈和老师点评标准化。"),
-        ("在岗提升", "把部门高频任务做成 AI 学习与工作流模板。"),
-        ("转岗培养", "围绕新岗位能力做作品集和成果发表。"),
-    ]
+    items = [("新人上手", "把学习路径、任务练习、AI 反馈和老师点评标准化。"), ("在岗提升", "把部门高频任务做成 AI 学习与工作流模板。"), ("转岗培养", "围绕新岗位能力做作品集和成果发表。")]
     for col, (title, body) in zip(cols, items):
         with col:
-            card("🏢", title, body)
-    st.markdown(
-        "<div class='warn'>"
-        + pick(
-            lang,
-            "企业数据必须脱敏；不上传商业秘密、客户隐私、合同原文、财务敏感数据。关键输出必须人工审核。",
-            "Company data must be sanitized. Do not upload trade secrets, customer privacy, contract originals, or sensitive financial data. Critical outputs require human review.",
-        )
-        + "</div>",
-        unsafe_allow_html=True,
-    )
+            st.markdown(html_card("🏢", title, body), unsafe_allow_html=True)
+    st.markdown("<div class='warn'>企业数据必须脱敏；不上传商业秘密、客户隐私、合同原文、财务敏感数据。关键输出必须人工审核。</div>", unsafe_allow_html=True)
 
 
 def render_pricing(lang: str):
-    st.markdown(pick(lang, "## 报价", "## Pricing"))
-    st.dataframe(
-        pd.DataFrame(
-            [
-                {pick(lang, "产品", "Product"): a, pick(lang, "价格", "Price"): b, pick(lang, "交付", "Deliverable"): c}
-                for a, b, c in PROGRAM_ROWS
-            ]
-        ),
-        use_container_width=True,
-        hide_index=True,
-    )
-    st.markdown(pick(lang, "不要按讲师小时数卖。按技能成长成果卖：学习路径、任务闭环、AI 反馈、作品集、服务包、升职/转岗/接单表达。", "Do not sell instructor hours. Sell skill-growth outcomes: learning paths, task loops, AI feedback, portfolios, service packages, and promotion/job-switch/freelance narratives."))
+    st.markdown("## 报价")
+    st.dataframe(pd.DataFrame([{"产品": a, "价格": b, "交付": c} for a, b, c in PROGRAM_ROWS]), use_container_width=True, hide_index=True)
+    st.markdown("不要按讲师小时数卖。按技能成长成果卖：学习路径、任务闭环、AI 反馈、作品集、服务包、升职/转岗/接单表达。")
 
 
 def render_faq(lang: str):
     st.markdown("## FAQ")
-    with st.expander(pick(lang, "这是不是只适合新人？", "Is this only for new hires?")):
-        st.write(pick(lang, "不是。新人、想升职的人、转岗的人、跳槽高薪的人、自由职业者、想带团队的人都适合。", "No. It is for new hires, professionals seeking promotion, role switchers, higher-paying job seekers, freelancers, and team leads."))
-    with st.expander(pick(lang, "自由职业者能学什么？", "What can freelancers learn?")):
-        st.write(pick(lang, "学可出售技能，做样品，包装服务包，写报价，设计获客话术和交付 SOP。", "They learn monetizable skills, build samples, package services, write quotes, design outreach scripts, and create delivery SOPs."))
-    with st.expander(pick(lang, "这是不是 AI 办公提效课？", "Is this just an AI office productivity course?")):
-        st.write(pick(lang, "不是。提效只是副产品，核心是学习新技能、提升技能，并做出可展示成果。", "No. Productivity is a byproduct. The core is learning and improving skills, then producing visible outcomes."))
-    with st.expander(pick(lang, "会不会承诺就业、涨薪、接单收入或证书？", "Do you promise employment, salary increase, freelance income, or certificates?")):
-        st.write(pick(lang, "不承诺。平台交付技能路径、作品集、服务包和表达能力，不做官方职业资格或收入保证。", "No. The platform delivers skill paths, portfolios, service packages, and communication ability. It does not promise official qualifications or income."))
-    with st.expander(pick(lang, "为什么不做 K12 或补习？", "Why not K12 tutoring?")):
-        st.write(pick(lang, "K12 学科补习监管风险高，本项目只做成人职业技能成长、自由职业技能训练和企业内训。", "K12 subject tutoring carries high regulatory risk. This project focuses on adult skill growth, freelance skill training, and company training."))
+    with st.expander("这是不是只适合新人？"):
+        st.write("不是。新人、想升职的人、转岗的人、跳槽高薪的人、自由职业者、想带团队的人都适合。")
+    with st.expander("自由职业者能学什么？"):
+        st.write("学可出售技能，做样品，包装服务包，写报价，设计获客话术和交付 SOP。")
+    with st.expander("这是不是 AI 办公提效课？"):
+        st.write("不是。提效只是副产品，核心是学习新技能、提升技能，并做出可展示成果。")
+    with st.expander("会不会承诺就业、涨薪、接单收入或证书？"):
+        st.write("不承诺。平台交付技能路径、作品集、服务包和表达能力，不做官方职业资格或收入保证。")
+    with st.expander("为什么不做 K12 或补习？"):
+        st.write("K12 学科补习监管风险高，本项目只做成人职业技能成长、自由职业技能训练和企业内训。")
 
 
 def main():
@@ -317,7 +254,6 @@ def main():
         ["home", "paths", "skills", "portfolio", "freelance", "company", "pricing", "faq"],
         format_func=lambda key: TEXT[lang][key],
     )
-
     if page == "home":
         render_home(lang)
     elif page == "paths":
@@ -334,9 +270,8 @@ def main():
         render_pricing(lang)
     else:
         render_faq(lang)
-
     st.sidebar.markdown("---")
-    st.sidebar.caption("AI Skill Growth Platform · public site v1.2")
+    st.sidebar.caption("AI Skill Growth Platform · visual landing v1.3")
 
 
 if __name__ == "__main__":
