@@ -42,15 +42,27 @@ def get_secret(name: str, default: str = "") -> str:
         return default
 
 
+def format_webhook_payload(lead: dict, provider: str) -> dict:
+    text = lead.get("summary", "")
+    provider = (provider or "generic").lower().strip()
+    if provider in {"feishu", "lark"}:
+        return {"msg_type": "text", "content": {"text": text}}
+    if provider in {"wecom", "wechat_work", "qywx", "enterprise_wechat"}:
+        return {"msgtype": "text", "text": {"content": text}}
+    return lead
+
+
 def post_lead_to_webhook(lead: dict) -> tuple[bool, str]:
     url = get_secret("LEAD_WEBHOOK_URL")
+    provider = get_secret("WEBHOOK_PROVIDER", "generic")
     if not url:
         return False, "未配置 LEAD_WEBHOOK_URL，线索仅在本页生成，可下载后手动跟进。"
     try:
-        data = json.dumps(lead, ensure_ascii=False).encode("utf-8")
+        payload = format_webhook_payload(lead, provider)
+        data = json.dumps(payload, ensure_ascii=False).encode("utf-8")
         req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json; charset=utf-8"}, method="POST")
         with urllib.request.urlopen(req, timeout=8) as resp:
-            return 200 <= resp.status < 300, f"Webhook 返回状态：{resp.status}"
+            return 200 <= resp.status < 300, f"已按 {provider} 格式发送，Webhook 返回状态：{resp.status}"
     except Exception as exc:
         return False, f"Webhook 发送失败：{exc}"
 
@@ -89,7 +101,7 @@ def render_offer_section():
         html+=f"<div class='{cls}'><span class='tag'>{tag}</span><h3>{title}</h3><div class='price'>{price}</div><p style='color:#64748b;font-weight:850'>{fit}</p><ul>"+"".join(f"<li>{b}</li>" for b in bullets)+f"</ul><div class='offer-btn'>{button}</div></div>"
     html+="</div>"
     st.markdown(html, unsafe_allow_html=True)
-    st.markdown("""<div class='grid2' style='margin-top:1rem'><div class='card green'><b>为什么这个产品更容易被购买？</b><p>它不是卖“AI 很厉害”，而是卖明确结果：学会一个技能、完成真实任务、获得 AI 反馈、形成作品集、用于升职/转岗/跳槽/接单。</p></div><div class='card orange'><b>合规边界</b><p>不承诺就业、不承诺涨薪、不承诺接单收入、不做官方证书。平台只交付训练过程、作品成果、服务包和表达能力。</p></div></div><div class='bottom-cta'><h3>先用 2 小时，找到你的下一个技能增长点。</h3><p>选择一个技能目标，现场完成一个微型任务和 AI 学习路径。</p><div class='btn-row'><span class='btn primary'>🚀 预约体验课</span><span class='btn secondary'>📩 咨询课程方案</span></div></div>""", unsafe_allow_html=True)
+    st.markdown("""<div class='grid2' style='margin-top:1rem'><div class='card green'><b>为什么这个产品更容易被购买？</b><p>它不是卖“AI 很厉害”，而是卖明确结果：学会一个技能、完成真实任务、获得 AI 反馈、形成作品集、用于升职/转岗/跳槽/接单。</p></div><div class='card orange'><b>合规边界</b><p>不承诺就业、不承诺涨薪、不承诺接单收入、不做官方证书。平台只交付训练过程、作品成果、服务包和表达能力。</p></div></div><div class='bottom-cta card' style='background:#0f172a;color:white;margin-top:1rem'><h3>先用 2 小时，找到你的下一个技能增长点。</h3><p style='color:#dbeafe'>选择一个技能目标，现场完成一个微型任务和 AI 学习路径。</p><div class='btn-row'><span class='btn primary'>🚀 预约体验课</span><span class='btn secondary'>📩 咨询课程方案</span></div></div>""", unsafe_allow_html=True)
 
 
 def render_home(lang: str):
@@ -151,12 +163,15 @@ def render_pricing(lang: str):
 
 
 def render_booking(lang: str):
-    subhero("BOOKING","预约体验课 / 咨询方案","填写信息后，系统会生成咨询摘要；也可自动发送到你配置的 Webhook。")
+    subhero("BOOKING","预约体验课 / 咨询方案","大陆场景优先支持飞书、企业微信、腾讯云函数、阿里云函数、自建后端。填写后可生成咨询摘要，也可自动发送到你配置的 Webhook。")
+    provider = get_secret("WEBHOOK_PROVIDER", "未配置")
     webhook_configured = bool(get_secret("LEAD_WEBHOOK_URL"))
-    st.markdown(f"<div class='card {'green' if webhook_configured else 'orange'}'><b>Webhook 状态</b><p>{'已配置：提交后会尝试自动发送线索。' if webhook_configured else '未配置：线索不会自动保存，请下载 TXT/CSV 或用邮件发送。'}</p></div>", unsafe_allow_html=True)
+    status_class = "green" if webhook_configured else "orange"
+    status_text = f"已配置：提交后会按 {provider} 格式自动发送线索。" if webhook_configured else "未配置：线索不会自动保存，请下载 TXT/CSV 或用邮件发送。"
+    st.markdown(f"<div class='card {status_class}'><b>Webhook 状态</b><p>{status_text}</p></div>", unsafe_allow_html=True)
     left, right = st.columns([1.05,.95])
     with left:
-        st.markdown("<div class='form-card'><h3>预约信息</h3><p style='color:#64748b;line-height:1.7'>支持生成咨询摘要、下载 TXT/CSV、邮件发送；配置 LEAD_WEBHOOK_URL 后可自动提交到外部系统。</p></div>", unsafe_allow_html=True)
+        st.markdown("<div class='form-card'><h3>预约信息</h3><p style='color:#64748b;line-height:1.7'>支持下载 TXT/CSV、邮件发送；配置 LEAD_WEBHOOK_URL 后，可提交到飞书机器人、企业微信机器人或普通后端接口。</p></div>", unsafe_allow_html=True)
         with st.form("booking_form"):
             name=st.text_input("姓名 / 称呼")
             contact=st.text_input("联系方式（微信 / 邮箱 / 手机，任选）")
@@ -167,7 +182,7 @@ def render_booking(lang: str):
             note=st.text_area("补充说明",placeholder="你的背景、现在卡在哪里、希望最终拿到什么成果")
             submitted=st.form_submit_button("生成并提交咨询摘要")
     with right:
-        st.markdown("<div class='diagnosis'><h3>咨询前会诊断什么？</h3><p>判断你该学什么、该做什么任务、最后拿什么作品证明能力。</p><ul><li>当前角色和目标</li><li>最短可行学习路径</li><li>可展示作品方向</li><li>适合体验课、训练营还是小班</li><li>是否适合自由职业服务包</li></ul></div>", unsafe_allow_html=True)
+        st.markdown("<div class='diagnosis'><h3>大陆优先推荐</h3><ul><li>飞书机器人：WEBHOOK_PROVIDER = feishu</li><li>企业微信机器人：WEBHOOK_PROVIDER = wecom</li><li>腾讯云函数 / 阿里云函数 / 自建接口：WEBHOOK_PROVIDER = generic</li><li>腾讯文档、金山表单：可先用 CSV 导入</li></ul></div>", unsafe_allow_html=True)
         st.markdown("<div class='lead-note'>建议从 2 小时体验课开始：先完成一个微型任务，再决定是否进入完整训练营。</div>", unsafe_allow_html=True)
 
     if submitted:
@@ -208,13 +223,13 @@ def render_booking(lang: str):
         st.markdown(f"<a class='mail-link' href='{mailto}'>用邮件发送摘要</a>", unsafe_allow_html=True)
 
     if st.session_state.get("leads"):
-        section("SESSION LEADS","本次会话线索","这些线索保存在当前浏览会话中；关闭或重启后可能消失。正式保存请配置 Webhook。")
+        section("SESSION LEADS","本次会话线索","这些线索保存在当前浏览会话中；关闭或重启后可能消失。正式保存请配置大陆可用 Webhook。")
         leads_df=pd.DataFrame(st.session_state["leads"])
         st.dataframe(leads_df.drop(columns=["summary"], errors="ignore"), use_container_width=True, hide_index=True)
         st.download_button("下载本次会话全部线索 CSV", data=leads_df.to_csv(index=False).encode("utf-8-sig"), file_name="ai_skill_growth_session_leads.csv", mime="text/csv")
 
-    section("WEBHOOK CONFIG","如何开启自动保存","在 Streamlit Cloud 的 App settings / Secrets 中加入以下配置。Webhook 可来自 Make、Zapier、飞书、Google Apps Script、Notion 自动化或自建接口。")
-    st.code('LEAD_WEBHOOK_URL = "https://你的-webhook-url"\nOWNER_EMAIL = "your-email@example.com"', language="toml")
+    section("WEBHOOK CONFIG","大陆可用配置示例","在 Streamlit Cloud 的 App settings / Secrets 中加入以下配置。")
+    st.code('LEAD_WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/xxxx"\nWEBHOOK_PROVIDER = "feishu"\nOWNER_EMAIL = "your-email@example.com"\n\n# 或企业微信机器人\n# LEAD_WEBHOOK_URL = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxxx"\n# WEBHOOK_PROVIDER = "wecom"\n\n# 或腾讯云函数 / 阿里云函数 / 自建后端\n# WEBHOOK_PROVIDER = "generic"', language="toml")
 
 
 def render_faq(lang: str):
@@ -236,7 +251,7 @@ def main():
     elif page=="booking": render_booking(lang)
     else: render_faq(lang)
     st.markdown("<div class='mobile-sticky'><span class='m1'>预约体验课</span><span class='m2'>咨询方案</span></div>", unsafe_allow_html=True)
-    st.caption("AI Skill Growth Platform · webhook leads v2.2")
+    st.caption("AI Skill Growth Platform · mainland webhooks v2.3")
 
 
 if __name__=="__main__":
