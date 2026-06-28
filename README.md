@@ -48,6 +48,43 @@ package the skill into work or service value
 present the result
 ```
 
+## Lead capture
+
+The booking page supports:
+
+```text
+booking form
+consultation summary
+TXT download
+CSV download
+mailto link
+session lead table
+optional webhook submission
+```
+
+### Optional Streamlit Secrets
+
+To enable automatic lead saving, add the following in Streamlit Cloud:
+
+```toml
+LEAD_WEBHOOK_URL = "https://your-webhook-url"
+OWNER_EMAIL = "your-email@example.com"
+```
+
+`LEAD_WEBHOOK_URL` can point to:
+
+```text
+Google Apps Script / Google Sheet
+Feishu / Lark webhook
+Make
+Zapier
+Notion automation
+Supabase Edge Function
+custom backend API
+```
+
+If `LEAD_WEBHOOK_URL` is not configured, the site still works, but leads must be downloaded or sent manually.
+
 ## Freelancer monetization loop
 
 ```text
