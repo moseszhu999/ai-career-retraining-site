@@ -18,6 +18,26 @@ Main file path: streamlit_app.py
 Python: 3.12
 ```
 
+## Product resource library
+
+The repository includes a unified resource index:
+
+```text
+product_resource_library.md
+```
+
+Use it as the main navigation document for:
+
+```text
+sales
+lead follow-up
+two-hour trial lesson delivery
+5-day skill growth camp
+5-day freelance monetization camp
+enterprise AI training
+compliance boundaries
+```
+
 ## Product positioning
 
 This is not limited to new hires.
