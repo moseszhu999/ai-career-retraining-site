@@ -96,13 +96,14 @@ def render_tasks() -> None:
     )
     left, right = st.columns([1.15, .85])
     with left:
-        label = st.selectbox("选择任务", [f"{r.day} · {r.title}" for _, r in TASKS.iterrows()], index=1)
-        row = TASKS.iloc[[f"{r.day} · {r.title}" for _, r in TASKS.iterrows()].index(label)]
+        labels = [f"{r.day} · {r.title}" for _, r in TASKS.iterrows()]
+        label = st.selectbox("选择任务", labels, index=1)
+        row = TASKS.iloc[labels.index(label)]
         st.markdown(
             f"""
 <div class='card task-card'>
-<h3>{row.day} · {row.title}</h3>
-<p><b>交付物：</b>{row.outcome}<br><b>状态：</b>{chip(row.status)}<br><b>下一步：</b>{row.next}</p>
+<h3>{row['day']} · {row['title']}</h3>
+<p><b>交付物：</b>{row['outcome']}<br><b>状态：</b>{chip(row['status'])}<br><b>下一步：</b>{row['next']}</p>
 </div>
 """,
             unsafe_allow_html=True,
@@ -148,7 +149,7 @@ def render_founder_backdoor() -> None:
         page_link = getattr(st, "page_link", None)
         if page_link:
             st.page_link("pages/99_Founder_Agent_Console.py", label="打开 Founder Agent Console", icon="🤖")
-        st.page_link("pages/00_Student_Home.py", label="查看学员首页候选页", icon="🎯") if page_link else None
+            st.page_link("pages/00_Student_Home.py", label="查看学员首页候选页", icon="🎯")
 
 
 page = render_nav()
