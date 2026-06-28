@@ -13,8 +13,8 @@ st.markdown(
 .main .block-container{max-width:1180px;padding-top:.8rem;padding-bottom:4rem}
 .app-nav{position:sticky;top:.35rem;z-index:999;margin-bottom:1rem;border:1px solid #c7d2fe;border-radius:1.35rem;background:rgba(255,255,255,.97);box-shadow:0 14px 34px rgba(15,23,42,.08);padding:.85rem 1rem;display:flex;justify-content:space-between;align-items:center;gap:1rem}.brand{display:flex;gap:.65rem;align-items:center;font-weight:980;color:#111827}.logo{width:40px;height:40px;border-radius:15px;background:linear-gradient(135deg,#4f46e5,#06b6d4);color:white;display:grid;place-items:center}.brand small{display:block;color:#64748b;font-weight:850}.nav-note{display:flex;gap:.42rem;flex-wrap:wrap}.pill{display:inline-block;border-radius:999px;padding:.3rem .68rem;font-size:.82rem;font-weight:900;border:1px solid #e2e8f0;background:#f8fafc;color:#475569;margin:.12rem .18rem .12rem 0}.hot{background:linear-gradient(90deg,#4f46e5,#06b6d4);border:none;color:white}.green{background:#dcfce7;color:#166534;border-color:#bbf7d0}.orange{background:#ffedd5;color:#9a3412;border-color:#fed7aa}.red{background:#fee2e2;color:#991b1b;border-color:#fecaca}.blue{background:#dbeafe;color:#1e40af;border-color:#bfdbfe}.purple{background:#ede9fe;color:#5b21b6;border-color:#ddd6fe}
 .nav-panel{margin:.7rem 0 1.15rem;padding:.55rem;border:1px solid #e0e7ff;border-radius:1.2rem;background:#f8fafc}div[data-testid='stRadio']>label{display:none}div[role='radiogroup']{display:flex;flex-wrap:wrap;gap:.45rem}div[role='radiogroup'] label{border:1px solid #dbeafe!important;border-radius:999px!important;background:white!important;padding:.42rem .88rem!important}div[role='radiogroup'] label p{font-weight:950!important;color:#334155!important;font-size:.93rem!important}div[role='radiogroup'] label:has(input:checked){background:linear-gradient(90deg,#4f46e5,#06b6d4)!important}div[role='radiogroup'] label:has(input:checked) p{color:white!important}
-.hero{border:1px solid #c7d2fe;border-radius:1.65rem;background:radial-gradient(circle at right,#ecfeff,#eef2ff 48%,#fff);padding:2rem;margin:1rem 0 1.2rem;box-shadow:0 18px 44px rgba(15,23,42,.08)}.hero h1{font-size:2.65rem;line-height:1.05;margin:.45rem 0;color:#0f172a;font-weight:980}.hero h1 span{background:linear-gradient(90deg,#4f46e5,#06b6d4);-webkit-background-clip:text;color:transparent}.hero p{color:#475569;line-height:1.75;font-size:1.03rem;max-width:900px}.eyebrow{display:inline-block;font-size:.78rem;letter-spacing:.12em;color:#3730a3;font-weight:950;background:white;border:1px solid #c7d2fe;border-radius:999px;padding:.3rem .65rem}.section-title{font-size:1.55rem;font-weight:950;margin:1.25rem 0 .35rem;color:#0f172a}.section-sub{color:#64748b;line-height:1.65;margin-bottom:.8rem}.grid2{display:grid;grid-template-columns:1.12fr .88fr;gap:1rem}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}.card{border:1px solid #e2e8f0;border-radius:1.15rem;background:white;padding:1rem;box-shadow:0 8px 22px rgba(15,23,42,.045)}.card h3{margin:.15rem 0 .45rem;color:#111827}.card p{color:#64748b;line-height:1.58}.soft{background:#f8fafc;border-color:#dbeafe}.good{background:#f0fdf4;border-color:#bbf7d0}.warn{background:#fff7ed;border-color:#fed7aa}.metric{font-size:2rem;font-weight:950;color:#111827}.quote{white-space:pre-wrap;background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1rem;line-height:1.65}.timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:.55rem}.timeline div{background:white;border:1px solid #c7d2fe;border-radius:1rem;padding:.85rem;text-align:center}.timeline b{display:block;color:#4f46e5}.timeline span{display:block;font-size:.86rem;color:#475569;font-weight:850;margin:.15rem 0}.progress-shell{height:.7rem;border-radius:999px;background:#e2e8f0;overflow:hidden}.progress-bar{height:100%;background:linear-gradient(90deg,#4f46e5,#06b6d4)}.mini{font-size:.86rem;color:#64748b;line-height:1.55}.task-card{border-left:5px solid #6366f1}.system-line{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-top:1rem}.system-line div{background:white;border:1px solid #dbeafe;border-radius:1rem;padding:.9rem}.system-line b{display:block;color:#3730a3;margin-bottom:.2rem}.step{display:flex;gap:.65rem;align-items:flex-start;margin:.65rem 0}.num{min-width:28px;height:28px;border-radius:999px;background:#eef2ff;color:#3730a3;font-weight:950;display:grid;place-items:center}.proof{border:1px solid #e0e7ff;border-radius:1rem;padding:1rem;background:linear-gradient(180deg,#fff,#f8fafc)}.proof h3{margin:.1rem 0 .35rem;color:#111827}.proof p{color:#64748b}.package{border:1px solid #dbeafe;border-radius:1rem;padding:1rem;background:white}.package b{display:block;color:#0f172a;margin-bottom:.35rem}.owner-note{border:1px dashed #c7d2fe;background:#f8fafc;border-radius:1rem;padding:1rem;color:#475569;line-height:1.65}.workbench-head{border:1px solid #c7d2fe;border-radius:1.35rem;padding:1.2rem;background:linear-gradient(135deg,#ffffff,#eef2ff);margin:.8rem 0 1rem}.workbench-head h2{margin:.2rem 0;color:#0f172a;font-size:1.75rem}.workbench-head p{color:#475569;line-height:1.7}.focus-card{border:1px solid #c7d2fe;border-radius:1.2rem;background:white;padding:1rem;box-shadow:0 10px 24px rgba(79,70,229,.08)}.focus-card h3{margin:.1rem 0;color:#111827}.side-panel{border:1px solid #e2e8f0;border-radius:1.15rem;background:#f8fafc;padding:1rem}.standard-list{border:1px solid #e0e7ff;border-radius:1rem;background:white;padding:1rem}.next-box{border:1px solid #fed7aa;background:#fff7ed;border-radius:1rem;padding:1rem;color:#7c2d12;line-height:1.65}.action-box{border:1px solid #bbf7d0;background:#f0fdf4;border-radius:1rem;padding:1rem;color:#166534;line-height:1.65}.mode-tag{font-size:.78rem;font-weight:950;letter-spacing:.1em;color:#4f46e5;text-transform:uppercase}
-@media(max-width:960px){.app-nav{align-items:flex-start;flex-direction:column}.nav-note{display:none}.grid2,.grid3,.grid4,.timeline,.system-line{grid-template-columns:1fr}.hero h1{font-size:2rem}}
+.hero{border:1px solid #c7d2fe;border-radius:1.65rem;background:radial-gradient(circle at right,#ecfeff,#eef2ff 48%,#fff);padding:2rem;margin:1rem 0 1.2rem;box-shadow:0 18px 44px rgba(15,23,42,.08)}.hero h1{font-size:2.65rem;line-height:1.05;margin:.45rem 0;color:#0f172a;font-weight:980}.hero h1 span{background:linear-gradient(90deg,#4f46e5,#06b6d4);-webkit-background-clip:text;color:transparent}.hero p{color:#475569;line-height:1.75;font-size:1.03rem;max-width:900px}.eyebrow{display:inline-block;font-size:.78rem;letter-spacing:.12em;color:#3730a3;font-weight:950;background:white;border:1px solid #c7d2fe;border-radius:999px;padding:.3rem .65rem}.section-title{font-size:1.55rem;font-weight:950;margin:1.25rem 0 .35rem;color:#0f172a}.section-sub{color:#64748b;line-height:1.65;margin-bottom:.8rem}.grid2{display:grid;grid-template-columns:1.12fr .88fr;gap:1rem}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}.card{border:1px solid #e2e8f0;border-radius:1.15rem;background:white;padding:1rem;box-shadow:0 8px 22px rgba(15,23,42,.045)}.card h3{margin:.15rem 0 .45rem;color:#111827}.card p{color:#64748b;line-height:1.58}.soft{background:#f8fafc;border-color:#dbeafe}.good{background:#f0fdf4;border-color:#bbf7d0}.warn{background:#fff7ed;border-color:#fed7aa}.metric{font-size:2rem;font-weight:950;color:#111827}.quote{white-space:pre-wrap;background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1rem;line-height:1.65}.timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:.55rem}.timeline div{background:white;border:1px solid #c7d2fe;border-radius:1rem;padding:.85rem;text-align:center}.timeline b{display:block;color:#4f46e5}.timeline span{display:block;font-size:.86rem;color:#475569;font-weight:850;margin:.15rem 0}.progress-shell{height:.7rem;border-radius:999px;background:#e2e8f0;overflow:hidden}.progress-bar{height:100%;background:linear-gradient(90deg,#4f46e5,#06b6d4)}.mini{font-size:.86rem;color:#64748b;line-height:1.55}.task-card{border-left:5px solid #6366f1}.system-line{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-top:1rem}.system-line div{background:white;border:1px solid #dbeafe;border-radius:1rem;padding:.9rem}.system-line b{display:block;color:#3730a3;margin-bottom:.2rem}.step{display:flex;gap:.65rem;align-items:flex-start;margin:.65rem 0}.num{min-width:28px;height:28px;border-radius:999px;background:#eef2ff;color:#3730a3;font-weight:950;display:grid;place-items:center}.proof{border:1px solid #e0e7ff;border-radius:1rem;padding:1rem;background:linear-gradient(180deg,#fff,#f8fafc)}.proof h3{margin:.1rem 0 .35rem;color:#111827}.proof p{color:#64748b}.package{border:1px solid #dbeafe;border-radius:1rem;padding:1rem;background:white}.package b{display:block;color:#0f172a;margin-bottom:.35rem}.owner-note{border:1px dashed #c7d2fe;background:#f8fafc;border-radius:1rem;padding:1rem;color:#475569;line-height:1.65}.workbench-head{border:1px solid #c7d2fe;border-radius:1.35rem;padding:1.2rem;background:linear-gradient(135deg,#ffffff,#eef2ff);margin:.8rem 0 1rem}.workbench-head h2{margin:.2rem 0;color:#0f172a;font-size:1.75rem}.workbench-head p{color:#475569;line-height:1.7}.focus-card{border:1px solid #c7d2fe;border-radius:1.2rem;background:white;padding:1rem;box-shadow:0 10px 24px rgba(79,70,229,.08)}.focus-card h3{margin:.1rem 0;color:#111827}.side-panel{border:1px solid #e2e8f0;border-radius:1.15rem;background:#f8fafc;padding:1rem}.standard-list{border:1px solid #e0e7ff;border-radius:1rem;background:white;padding:1rem}.next-box{border:1px solid #fed7aa;background:#fff7ed;border-radius:1rem;padding:1rem;color:#7c2d12;line-height:1.65}.action-box{border:1px solid #bbf7d0;background:#f0fdf4;border-radius:1rem;padding:1rem;color:#166534;line-height:1.65}.mode-tag{font-size:.78rem;font-weight:950;letter-spacing:.1em;color:#4f46e5;text-transform:uppercase}.portfolio-hero{border:1px solid #c7d2fe;border-radius:1.35rem;background:radial-gradient(circle at left,#ecfeff,#fff 55%);padding:1.25rem;margin:.8rem 0 1rem}.portfolio-hero h2{margin:.2rem 0;color:#0f172a;font-size:1.8rem}.portfolio-card{border:1px solid #e0e7ff;border-radius:1.15rem;background:white;padding:1rem;box-shadow:0 10px 24px rgba(15,23,42,.045);min-height:210px}.portfolio-card h3{margin:.15rem 0;color:#111827}.evidence-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem}.evidence{border:1px solid #e2e8f0;border-radius:1rem;background:#f8fafc;padding:.9rem}.evidence b{display:block;color:#0f172a;margin-bottom:.25rem}.score-ring{border-radius:1.2rem;border:1px solid #c7d2fe;background:linear-gradient(135deg,#eef2ff,#fff);padding:1rem;text-align:center}.score-ring .big{font-size:2.5rem;font-weight:980;color:#3730a3}.share-row{display:grid;grid-template-columns:repeat(3,1fr);gap:.65rem}.share-row div{border:1px dashed #c7d2fe;border-radius:1rem;background:#f8fafc;padding:.9rem;color:#475569}.review-box{border:1px solid #dbeafe;border-radius:1rem;background:white;padding:1rem;line-height:1.65;color:#475569}
+@media(max-width:960px){.app-nav{align-items:flex-start;flex-direction:column}.nav-note{display:none}.grid2,.grid3,.grid4,.timeline,.system-line,.evidence-grid,.share-row{grid-template-columns:1fr}.hero h1{font-size:2rem}}
 </style>
 """,
     unsafe_allow_html=True,
@@ -40,11 +40,11 @@ TASKS = pd.DataFrame(
 
 PORTFOLIO = pd.DataFrame(
     [
-        ["目标拆解", "5天成长路线图", "86", "可展示", "能说明目标、路径和交付物"],
-        ["测试用例作品", "测试用例 + Bug报告", "64", "修改中", "补齐权限、安全、边界后可展示"],
-        ["复杂需求拆解", "流程 + 异常分支", "--", "待点评", "等待Agent正式点评"],
+        ["目标拆解", "5天成长路线图", "86", "可展示", "能说明目标、路径和交付物", "职业成长", "目标清晰、路径可执行、交付物可检查", "适合放入面试材料和培训前测报告"],
+        ["测试用例作品", "测试用例 + Bug报告", "64", "修改中", "补齐权限、安全、边界后可展示", "软件测试", "已覆盖基础登录，缺少权限、安全和边界", "适合改造成软件测试入门作品"],
+        ["复杂需求拆解", "流程 + 异常分支", "--", "待点评", "等待Agent正式点评", "业务分析", "已提交但尚未完成正式点评", "适合作为业务分析/测试分析作品候选"],
     ],
-    columns=["作品", "证明材料", "评分", "状态", "说明"],
+    columns=["作品", "证明材料", "评分", "状态", "说明", "方向", "Agent摘要", "展示建议"],
 )
 
 STATUS_CLASS = {"Agent已点评": "green", "AI已反馈": "orange", "待Agent点评": "blue", "未开始": "", "修改中": "orange", "可展示": "green", "待点评": "blue", "今日主任务": "purple", "已完成": "green", "等待点评": "blue", "未解锁": ""}
@@ -63,7 +63,7 @@ def render_nav() -> str:
         """
 <div class='app-nav'>
   <div class='brand'><div class='logo'>AI</div><div>AI Skill Growth OS<small>学员前台 · Agent反馈 · 作品集 · Founder后台</small></div></div>
-  <div class='nav-note'><span class='pill'>页面优先</span><span class='pill'>学习工作台</span><span class='pill'>作品集</span><span class='pill hot'>v4.5.1 UI</span></div>
+  <div class='nav-note'><span class='pill'>页面优先</span><span class='pill'>学习工作台</span><span class='pill'>作品集详情</span><span class='pill hot'>v4.5.2 UI</span></div>
 </div>
 """,
         unsafe_allow_html=True,
@@ -218,23 +218,115 @@ def render_tasks() -> None:
 
 
 def render_portfolio() -> None:
-    st.markdown("<div class='section-title'>作品集</div>", unsafe_allow_html=True)
-    st.markdown("<div class='section-sub'>作品集不是任务列表，而是“可展示证明”。页面阶段先展示卡片形态和状态口径。</div>", unsafe_allow_html=True)
+    approved = int((PORTFOLIO["状态"] == "可展示").sum())
+    editing = int((PORTFOLIO["状态"] == "修改中").sum())
+    pending = int((PORTFOLIO["状态"] == "待点评").sum())
+    st.markdown(
+        f"""
+<div class='portfolio-hero'>
+<span class='mode-tag'>PORTFOLIO PROOF PAGE · PAGE FIRST</span>
+<h2>作品集不是任务列表，而是可展示证明</h2>
+<p>这一页要让学员看到：哪些成果可以展示，为什么可以展示，还差什么，未来如何导出给面试官、客户或上级。</p>
+<div class='grid4'>
+  <div class='card'><span class='mini'>可展示</span><div class='metric'>{approved}</div><p>已经可以作为成长证明。</p></div>
+  <div class='card'><span class='mini'>修改中</span><div class='metric'>{editing}</div><p>有价值，但还需要补强。</p></div>
+  <div class='card'><span class='mini'>待点评</span><div class='metric'>{pending}</div><p>等待Agent或Founder确认。</p></div>
+  <div class='card'><span class='mini'>导出能力</span><div class='metric'>Soon</div><p>后续支持PDF/分享链接。</p></div>
+</div>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
 
-    st.markdown("<div class='grid3'>", unsafe_allow_html=True)
+    st.markdown("<div class='section-title'>作品卡片</div>", unsafe_allow_html=True)
+    cards_html = "<div class='grid3'>"
     for _, row in PORTFOLIO.iterrows():
+        cards_html += f"""
+<div class='portfolio-card'>
+<h3>{row['作品']}</h3>
+{chip(row['状态'])}<span class='pill purple'>{row['方向']}</span>
+<p><b>证明材料：</b>{row['证明材料']}</p>
+<p><b>评分：</b>{row['评分']}</p>
+<p>{row['说明']}</p>
+</div>
+"""
+    cards_html += "</div>"
+    st.markdown(cards_html, unsafe_allow_html=True)
+
+    st.markdown("<div class='section-title'>作品详情</div>", unsafe_allow_html=True)
+    selected = st.selectbox("选择一个作品查看详情", PORTFOLIO["作品"].tolist(), index=0)
+    row = PORTFOLIO[PORTFOLIO["作品"] == selected].iloc[0]
+    left, right = st.columns([1.15, .85])
+    with left:
         st.markdown(
             f"""
-<div class='proof'>
+<div class='focus-card'>
 <h3>{row['作品']}</h3>
+<p><b>方向：</b>{row['方向']}　{chip(row['状态'])}</p>
 <p><b>证明材料：</b>{row['证明材料']}</p>
-<p><b>评分：</b>{row['评分']}　<b>状态：</b>{chip(row['状态'])}</p>
-<p>{row['说明']}</p>
+<p><b>展示建议：</b>{row['展示建议']}</p>
 </div>
 """,
             unsafe_allow_html=True,
         )
-    st.markdown("</div>", unsafe_allow_html=True)
+        st.markdown(
+            f"""
+<div class='review-box'>
+<b>Agent点评摘要</b><br>
+{row['Agent摘要']}。<br><br>
+<b>改进方向</b><br>
+如果要成为更强的作品集材料，需要补充“背景 → 方法 → 结果 → 证据 → 复盘”。
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+        st.markdown("<div class='section-title'>证明材料结构</div>", unsafe_allow_html=True)
+        st.markdown(
+            """
+<div class='evidence-grid'>
+  <div class='evidence'><b>背景</b><span class='mini'>为什么做这个任务，解决什么问题。</span></div>
+  <div class='evidence'><b>方法</b><span class='mini'>你如何拆解、分析、设计或测试。</span></div>
+  <div class='evidence'><b>结果</b><span class='mini'>最终产出了什么可检查材料。</span></div>
+  <div class='evidence'><b>复盘</b><span class='mini'>Agent指出了什么，你如何改进。</span></div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+    with right:
+        score_display = row["评分"] if row["评分"] != "--" else "待定"
+        st.markdown(
+            f"""
+<div class='score-ring'>
+<span class='mini'>作品评分</span>
+<div class='big'>{score_display}</div>
+<p>{row['状态']}</p>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+        st.markdown("<div class='section-title'>可展示检查</div>", unsafe_allow_html=True)
+        st.markdown(
+            """
+<div class='standard-list'>
+<div class='step'><div class='num'>1</div><div><b>别人能看懂</b><br><span class='mini'>不是内部笔记，而是可解释成果。</span></div></div>
+<div class='step'><div class='num'>2</div><div><b>有证据</b><br><span class='mini'>有表格、文档、案例或截图支撑。</span></div></div>
+<div class='step'><div class='num'>3</div><div><b>可复用</b><br><span class='mini'>能用于面试、汇报、客户样品或咨询转化。</span></div></div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+    st.markdown("<div class='section-title'>导出 / 分享占位</div>", unsafe_allow_html=True)
+    st.markdown(
+        """
+<div class='share-row'>
+  <div><b>导出PDF</b><br><span class='mini'>后续生成作品集PDF。</span></div>
+  <div><b>生成分享链接</b><br><span class='mini'>后续给面试官或客户查看。</span></div>
+  <div><b>加入咨询材料</b><br><span class='mini'>后续把作品用于转化和销售。</span></div>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
 
     st.markdown("<div class='section-title'>作品集规则</div>", unsafe_allow_html=True)
     st.markdown(
@@ -265,7 +357,7 @@ def render_consult() -> None:
         unsafe_allow_html=True,
     )
 
-    with st.form("consult_form_v451_pages"):
+    with st.form("consult_form_v452_pages"):
         name = st.text_input("姓名 / 称呼")
         contact = st.text_input("联系方式，选填")
         identity = st.selectbox("你现在属于哪类人？", ["职场新人", "在岗提升", "升职准备", "转岗 / 跳槽", "自由职业 / 副业接单", "企业培训负责人", "小微老板"])
@@ -303,4 +395,4 @@ else:
     render_consult()
 
 render_founder_backdoor()
-st.caption("AI Skill Growth OS · My Tasks Workbench · v4.5.1")
+st.caption("AI Skill Growth OS · Portfolio Proof Page · v4.5.2")
