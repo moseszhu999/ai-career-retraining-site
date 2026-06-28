@@ -151,6 +151,47 @@ Recommended price:
 4999 RMB
 ```
 
+## Enterprise AI training program
+
+The repository includes a full B2B enterprise training outline:
+
+```text
+enterprise_ai_training_program_outline.md
+```
+
+Positioning:
+
+```text
+AI lecture
+-> enterprise sample class
+-> department training camp
+-> customized enterprise AI skill system
+```
+
+Enterprise product tiers:
+
+```text
+sample class: 3000 - 8000 RMB
+department training camp: 30000 RMB+
+custom enterprise training: 50000 - 200000 RMB+
+```
+
+Enterprise deliverables:
+
+```text
+AI skill map
+high-frequency task list
+AI workflow templates
+prompt template library
+employee practice tasks
+scoring standards
+sample outputs
+common error library
+presentation templates
+training review report
+follow-up recommendations
+```
+
 ## Instructor manual
 
 The repository includes a full instructor delivery manual:
