@@ -50,7 +50,7 @@ present the result
 
 ## Entry product: 2-hour trial lesson
 
-The site now includes a dedicated page for:
+The site includes a dedicated page for:
 
 ```text
 AI 技能成长 2 小时体验课
@@ -78,6 +78,34 @@ sales script
 test case / bug report
 Japanese business email
 team AI workflow template
+```
+
+## Sales follow-up SOP
+
+The site includes a dedicated `跟进SOP` page for converting Feishu / WeCom leads into paid trial lessons.
+
+It covers:
+
+```text
+lead status pipeline
+5-minute first reply scripts
+qualification questions
+booking and payment scripts
+after-class conversion scripts
+objection handling
+Feishu follow-up record template
+```
+
+Recommended lead statuses:
+
+```text
+新线索
+已联系
+已约时间
+已付款
+已上课
+已转化
+未转化
 ```
 
 ## Lead capture
