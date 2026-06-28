@@ -49,7 +49,7 @@ def render_nav() -> str:
     st.markdown(
         """
 <div class='app-nav'>
-  <div class='brand'><div class='logo'>AI</div><div>AI Skill Growth<small>一人公司 · Agent OS · v4.3.6</small></div></div>
+  <div class='brand'><div class='logo'>AI</div><div>AI Skill Growth<small>一人公司 · Agent OS · v4.3.6.1</small></div></div>
   <div class='nav-note'><span class='pill'>学员端</span><span class='pill'>任务卡</span><span class='pill'>Agent反馈</span><span class='pill hot'>作品集</span></div>
 </div>
 """,
@@ -131,7 +131,7 @@ def render_portfolio() -> None:
 def render_consult() -> None:
     st.markdown("<div class='section-title'>咨询</div>", unsafe_allow_html=True)
     st.markdown("<div class='section-sub'>咨询页是转化入口，普通用户不需要看到报价后台，只需要知道适不适合自己。</div>", unsafe_allow_html=True)
-    with st.form("consult_form_v436"):
+    with st.form("consult_form_v4361"):
         name = st.text_input("姓名 / 称呼")
         identity = st.selectbox("你现在属于哪类人？", ["职场新人", "在岗提升", "升职准备", "转岗 / 跳槽", "自由职业 / 副业接单", "企业培训负责人", "小微老板"])
         goal = st.selectbox("你最想解决什么？", ["学新技能", "提升现有技能", "做作品集", "升职表达", "换工作 / 高薪跳槽", "自由职业接单", "企业内训"])
@@ -146,11 +146,7 @@ def render_consult() -> None:
 def render_founder_backdoor() -> None:
     with st.expander("Founder / Owner 入口"):
         st.caption("普通用户导航不显示后台。Founder Console 继续单独 owner-gated。")
-        page_link = getattr(st, "page_link", None)
-        if page_link:
-            st.page_link("pages/99_Founder_Agent_Console.py", label="打开 Founder Agent Console", icon="🤖")
-            st.page_link("pages/00_Student_Home.py", label="查看真实学员首页候选页", icon="🎯")
-            st.page_link("pages/00_Product_App.py", label="查看独立产品壳备份页", icon="🚀")
+        st.info("请从左侧页面列表打开 Founder_Agent_Console / Student_Home / Product_App。此处不再使用 st.page_link，避免不同 Streamlit 版本或页面路径导致首页崩溃。")
 
 
 page = render_nav()
@@ -164,4 +160,4 @@ else:
     render_consult()
 
 render_founder_backdoor()
-st.caption("AI Skill Growth Platform · Default Product Home · v4.3.6")
+st.caption("AI Skill Growth Platform · Default Product Home · v4.3.6.1")
