@@ -80,6 +80,39 @@ Japanese business email
 team AI workflow template
 ```
 
+## Main paid product: 5-day skill growth camp
+
+The repository includes a full 5-day curriculum:
+
+```text
+five_day_skill_growth_camp_curriculum.md
+```
+
+Positioning:
+
+```text
+2-hour trial lesson
+-> 5-day skill growth camp
+-> 4-week advanced cohort / freelance monetization camp / enterprise training
+```
+
+5-day camp promise:
+
+```text
+1 skill growth roadmap
+3 visible portfolio artifacts
+1 AI feedback revision record
+1 outcome presentation script
+1 30-day action plan
+1 instructor review
+```
+
+Recommended price:
+
+```text
+3999 RMB
+```
+
 ## Instructor manual
 
 The repository includes a full instructor delivery manual:
