@@ -80,6 +80,30 @@ Japanese business email
 team AI workflow template
 ```
 
+## Instructor manual
+
+The repository includes a full instructor delivery manual:
+
+```text
+trial_lesson_instructor_manual.md
+```
+
+It covers:
+
+```text
+lesson goal
+pre-class preparation
+standard 120-minute flow
+opening script
+goal diagnosis questions
+six trial task templates
+AI feedback standards
+closing script
+post-class record template
+qualification standards
+compliance boundaries
+```
+
 ## Sales follow-up SOP
 
 The site includes a dedicated `跟进SOP` page for converting Feishu / WeCom leads into paid trial lessons.
