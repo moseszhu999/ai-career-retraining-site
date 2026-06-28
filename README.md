@@ -1,10 +1,10 @@
-# AI Career Retraining Site
+# AI Workplace Skill Growth Site
 
 Public Streamlit landing page for:
 
 ```text
-AI 时代职业再训练
-把普通岗位，升级成 AI 工作流岗位。
+AI 职场技能成长
+用 AI 更快学会新技能，并做出可展示的工作成果。
 ```
 
 ## Streamlit deploy settings
@@ -20,16 +20,35 @@ Python: 3.12
 
 ## Product positioning
 
-This is not a prompt course or an AI office tips page.
+This is not limited to new hires.
 
-The site sells adult AI-era career retraining:
+The site is for working professionals who need to:
 
 ```text
-role upgrade
-AI job workflows
-visible work artifacts
-career transition narrative
-enterprise department workflow templates
+learn new skills
+improve current skills
+prepare for promotion
+switch jobs or roles
+pursue higher-paying opportunities
+build visible work artifacts
+```
+
+## Core learning loop
+
+```text
+set skill goal
+learn with AI
+practice real tasks
+receive AI feedback
+revise output
+build portfolio artifacts
+present the result
+```
+
+## Product promise
+
+```text
+Help professionals use AI to learn and improve job skills faster, then prove their ability through reviewable work outcomes.
 ```
 
 ## Compliance boundary
