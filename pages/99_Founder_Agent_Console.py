@@ -27,6 +27,26 @@ def get_secret(name: str, default: str = "") -> str:
         return default
 
 
+def owner_gate() -> None:
+    expected = get_secret("OWNER_PASSCODE")
+    if not expected:
+        st.warning("Founder Console 尚未配置 OWNER_PASSCODE。请先到 Streamlit Secrets 添加 OWNER_PASSCODE。")
+        st.code('OWNER_PASSCODE = "your-private-passcode"', language="toml")
+        st.stop()
+    if st.session_state.get("owner_unlocked") is True:
+        return
+    st.markdown("### Founder Console 门禁")
+    entered = st.text_input("输入 OWNER_PASSCODE", type="password")
+    if st.button("进入 Founder Console", type="primary"):
+        if entered == expected:
+            st.session_state["owner_unlocked"] = True
+            st.success("已进入 Founder Console。")
+            st.rerun()
+        else:
+            st.error("口令不正确。")
+    st.stop()
+
+
 def db_ready() -> bool:
     return bool(get_secret("SUPABASE_URL") and get_secret("SUPABASE_ANON_KEY"))
 
@@ -201,6 +221,8 @@ st.markdown("""
 <span class='pill'>Agent Review</span><span class='pill'>Agent Quality</span><span class='pill'>Founder Daily</span>
 </div>
 """, unsafe_allow_html=True)
+
+owner_gate()
 
 if not db_ready():
     st.warning("请先配置 Streamlit Secrets：SUPABASE_URL / SUPABASE_ANON_KEY。")
