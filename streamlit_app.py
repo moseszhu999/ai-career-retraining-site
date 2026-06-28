@@ -13,26 +13,23 @@ st.set_page_config(page_title="AI 技能成长教育平台", page_icon="🚀", l
 st.markdown(
     """
 <style>
-:root{--ink:#0f172a;--muted:#64748b;--brand:#4f46e5;--brand2:#06b6d4;--line:#e2e8f0}
+:root{--ink:#0f172a;--muted:#64748b;--brand:#4f46e5;--brand2:#06b6d4;--line:#e2e8f0;--green:#16a34a}
 .main .block-container{max-width:1180px;padding-top:.7rem;padding-bottom:5.5rem}
 [data-testid="stSidebar"],[data-testid="collapsedControl"]{display:none}
-section{margin:2.2rem 0 .95rem}.kicker{font-size:.78rem;font-weight:950;letter-spacing:.14em;color:var(--brand);text-transform:uppercase}.title{font-size:1.72rem;font-weight:950;color:var(--ink);line-height:1.22}.sub{color:var(--muted);line-height:1.75;max-width:850px}
-.nav{position:sticky;top:.45rem;z-index:999;margin-bottom:1rem}.nav-inner{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.72rem .95rem;border:1px solid #c7d2fe;border-radius:1.25rem;background:rgba(255,255,255,.9);backdrop-filter:blur(18px);box-shadow:0 14px 34px rgba(15,23,42,.08)}.brand{display:flex;gap:.62rem;align-items:center;font-weight:950;color:#111827}.logo{width:36px;height:36px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(135deg,var(--brand),var(--brand2));color:white}.brand small{display:block;color:var(--muted);font-weight:800}.badges{display:flex;gap:.45rem;flex-wrap:wrap}.badge{padding:.36rem .7rem;border-radius:999px;background:#f8fafc;border:1px solid var(--line);font-weight:900;color:#475569;font-size:.82rem}.badge.cta{background:linear-gradient(90deg,var(--brand),#7c3aed);color:white;border:none}
-.nav-panel{margin:.65rem 0 1.15rem;padding:.55rem;border:1px solid #e0e7ff;border-radius:1.2rem;background:#f8fafc;box-shadow:0 10px 26px rgba(15,23,42,.05)}
-div[data-testid="stRadio"]>label{display:none}div[role="radiogroup"]{display:flex;flex-wrap:wrap;gap:.42rem}div[role="radiogroup"] label{border:1px solid #dbeafe!important;border-radius:999px!important;background:white!important;padding:.38rem .74rem!important;box-shadow:0 4px 12px rgba(15,23,42,.035)}div[role="radiogroup"] label p{font-weight:900!important;color:#334155!important;font-size:.9rem!important}div[role="radiogroup"] label:has(input:checked){background:linear-gradient(90deg,#4f46e5,#06b6d4)!important;border-color:#4f46e5!important}div[role="radiogroup"] label:has(input:checked) p{color:white!important}
-.hero{position:relative;padding:2.25rem;border:1px solid #c7d2fe;border-radius:1.65rem;background:radial-gradient(circle at 86% 12%,#cffafe 0,#eef2ff 32%,#f8fafc 72%);box-shadow:0 24px 70px rgba(15,23,42,.10);overflow:hidden}.hero-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:1.8rem;align-items:center}.eyebrow{display:inline-block;font-size:.78rem;letter-spacing:.13em;color:#3730a3;font-weight:950;background:white;border:1px solid #c7d2fe;border-radius:999px;padding:.32rem .65rem}.hero h1{margin:.7rem 0 .8rem;font-size:3.15rem;line-height:1.02;color:var(--ink);font-weight:980}.hero h1 span{background:linear-gradient(90deg,var(--brand),var(--brand2));-webkit-background-clip:text;color:transparent}.hero p{font-size:1.12rem;color:#475569;line-height:1.78}.hero b{color:#312e81}.btn-row{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.1rem}.btn{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:.78rem 1.08rem;font-weight:950}.primary{background:linear-gradient(90deg,var(--brand),#7c3aed);color:white;box-shadow:0 12px 25px rgba(79,70,229,.28)}.secondary{background:white;color:#3730a3;border:1px solid #c7d2fe}.pill{display:inline-block;border-radius:999px;background:white;color:#3730a3;border:1px solid #c7d2fe;padding:.28rem .62rem;margin:.15rem;font-weight:850;font-size:.83rem}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-top:1.08rem}.stat{background:white;border:1px solid #e0e7ff;border-radius:1rem;padding:.78rem;text-align:center}.stat b{display:block;font-size:1.48rem;color:var(--brand)}.stat span{font-size:.82rem;color:var(--muted);font-weight:850}
+.nav{position:sticky;top:.45rem;z-index:999;margin-bottom:1rem}.nav-inner{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.72rem .95rem;border:1px solid #c7d2fe;border-radius:1.25rem;background:rgba(255,255,255,.92);backdrop-filter:blur(18px);box-shadow:0 14px 34px rgba(15,23,42,.08)}.brand{display:flex;gap:.62rem;align-items:center;font-weight:950;color:#111827}.logo{width:36px;height:36px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(135deg,var(--brand),var(--brand2));color:white}.brand small{display:block;color:var(--muted);font-weight:800}.badges{display:flex;gap:.45rem;flex-wrap:wrap}.badge{padding:.36rem .7rem;border-radius:999px;background:#f8fafc;border:1px solid var(--line);font-weight:900;color:#475569;font-size:.82rem}.badge.cta{background:linear-gradient(90deg,var(--brand),#7c3aed);color:white;border:none}
+.nav-panel{margin:.65rem 0 1.15rem;padding:.55rem;border:1px solid #e0e7ff;border-radius:1.2rem;background:#f8fafc;box-shadow:0 10px 26px rgba(15,23,42,.05)}div[data-testid="stRadio"]>label{display:none}div[role="radiogroup"]{display:flex;flex-wrap:wrap;gap:.42rem}div[role="radiogroup"] label{border:1px solid #dbeafe!important;border-radius:999px!important;background:white!important;padding:.38rem .74rem!important;box-shadow:0 4px 12px rgba(15,23,42,.035)}div[role="radiogroup"] label p{font-weight:900!important;color:#334155!important;font-size:.9rem!important}div[role="radiogroup"] label:has(input:checked){background:linear-gradient(90deg,#4f46e5,#06b6d4)!important;border-color:#4f46e5!important}div[role="radiogroup"] label:has(input:checked) p{color:white!important}
+.hero{padding:2.25rem;border:1px solid #c7d2fe;border-radius:1.65rem;background:radial-gradient(circle at 86% 12%,#cffafe 0,#eef2ff 32%,#f8fafc 72%);box-shadow:0 24px 70px rgba(15,23,42,.10);overflow:hidden}.hero-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:1.8rem;align-items:center}.eyebrow{display:inline-block;font-size:.78rem;letter-spacing:.13em;color:#3730a3;font-weight:950;background:white;border:1px solid #c7d2fe;border-radius:999px;padding:.32rem .65rem}.hero h1{margin:.7rem 0 .8rem;font-size:3.15rem;line-height:1.02;color:var(--ink);font-weight:980}.hero h1 span{background:linear-gradient(90deg,var(--brand),var(--brand2));-webkit-background-clip:text;color:transparent}.hero p{font-size:1.12rem;color:#475569;line-height:1.78}.hero b{color:#312e81}.btn-row{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.1rem}.btn{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:.78rem 1.08rem;font-weight:950}.primary{background:linear-gradient(90deg,var(--brand),#7c3aed);color:white;box-shadow:0 12px 25px rgba(79,70,229,.28)}.secondary{background:white;color:#3730a3;border:1px solid #c7d2fe}.pill{display:inline-block;border-radius:999px;background:white;color:#3730a3;border:1px solid #c7d2fe;padding:.28rem .62rem;margin:.15rem;font-weight:850;font-size:.83rem}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-top:1.08rem}.stat{background:white;border:1px solid #e0e7ff;border-radius:1rem;padding:.78rem;text-align:center}.stat b{display:block;font-size:1.48rem;color:var(--brand)}.stat span{font-size:.82rem;color:var(--muted);font-weight:850}
 .visual{position:relative;min-height:455px;border:1px solid #dbeafe;border-radius:1.45rem;background:linear-gradient(160deg,#fff,#eef2ff 54%,#ecfeff);overflow:hidden;box-shadow:0 18px 36px rgba(30,41,59,.08)}.dash{position:absolute;left:30px;right:30px;top:28px;bottom:28px;border-radius:1.2rem;background:rgba(255,255,255,.76);border:1px solid #dbeafe;box-shadow:0 18px 40px rgba(15,23,42,.12);padding:1rem}.dash-head{display:flex;justify-content:space-between;align-items:center;font-weight:950}.avatar{width:38px;height:38px;border-radius:14px;display:inline-grid;place-items:center;background:linear-gradient(135deg,var(--brand),var(--brand2));color:white;margin-right:.55rem}.live{padding:.28rem .55rem;border-radius:999px;background:#dcfce7;color:#166534;font-size:.78rem}.journey{display:grid;grid-template-columns:repeat(5,1fr);gap:.42rem;margin:.8rem 0}.journey div{border:1px solid #c7d2fe;background:white;border-radius:.85rem;padding:.55rem .3rem;text-align:center}.journey b{display:block;color:var(--brand);font-size:.82rem}.journey span{font-size:.72rem;font-weight:900;color:#312e81}.ai-box{margin-top:.85rem;background:#0f172a;border-radius:1rem;color:#e2e8f0;padding:.95rem}.ai-box b{color:#93c5fd}.prompt{border:1px solid #334155;background:#111827;border-radius:.8rem;padding:.72rem;color:#cbd5e1;line-height:1.55}.mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:.55rem;margin-top:.75rem}.mini{background:white;border:1px solid #e0e7ff;border-radius:.9rem;padding:.7rem;font-weight:930;color:#111827}.mini small{display:block;color:#64748b;font-weight:750;margin-top:.22rem}.progress{position:absolute;left:22px;right:22px;bottom:20px;background:linear-gradient(90deg,#312e81,#0369a1);color:white;border-radius:1rem;padding:.8rem}.bar{height:9px;background:rgba(255,255,255,.25);border-radius:999px;margin-top:.55rem;overflow:hidden}.bar span{display:block;width:72%;height:100%;background:linear-gradient(90deg,#86efac,#67e8f9)}
+section{margin:2.2rem 0 .95rem}.kicker{font-size:.78rem;font-weight:950;letter-spacing:.14em;color:var(--brand);text-transform:uppercase}.title{font-size:1.72rem;font-weight:950;color:var(--ink);line-height:1.22}.sub{color:var(--muted);line-height:1.75;max-width:850px}.subhero{border:1px solid #c7d2fe;border-radius:1.35rem;padding:1.35rem;background:radial-gradient(circle at right,#ecfeff,#eef2ff 46%,#fff);box-shadow:0 16px 36px rgba(15,23,42,.07);margin:1.2rem 0}.subhero h2{margin:.2rem 0 .5rem;color:var(--ink);font-size:2rem}.subhero p{color:#475569;line-height:1.75}.label{display:inline-block;border-radius:999px;background:white;border:1px solid #c7d2fe;color:#3730a3;font-weight:950;padding:.25rem .6rem;font-size:.78rem}
 .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:.95rem}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}.card{border:1px solid var(--line);border-radius:1.08rem;background:white;padding:1rem;box-shadow:0 8px 22px rgba(15,23,42,.045);min-height:132px}.card b{color:var(--ink)}.card p{color:var(--muted);line-height:1.58}.soft{background:linear-gradient(180deg,#fff,#f8fafc);border-color:#dbeafe}.orange{background:#fff7ed;border-color:#fed7aa;color:#7c2d12}.green{background:#f0fdf4;border-color:#bbf7d0}.dark{background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1rem;white-space:pre-wrap}.strip{display:grid;grid-template-columns:repeat(4,1fr);gap:.85rem;margin:1rem 0 1.2rem}.metric{border:1px solid #e0e7ff;background:white;border-radius:1.05rem;padding:1rem;box-shadow:0 10px 24px rgba(15,23,42,.05)}.metric b{display:block;font-size:1.6rem;color:var(--brand)}.metric span{color:#64748b;font-weight:850;font-size:.86rem}.flow{display:grid;grid-template-columns:repeat(6,1fr);gap:.55rem}.flow div{background:white;border:1px solid #c7d2fe;border-radius:1rem;padding:.85rem;text-align:center}.flow b{display:block;color:var(--brand)}.flow span{font-weight:850;color:#312e81;font-size:.82rem}
 .offer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}.offer{position:relative;border:1px solid #dbeafe;border-radius:1.25rem;background:white;padding:1.15rem;box-shadow:0 14px 34px rgba(15,23,42,.07);min-height:292px}.offer.featured{border:2px solid #4f46e5;box-shadow:0 22px 44px rgba(79,70,229,.16);transform:translateY(-4px)}.offer:before{content:"";position:absolute;left:0;top:0;right:0;height:5px;background:linear-gradient(90deg,var(--brand),var(--brand2))}.tag{display:inline-block;border-radius:999px;background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe;padding:.24rem .55rem;font-size:.76rem;font-weight:950}.offer.featured .tag{background:#4f46e5;color:white}.price{font-size:1.45rem;font-weight:980;color:#16a34a}.offer ul{margin:.45rem 0 3.2rem 1rem;color:#475569;line-height:1.7}.offer-btn{position:absolute;left:1.15rem;right:1.15rem;bottom:1.05rem;text-align:center;border-radius:999px;padding:.68rem .8rem;font-weight:950;background:#0f172a;color:white}.offer.featured .offer-btn{background:linear-gradient(90deg,var(--brand),#7c3aed)}
-.subhero{border:1px solid #c7d2fe;border-radius:1.35rem;padding:1.35rem;background:radial-gradient(circle at right,#ecfeff,#eef2ff 46%,#fff);box-shadow:0 16px 36px rgba(15,23,42,.07);margin:1.2rem 0}.subhero h2{margin:.2rem 0 .5rem;color:var(--ink);font-size:2rem}.subhero p{color:#475569;line-height:1.75}.label{display:inline-block;border-radius:999px;background:white;border:1px solid #c7d2fe;color:#3730a3;font-weight:950;padding:.25rem .6rem;font-size:.78rem}.form-card,.diagnosis{border:1px solid #dbeafe;background:white;border-radius:1.25rem;padding:1.15rem;box-shadow:0 14px 34px rgba(15,23,42,.07)}.diagnosis{background:linear-gradient(180deg,#fff,#eef2ff);border-color:#c7d2fe}.summary{border-radius:1rem;background:#0f172a;color:#e2e8f0;padding:1rem;line-height:1.7;white-space:pre-wrap}.lead-note{border:1px solid #bbf7d0;background:#f0fdf4;color:#14532d;border-radius:1rem;padding:1rem;margin-top:1rem;font-weight:850}.mail-link{display:inline-block;border-radius:999px;background:linear-gradient(90deg,#4f46e5,#06b6d4);color:white!important;text-decoration:none;padding:.7rem 1rem;font-weight:950;margin-top:.7rem}.mobile-sticky{display:none}
+.form-card,.diagnosis{border:1px solid #dbeafe;background:white;border-radius:1.25rem;padding:1.15rem;box-shadow:0 14px 34px rgba(15,23,42,.07)}.diagnosis{background:linear-gradient(180deg,#fff,#eef2ff);border-color:#c7d2fe}.summary{border-radius:1rem;background:#0f172a;color:#e2e8f0;padding:1rem;line-height:1.7;white-space:pre-wrap}.lead-note{border:1px solid #bbf7d0;background:#f0fdf4;color:#14532d;border-radius:1rem;padding:1rem;margin-top:1rem;font-weight:850}.mail-link{display:inline-block;border-radius:999px;background:linear-gradient(90deg,#4f46e5,#06b6d4);color:white!important;text-decoration:none;padding:.7rem 1rem;font-weight:950;margin-top:.7rem}.mobile-sticky{display:none}
 @media(max-width:960px){.nav{position:relative}.nav-inner{align-items:flex-start;flex-direction:column}.badges{display:none}.hero-grid,.grid2,.grid3,.grid4,.strip,.offer-grid{grid-template-columns:1fr}.flow{grid-template-columns:repeat(2,1fr)}.visual{min-height:450px}.offer.featured{transform:none}.stats{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:640px){.main .block-container{padding-left:.75rem;padding-right:.75rem;padding-bottom:6.2rem}.nav-panel{overflow-x:auto}.nav-panel div[role="radiogroup"]{flex-wrap:nowrap;overflow-x:auto}.nav-panel div[role="radiogroup"] label{white-space:nowrap}.hero{padding:1.1rem;border-radius:1.2rem}.hero h1{font-size:2rem}.hero p{font-size:1rem}.btn-row{display:grid;grid-template-columns:1fr}.btn{width:100%}.dash{left:14px;right:14px;top:14px;bottom:54px;padding:.75rem}.journey{gap:.25rem}.journey span{font-size:.62rem}.mini-grid{grid-template-columns:1fr}.progress{left:14px;right:14px;bottom:12px}.offer{min-height:0}.offer ul{margin-bottom:1rem}.offer-btn{position:static;margin-top:.75rem}.mobile-sticky{display:flex;position:fixed;left:.7rem;right:.7rem;bottom:.7rem;z-index:1000;gap:.5rem;background:rgba(15,23,42,.92);backdrop-filter:blur(16px);border-radius:1rem;padding:.55rem;box-shadow:0 18px 44px rgba(15,23,42,.35)}.mobile-sticky span{flex:1;text-align:center;border-radius:.8rem;padding:.68rem .5rem;color:white;font-weight:950}.mobile-sticky .m1{background:linear-gradient(90deg,#4f46e5,#06b6d4)}.mobile-sticky .m2{background:rgba(255,255,255,.12)}}
 </style>
-""",
-    unsafe_allow_html=True,
-)
+""", unsafe_allow_html=True)
 
-TEXT = {"zh":{"nav":"导航","home":"首页","trial":"2小时体验课","paths":"成长路径","skills":"技能训练","portfolio":"作品集","freelance":"自由职业","company":"企业内训","pricing":"报价","booking":"预约咨询","faq":"FAQ"}}
+TEXT = {"zh":{"nav":"导航","home":"首页","trial":"2小时体验课","sop":"跟进SOP","paths":"成长路径","skills":"技能训练","portfolio":"作品集","freelance":"自由职业","company":"企业内训","pricing":"报价","booking":"预约咨询","faq":"FAQ"}}
 MOTIVE_ROWS=[("新人上手","从不会到能做","学习岗位基础技能，完成第一个可检查任务"),("在岗提升","从能做到账户价值更高","把重复任务做成 AI 工作流，提升交付质量"),("升职准备","从执行者到负责人","学会分析、汇报、复盘和带新人"),("转岗换工作","从旧岗位到新岗位","补齐新岗位技能，形成可展示作品集"),("跳槽高薪","从会说到有证据","用作品、流程和表达证明能力"),("自由职业增收","从会技能到能接单赚钱","学习可出售技能，形成服务包、报价和交付作品"),("小团队管理","从自己干到带团队","把团队高频任务标准化、模板化")]
 ROLE_ROWS=[("行政 / 人事","会议纪要、制度、SOP、招聘沟通、数据说明"),("销售 / 商务","客户画像、跟进话术、方案初稿、报价说明、成交复盘"),("客服 / 售后","问题分类、回复模板、知识库、满意度复盘"),("运营 / 市场","活动方案、内容日历、数据复盘、转化话术"),("老师 / 培训师","课程设计、练习设计、反馈、发表会、教学复盘"),("IT / 项目人员","需求理解、测试用例、Bug 报告、日报周报、发表说明"),("自由职业者","获客定位、服务包设计、报价单、交付 SOP、客户沟通、案例展示"),("小微老板","市场调研、文案、报价、客户沟通、流程清单")]
 SKILL_ROWS=[("学新技能","用 AI 生成学习路径、解释概念、给例子、拆练习"),("做任务","把学习目标变成真实工作任务，而不是只看教程"),("被纠错","让 AI 做第一轮反馈：遗漏、逻辑、格式、表达、风险"),("再修改","根据反馈修改，形成第二版、第三版成果"),("做作品","把练习变成能给老板、客户或面试官看的作品"),("变服务","把技能包装成自由职业服务包、报价和交付流程"),("会表达","能说明自己怎么学、怎么做、怎么用 AI 提升结果")]
@@ -85,7 +82,7 @@ def html_card(icon: str, title: str, body: str, cls: str = "card") -> str:
 
 def render_top_nav(lang: str):
     st.markdown("""<div class='nav'><div class='nav-inner'><div class='brand'><div class='logo'>AI</div><div>AI Skill Growth Platform<small>技能成长 · 作品交付 · 自由职业变现</small></div></div><div class='badges'><span class='badge'>职场成长</span><span class='badge'>自由职业</span><span class='badge'>企业内训</span><span class='badge cta'>预约体验课</span></div></div></div>""", unsafe_allow_html=True)
-    nav_keys=["home","trial","paths","skills","portfolio","freelance","company","pricing","booking","faq"]
+    nav_keys=["home","trial","sop","paths","skills","portfolio","freelance","company","pricing","booking","faq"]
     st.markdown("<div class='nav-panel'>", unsafe_allow_html=True)
     page=st.radio(TEXT[lang]["nav"], nav_keys, horizontal=True, label_visibility="collapsed", format_func=lambda key:TEXT[lang][key], key="top_page_nav")
     st.markdown("</div>", unsafe_allow_html=True)
@@ -105,7 +102,7 @@ def render_offer_section():
         html+=f"<div class='{cls}'><span class='tag'>{tag}</span><h3>{title}</h3><div class='price'>{price}</div><p style='color:#64748b;font-weight:850'>{fit}</p><ul>"+"".join(f"<li>{b}</li>" for b in bullets)+f"</ul><div class='offer-btn'>{button}</div></div>"
     html+="</div>"
     st.markdown(html, unsafe_allow_html=True)
-    st.markdown("""<div class='grid2' style='margin-top:1rem'><div class='card green'><b>为什么这个产品更容易被购买？</b><p>它不是卖“AI 很厉害”，而是卖明确结果：学会一个技能、完成真实任务、获得 AI 反馈、形成作品集、用于升职/转岗/跳槽/接单。</p></div><div class='card orange'><b>合规边界</b><p>不承诺就业、不承诺涨薪、不承诺接单收入、不做官方证书。平台只交付训练过程、作品成果、服务包和表达能力。</p></div></div><div class='card' style='background:#0f172a;color:white;margin-top:1rem'><h3>先用 2 小时，找到你的下一个技能增长点。</h3><p style='color:#dbeafe'>选择一个技能目标，现场完成一个微型任务和 AI 学习路径。</p><div class='btn-row'><span class='btn primary'>🚀 预约体验课</span><span class='btn secondary'>📩 咨询课程方案</span></div></div>""", unsafe_allow_html=True)
+    st.markdown("""<div class='grid2' style='margin-top:1rem'><div class='card green'><b>为什么这个产品更容易被购买？</b><p>它不是卖“AI 很厉害”，而是卖明确结果：学会一个技能、完成真实任务、获得 AI 反馈、形成作品集、用于升职/转岗/跳槽/接单。</p></div><div class='card orange'><b>合规边界</b><p>不承诺就业、不承诺涨薪、不承诺接单收入、不做官方证书。平台只交付训练过程、作品成果、服务包和表达能力。</p></div></div>""", unsafe_allow_html=True)
 
 
 def render_home(lang: str):
@@ -117,8 +114,6 @@ def render_home(lang: str):
     section("WHO","谁会需要这个平台","凡是需要学习新技能、提升技能、证明能力或把技能变现的人，都有使用场景。")
     who=[("🌱","新人上手","从不会到能做，完成第一个可检查任务。"),("📈","在岗提升","把重复任务变成 AI 工作流，提升交付质量。"),("🧗","升职准备","从执行者升级为能分析、汇报、复盘的人。"),("🔁","转岗跳槽","补齐新岗位技能，用作品证明能力。"),("💼","自由职业增收","把技能包装成服务包、报价和交付 SOP。"),("🏢","企业内训","把新人培养和在岗提升做成标准化体系。")]
     st.markdown("<div class='grid3'>"+"".join(html_card(*c) for c in who)+"</div>", unsafe_allow_html=True)
-    section("BEFORE / AFTER","从“学过”变成“能交付”","不是多听课，而是能产出作品、服务包和表达证据。")
-    st.markdown("""<div class='grid2'><div class='card orange'><b>普通学习方式</b><p>看很多教程，但没有真实任务；不知道自己错在哪里；学完没有作品。</p></div><div class='card green'><b>AI 技能成长方式</b><p>先定技能目标，再拆成任务；AI 做第一轮纠错，老师做关键点评；每个阶段都有可展示作品。</p></div></div>""", unsafe_allow_html=True)
     section("METHOD","AI 技能成长闭环","把学习从“看资料”变成“有目标、有任务、有反馈、有作品、有价值”的训练流程。")
     flow=[("01","定目标"),("02","学技能"),("03","做任务"),("04","AI 反馈"),("05","出作品"),("06","变价值")]
     st.markdown("<div class='flow'>"+"".join(f"<div><b>{n}</b><span>{t}</span></div>" for n,t in flow)+"</div>", unsafe_allow_html=True)
@@ -130,32 +125,49 @@ def render_home(lang: str):
 
 def render_trial(lang: str):
     subhero("2-HOUR TRIAL","AI 技能成长 2 小时体验课","这是当前最适合先卖的入口产品。目标不是讲很多理论，而是在 2 小时内帮用户完成一个真实小任务，拿到一个小作品和后续学习路径。")
-    st.markdown("""<div class='grid3'>
-    <div class='card green'><b>推荐价格</b><p><span style='font-size:1.7rem;font-weight:950;color:#16a34a'>99 / 199 元</span><br>先降低决策门槛，用真实体验建立信任。</p></div>
-    <div class='card soft'><b>适合谁</b><p>想学新技能、升职表达、转岗跳槽、做作品集、自由职业接单、企业内训负责人。</p></div>
-    <div class='card soft'><b>体验课核心承诺</b><p>2 小时内不空谈，必须完成一个微型任务，并形成可继续打磨的成果。</p></div>
-    </div>""", unsafe_allow_html=True)
-
+    st.markdown("""<div class='grid3'><div class='card green'><b>推荐价格</b><p><span style='font-size:1.7rem;font-weight:950;color:#16a34a'>99 / 199 元</span><br>先降低决策门槛，用真实体验建立信任。</p></div><div class='card soft'><b>适合谁</b><p>想学新技能、升职表达、转岗跳槽、做作品集、自由职业接单、企业内训负责人。</p></div><div class='card soft'><b>体验课核心承诺</b><p>2 小时内不空谈，必须完成一个微型任务，并形成可继续打磨的成果。</p></div></div>""", unsafe_allow_html=True)
     section("FLOW","2 小时体验课流程","把时间切成明确阶段，避免体验课变成闲聊。")
     steps=[("0-10 分钟","目标诊断","确认身份、目标、当前卡点和想拿到的成果。"),("10-25 分钟","任务拆解","把目标拆成一个今天能完成的微型真实任务。"),("25-65 分钟","AI 辅助完成第一版","现场用 AI 生成初稿、结构、代码、文案、PPT 或 SOP。"),("65-95 分钟","AI 反馈与修改","让 AI 做第一轮纠错，再根据业务标准修改。"),("95-115 分钟","作品定稿","形成一个可展示的小作品或作品框架。"),("115-120 分钟","后续路径","给出 5 天 / 4 周训练建议和是否适合继续学习。")]
     st.markdown("<div class='grid3'>"+"".join(f"<div class='card soft'><b>{t}</b><p><b>{a}</b><br>{b}</p></div>" for t,a,b in steps)+"</div>", unsafe_allow_html=True)
-
     section("DELIVERABLES","用户带走什么","体验课结束时要有可复制、可截图、可继续加工的东西。")
     deliverables=[("🎯","1 个技能目标","明确要学什么、为什么学、学到什么程度。"),("🧩","1 个微型任务","把抽象目标变成一个今天能做的小任务。"),("📦","1 个小作品","如 PPT 结构、测试用例、销售话术、服务包草稿、日报模板。"),("✅","1 次反馈记录","保留 AI 纠错和修改前后对比。"),("🧭","1 份后续路径","推荐 5 天营、自由职业营、4 周小班或企业内训。"),("💬","1 段表达稿","用于面试、升职汇报、客户沟通或作品介绍。")]
     st.markdown("<div class='grid3'>"+"".join(html_card(*d) for d in deliverables)+"</div>", unsafe_allow_html=True)
-
     section("EXAMPLES","体验课任务示例","不同用户不用同一套话术，必须按目标出任务。")
     examples=[("升职准备","把最近一个工作成果整理成 3 页汇报 PPT 大纲，并生成上司可能追问的问题。"),("转岗跳槽","根据目标岗位，做一个小型岗位作品案例和面试表达稿。"),("自由职业","把一个技能包装成服务包：交付内容、报价边界、样品案例、获客私信。"),("企业内训","把部门一个高频任务改造成 AI 工作流训练模板。"),("IT / 测试","根据一个登录页面，写测试用例、遗漏点检查和 Bug 报告模板。"),("日语商务","根据客户场景，写一封日语商务邮件并做敬语/结构修正。")]
     st.markdown("<div class='grid3'>"+"".join(f"<div class='card soft'><b>{a}</b><p>{b}</p></div>" for a,b in examples)+"</div>", unsafe_allow_html=True)
-
     section("CONVERSION","体验课后怎么转化","体验课不是终点，而是判断用户适合哪条后续路径。")
-    st.markdown("""<div class='grid3'>
-    <div class='offer'><span class='tag'>主推转化</span><h3>5 天技能成长营</h3><div class='price'>3999 元建议</div><p>适合升职、转岗、跳槽、作品集打磨。</p><ul><li>3 个可展示作品</li><li>学习路径</li><li>表达稿</li></ul><div class='offer-btn'>体验后推荐</div></div>
-    <div class='offer'><span class='tag'>自由职业</span><h3>5 天技能变现营</h3><div class='price'>4999 元建议</div><p>适合副业、接单、涨价。</p><ul><li>服务包</li><li>报价单</li><li>获客话术</li></ul><div class='offer-btn'>体验后推荐</div></div>
-    <div class='offer'><span class='tag'>企业版</span><h3>企业 AI 技能内训</h3><div class='price'>3 万元起</div><p>适合新人培养、部门工作流升级。</p><ul><li>任务包</li><li>评分标准</li><li>成果发表</li></ul><div class='offer-btn'>咨询企业方案</div></div>
-    </div>""", unsafe_allow_html=True)
+    st.markdown("""<div class='grid3'><div class='offer'><span class='tag'>主推转化</span><h3>5 天技能成长营</h3><div class='price'>3999 元建议</div><p>适合升职、转岗、跳槽、作品集打磨。</p><ul><li>3 个可展示作品</li><li>学习路径</li><li>表达稿</li></ul><div class='offer-btn'>体验后推荐</div></div><div class='offer'><span class='tag'>自由职业</span><h3>5 天技能变现营</h3><div class='price'>4999 元建议</div><p>适合副业、接单、涨价。</p><ul><li>服务包</li><li>报价单</li><li>获客话术</li></ul><div class='offer-btn'>体验后推荐</div></div><div class='offer'><span class='tag'>企业版</span><h3>企业 AI 技能内训</h3><div class='price'>3 万元起</div><p>适合新人培养、部门工作流升级。</p><ul><li>任务包</li><li>评分标准</li><li>成果发表</li></ul><div class='offer-btn'>咨询企业方案</div></div></div>""", unsafe_allow_html=True)
 
-    st.markdown("""<div class='card' style='background:#0f172a;color:white;margin-top:1rem'><h3>下一步：预约一节 2 小时体验课</h3><p style='color:#dbeafe'>建议从一个具体目标开始：例如 PPT 汇报、测试用例、销售话术、自由职业服务包、日语商务邮件、Java 项目发表。</p><div class='btn-row'><span class='btn primary'>去预约咨询页填写信息</span><span class='btn secondary'>价格：99 / 199 元</span></div></div>""", unsafe_allow_html=True)
+
+def render_followup_sop(lang: str):
+    subhero("SALES SOP","飞书线索跟进 SOP / 成交话术","飞书收到线索只是开始。这个页面把收到线索后的 5 分钟回复、邀约体验课、付款确认、课后转化和未成交复盘整理成固定流程。")
+    section("STATUS","线索状态看板","飞书群里收到线索后，先给每条线索一个状态。")
+    statuses=[("新线索","刚提交，还未联系。5 分钟内必须响应。"),("已联系","已发送第一条回复，等待对方回应。"),("已约时间","已确定体验课时间。"),("已付款","已收 99/199 元体验课费用。"),("已上课","体验课已完成，进入课后转化。"),("已转化","转入 5 天营 / 自由职业营 / 企业方案。"),("未转化","记录原因，7 天后可二次触达。")]
+    st.markdown("<div class='grid4'>"+"".join(f"<div class='card soft'><b>{a}</b><p>{b}</p></div>" for a,b in statuses)+"</div>", unsafe_allow_html=True)
+
+    section("5-MIN REPLY","5 分钟内第一条回复","目标不是长篇销售，而是确认用户目标并引导到 2 小时体验课。")
+    first_messages=[("通用版","你好，我看到你的预约信息了。你现在的目标是「XXX」，比较适合先做一次 2 小时 AI 技能成长体验课。体验课里我们会帮你完成一个真实小任务，并给你一份后续学习路径。"),("自由职业版","你好，我看到了你的预约。你现在更像是想把「XXX」变成可接单服务。建议先做一次 2 小时体验课，我们会帮你把技能拆成服务包、样品和报价边界。"),("企业内训版","你好，我看到你关注企业内训。我们可以先用 30 分钟确认部门场景，再安排一次 2 小时样板体验，现场把一个高频任务做成 AI 训练模板。")]
+    st.markdown("<div class='grid3'>"+"".join(f"<div class='card green'><b>{a}</b><p>{b}</p></div>" for a,b in first_messages)+"</div>", unsafe_allow_html=True)
+
+    section("QUALIFY","3 个判断问题","不要一上来讲课程，先判断用户是否适合体验课。")
+    questions=[("目标确认","你这次最想解决的是学一个新技能、升职表达、转岗跳槽，还是自由职业接单？"),("成果确认","如果 2 小时体验课结束，你最希望拿到什么：PPT 大纲、测试用例、服务包、话术、邮件模板，还是学习路径？"),("时间确认","你更适合本周晚上、周末，还是工作日白天做 2 小时体验？")]
+    st.markdown("<div class='grid3'>"+"".join(html_card("❓",a,b) for a,b in questions)+"</div>", unsafe_allow_html=True)
+
+    section("BOOKING SCRIPT","邀约与付款话术","明确体验课价格、交付物和下一步动作。")
+    booking_cards=[("99 元体验价","我们先按 99 元体验课走。2 小时里只做一件事：帮你把「XXX」拆成一个真实任务，并完成第一版作品。"),("199 元标准价","如果你希望我提前看你的材料，并课后给一份更完整的学习路径，可以按 199 元标准体验课。"),("约时间","你看这两个时间哪个方便：周三晚上 8:00-10:00，或者周六下午 2:00-4:00？")]
+    st.markdown("<div class='grid3'>"+"".join(f"<div class='card soft'><b>{a}</b><p>{b}</p></div>" for a,b in booking_cards)+"</div>", unsafe_allow_html=True)
+
+    section("AFTER CLASS","体验课后转化话术","体验课结束后不要马上硬推，先总结成果，再给下一步方案。")
+    after_cards=[("总结成果","今天我们已经完成了：1 个目标、1 个任务、1 个初版作品、1 次反馈修改。这个方向是可以继续打磨的。"),("转 5 天营","如果你想把这个能力做成 3 个可展示作品，建议进入 5 天技能成长营。目标是形成作品集和表达稿。"),("转自由职业营","如果你想把这个能力变成接单服务，建议进入 5 天自由职业技能变现营。重点是服务包、报价单、样品和交付 SOP。"),("转企业内训","如果这个任务是部门共性问题，可以升级成企业内训：我们把它做成任务包、评分标准和成果发表机制。")]
+    st.markdown("<div class='grid4'>"+"".join(f"<div class='card green'><b>{a}</b><p>{b}</p></div>" for a,b in after_cards)+"</div>", unsafe_allow_html=True)
+
+    section("OBJECTIONS","常见异议处理","不要争辩，回到体验课低门槛和明确交付。")
+    objections=[("我再考虑一下","可以。你不用现在决定大课。建议先做 2 小时体验课，成本很低，做完你会知道这个方向是否值得继续。"),("我没时间","那更适合体验课。我们只拿 2 小时完成一个小任务，不要求你先学很多理论。"),("我怕 AI 课没用","这不是纯 AI 工具课。体验课一定要完成一个你的真实任务，不完成作品就没有意义。"),("价格能不能便宜","体验课已经是低门槛验证价。真正重要的是你能不能通过 2 小时看到可继续打磨的结果。")]
+    st.markdown("<div class='grid4'>"+"".join(f"<div class='card orange'><b>{a}</b><p>{b}</p></div>" for a,b in objections)+"</div>", unsafe_allow_html=True)
+
+    section("RECORD","飞书跟进记录模板","每条线索至少记录这些字段，后面才能复盘。")
+    template='''【线索跟进记录】\n姓名/称呼：\n联系方式：\n身份：新人 / 在岗 / 升职 / 跳槽 / 自由职业 / 企业\n目标技能：\n推荐产品：2小时体验课 / 5天成长营 / 自由职业营 / 企业内训\n跟进状态：新线索 / 已联系 / 已约时间 / 已付款 / 已上课 / 已转化 / 未转化\n下次动作：\n备注：'''
+    st.markdown(f"<div class='dark'>{template}</div>", unsafe_allow_html=True)
 
 
 def render_paths(lang: str):
@@ -218,7 +230,6 @@ def render_booking(lang: str):
     with right:
         st.markdown("<div class='diagnosis'><h3>大陆优先推荐</h3><ul><li>飞书机器人：WEBHOOK_PROVIDER = feishu</li><li>企业微信机器人：WEBHOOK_PROVIDER = wecom</li><li>腾讯云函数 / 阿里云函数 / 自建接口：WEBHOOK_PROVIDER = generic</li><li>腾讯文档、金山表单：可先用 CSV 导入</li></ul></div>", unsafe_allow_html=True)
         st.markdown("<div class='lead-note'>建议从 2 小时体验课开始：先完成一个微型任务，再决定是否进入完整训练营。</div>", unsafe_allow_html=True)
-
     if submitted:
         timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         lead={"timestamp":timestamp,"name":name,"contact":contact,"identity":identity,"goal":goal,"skill":skill,"time_budget":time_budget,"note":note,"source":"streamlit_site"}
@@ -255,13 +266,11 @@ def render_booking(lang: str):
         owner_email=get_secret("OWNER_EMAIL")
         mailto=f"mailto:{owner_email}?subject="+quote("AI技能成长咨询摘要")+"&body="+quote(summary)
         st.markdown(f"<a class='mail-link' href='{mailto}'>用邮件发送摘要</a>", unsafe_allow_html=True)
-
     if st.session_state.get("leads"):
         section("SESSION LEADS","本次会话线索","这些线索保存在当前浏览会话中；关闭或重启后可能消失。正式保存请配置大陆可用 Webhook。")
         leads_df=pd.DataFrame(st.session_state["leads"])
         st.dataframe(leads_df.drop(columns=["summary"], errors="ignore"), use_container_width=True, hide_index=True)
         st.download_button("下载本次会话全部线索 CSV", data=leads_df.to_csv(index=False).encode("utf-8-sig"), file_name="ai_skill_growth_session_leads.csv", mime="text/csv")
-
     section("WEBHOOK CONFIG","大陆可用配置示例","在 Streamlit Cloud 的 App settings / Secrets 中加入以下配置。")
     st.code('LEAD_WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/xxxx"\nWEBHOOK_PROVIDER = "feishu"\nOWNER_EMAIL = "your-email@example.com"\n\n# 或企业微信机器人\n# LEAD_WEBHOOK_URL = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxxx"\n# WEBHOOK_PROVIDER = "wecom"\n\n# 或腾讯云函数 / 阿里云函数 / 自建后端\n# WEBHOOK_PROVIDER = "generic"', language="toml")
 
@@ -277,6 +286,7 @@ def main():
     page=render_top_nav(lang)
     if page=="home": render_home(lang)
     elif page=="trial": render_trial(lang)
+    elif page=="sop": render_followup_sop(lang)
     elif page=="paths": render_paths(lang)
     elif page=="skills": render_skills(lang)
     elif page=="portfolio": render_portfolio(lang)
@@ -286,7 +296,7 @@ def main():
     elif page=="booking": render_booking(lang)
     else: render_faq(lang)
     st.markdown("<div class='mobile-sticky'><span class='m1'>预约体验课</span><span class='m2'>咨询方案</span></div>", unsafe_allow_html=True)
-    st.caption("AI Skill Growth Platform · trial product page v2.4")
+    st.caption("AI Skill Growth Platform · sales follow-up SOP v2.5")
 
 
 if __name__=="__main__":
