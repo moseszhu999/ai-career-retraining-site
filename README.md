@@ -48,6 +48,38 @@ package the skill into work or service value
 present the result
 ```
 
+## Entry product: 2-hour trial lesson
+
+The site now includes a dedicated page for:
+
+```text
+AI 技能成长 2 小时体验课
+Recommended price: 99 / 199 RMB
+```
+
+Trial lesson promise:
+
+```text
+1. diagnose one skill goal
+2. turn the goal into one micro real task
+3. use AI to create the first draft
+4. run one round of AI feedback and revision
+5. produce one small visible artifact
+6. recommend the next learning path
+```
+
+Example trial tasks:
+
+```text
+promotion report outline
+job-switching portfolio sample
+freelance service package draft
+sales script
+test case / bug report
+Japanese business email
+team AI workflow template
+```
+
 ## Lead capture
 
 The booking page supports:
