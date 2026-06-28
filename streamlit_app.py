@@ -34,7 +34,8 @@ def init_state() -> None:
     defaults = {
         "role": "访客",
         "user_name": "体验用户",
-        "page": "home",
+        "target_page": "home",
+        "nav_page": "home",
         "task_status": "未开始",
         "draft": "目标：补齐登录页面测试能力\n\n当前草稿：\n1. 正常登录：输入正确用户名和密码，可以登录成功。\n2. 错误密码：提示密码错误。\n3. 空用户名：提示必须输入用户名。\n\n待补充：权限、安全、边界、Bug报告模板。",
         "draft_saved": False,
@@ -47,6 +48,11 @@ def init_state() -> None:
     }
     for k, v in defaults.items():
         st.session_state.setdefault(k, v)
+
+
+def goto(page: str) -> None:
+    st.session_state.target_page = page
+    st.session_state.nav_page = page
 
 
 def chip(text: str) -> str:
@@ -80,14 +86,15 @@ def top_nav() -> str:
     st.markdown(
         f"""
 <div class='top'>
-  <div class='brand'>AI Skill Growth OS<small>Session Interaction Demo · v4.6.0</small></div>
+  <div class='brand'>AI Skill Growth OS<small>Session Interaction Demo · v4.6.1</small></div>
   <div>{chip(st.session_state.role)}<span class='pill'>{st.session_state.user_name}</span><span class='pill'>最近：{st.session_state.last_event}</span></div>
 </div>
 """,
         unsafe_allow_html=True,
     )
-    page = st.radio("产品导航", list(NAV.keys()), format_func=lambda k: NAV[k], horizontal=True, key="page", label_visibility="collapsed")
-    return page
+    if st.session_state.target_page != st.session_state.nav_page:
+        st.session_state.nav_page = st.session_state.target_page
+    return st.radio("产品导航", list(NAV.keys()), format_func=lambda k: NAV[k], horizontal=True, key="nav_page", label_visibility="collapsed")
 
 
 def login_panel() -> None:
@@ -100,20 +107,20 @@ def login_panel() -> None:
             st.session_state.role = role
             st.session_state.user_name = name or "体验用户"
             st.session_state.last_event = f"进入{role}体验"
-            st.session_state.page = "tasks" if role == "学员" else "home"
+            goto("tasks" if role == "学员" else "home")
             st.rerun()
         c1, c2, c3 = st.columns(3)
         if c1.button("快速进入学员Demo"):
             st.session_state.role = "学员"
             st.session_state.user_name = "学员Demo"
-            st.session_state.page = "tasks"
             st.session_state.last_event = "进入学员Demo"
+            goto("tasks")
             st.rerun()
         if c2.button("快速进入FounderDemo"):
             st.session_state.role = "Founder"
             st.session_state.user_name = "Founder"
-            st.session_state.page = "home"
             st.session_state.last_event = "进入FounderDemo"
+            goto("home")
             st.rerun()
         if c3.button("重置体验状态"):
             for key in list(st.session_state.keys()):
@@ -126,26 +133,23 @@ def home() -> None:
     if st.session_state.role == "学员":
         feedback_state = "已有反馈" if st.session_state.ai_feedback else "未请求"
         candidate_state = "有候选" if st.session_state.portfolio_candidate else "暂无候选"
-        st.markdown(
-            f"""
+        st.markdown(f"""
 <div class='hero'>
 <span class='pill hot'>登录后首页</span>
 <h1>{st.session_state.user_name}，今天继续：<br><span>Day 2 · 测试用例作品</span></h1>
 <p>你现在不是在看介绍，而是在一个任务流程里。保存草稿、请求反馈、提交Agent都会改变状态。</p>
 <span class='pill'>任务状态：{st.session_state.task_status}</span><span class='pill'>草稿字数：{len(st.session_state.draft)}</span><span class='pill'>AI反馈：{feedback_state}</span><span class='pill'>作品集：{candidate_state}</span>
 </div>
-""",
-            unsafe_allow_html=True,
-        )
+""", unsafe_allow_html=True)
         c1, c2, c3 = st.columns(3)
         if c1.button("继续今日任务", type="primary"):
-            st.session_state.page = "tasks"
+            goto("tasks")
             st.rerun()
         if c2.button("查看作品集"):
-            st.session_state.page = "portfolio"
+            goto("portfolio")
             st.rerun()
         if c3.button("生成咨询路径"):
-            st.session_state.page = "consult"
+            goto("consult")
             st.rerun()
         return
 
@@ -190,7 +194,7 @@ def tasks() -> None:
 </div>
 """, unsafe_allow_html=True)
     st.markdown("<div class='section'>训练路径</div>", unsafe_allow_html=True)
-    st.markdown("<div class='timeline'>" + "".join(f"<div><b>{r.day}</b><span>{r.title}</span><br>{chip(r.focus)}<div class='progress'><div class='bar' style='width:{r.progress}%'></div></div></div>" for _, r in TASKS.iterrows()) + "</div>", unsafe_allow_html=True)
+    st.markdown("<div class='timeline'>" + "".join(f"<div><b>{r['day']}</b><span>{r['title']}</span><br>{chip(r['focus'])}<div class='progress'><div class='bar' style='width:{r['progress']}%'></div></div></div>" for _, r in TASKS.iterrows()) + "</div>", unsafe_allow_html=True)
     left, right = st.columns([1.1, .9])
     with left:
         st.markdown(f"<div class='card'><h3>Day 2 · 测试用例作品</h3><p><b>交付物：</b>测试用例 + Bug报告<br><b>状态：</b>{chip(st.session_state.task_status)}<br><b>下一步：</b>{'等待Agent点评' if st.session_state.submitted else '补充权限、安全、边界后提交'}</p></div>", unsafe_allow_html=True)
@@ -236,7 +240,7 @@ def portfolio() -> None:
         rows.append(["登录测试作品", "测试用例 + Bug报告草稿", "待定", "待点评", "软件测试", "已提交给Agent，等待确认是否可展示。"])
     df = pd.DataFrame(rows, columns=["作品", "证明材料", "评分", "状态", "方向", "说明"])
     st.markdown("<div class='panel'><span class='pill hot'>Portfolio Proof</span><h2>作品集会根据任务状态变化</h2><p>提交给Agent后，这里会出现新的候选作品。</p></div>", unsafe_allow_html=True)
-    st.markdown("<div class='grid3'>" + "".join(f"<div class='proof'><h3>{r.作品}</h3>{chip(r.状态)}<span class='pill purple'>{r.方向}</span><p><b>证明材料：</b>{r.证明材料}</p><p><b>评分：</b>{r.评分}</p><p>{r.说明}</p></div>" for _, r in df.iterrows()) + "</div>", unsafe_allow_html=True)
+    st.markdown("<div class='grid3'>" + "".join(f"<div class='proof'><h3>{r['作品']}</h3>{chip(r['状态'])}<span class='pill purple'>{r['方向']}</span><p><b>证明材料：</b>{r['证明材料']}</p><p><b>评分：</b>{r['评分']}</p><p>{r['说明']}</p></div>" for _, r in df.iterrows()) + "</div>", unsafe_allow_html=True)
     st.dataframe(df, use_container_width=True, hide_index=True)
 
 
@@ -249,7 +253,7 @@ def consult() -> None:
         goal = st.selectbox("你最想解决什么？", ["学新技能", "提升现有技能", "做作品集", "升职表达", "换工作 / 高薪跳槽", "自由职业接单", "企业内训"])
     package, reason, steps = recommend_package(identity, goal)
     st.markdown(f"<div class='card'><h3>推荐路径：{package}</h3><p>{reason}</p><p>{' → '.join(steps)}</p></div>", unsafe_allow_html=True)
-    with st.form("consult_form_v460"):
+    with st.form("consult_form_v461"):
         name = st.text_input("姓名 / 称呼")
         contact = st.text_input("联系方式，选填")
         note = st.text_area("补充说明")
@@ -280,4 +284,4 @@ else:
 with st.expander("Founder OS / 后台入口"):
     st.markdown("普通用户前台只保留四个入口。Founder Console 是唯一后台页，继续单独 owner-gated。当前页面阶段不使用 st.page_link，避免 Streamlit 路径崩溃。")
 
-st.caption("AI Skill Growth OS · Session Interaction Demo · v4.6.0")
+st.caption("AI Skill Growth OS · Session Interaction Demo · v4.6.1")
