@@ -101,9 +101,11 @@ create table if not exists learners (
     unique (tenant_id, learner_code)
 );
 
+alter table app_users drop constraint if exists app_users_client_fk;
 alter table app_users
     add constraint app_users_client_fk foreign key (client_id) references clients(id) on delete set null;
 
+alter table app_users drop constraint if exists app_users_learner_fk;
 alter table app_users
     add constraint app_users_learner_fk foreign key (learner_id) references learners(id) on delete set null;
 
@@ -282,42 +284,50 @@ select * from app_users where auth_user_id = auth.uid() and is_active = true;
 -- Learner and ClientAdmin policies are intentionally narrower and should be applied table-by-table
 -- before production launch. Until then, keep production tables behind service-role writes only.
 
-create policy if not exists founder_select_clients on clients
+drop policy if exists founder_select_clients on clients;
+create policy founder_select_clients on clients
 for select using (
     tenant_id in (select tenant_id from current_app_user where role = 'Founder')
 );
 
-create policy if not exists founder_select_cohorts on cohorts
+drop policy if exists founder_select_cohorts on cohorts;
+create policy founder_select_cohorts on cohorts
 for select using (
     tenant_id in (select tenant_id from current_app_user where role = 'Founder')
 );
 
-create policy if not exists founder_select_learners on learners
+drop policy if exists founder_select_learners on learners;
+create policy founder_select_learners on learners
 for select using (
     tenant_id in (select tenant_id from current_app_user where role = 'Founder')
 );
 
-create policy if not exists founder_select_assignments on assignments
+drop policy if exists founder_select_assignments on assignments;
+create policy founder_select_assignments on assignments
 for select using (
     tenant_id in (select tenant_id from current_app_user where role = 'Founder')
 );
 
-create policy if not exists learner_select_own_assignments on assignments
+drop policy if exists learner_select_own_assignments on assignments;
+create policy learner_select_own_assignments on assignments
 for select using (
     learner_id in (select learner_id from current_app_user where role = 'Learner')
 );
 
-create policy if not exists learner_select_own_submissions on submissions
+drop policy if exists learner_select_own_submissions on submissions;
+create policy learner_select_own_submissions on submissions
 for select using (
     learner_id in (select learner_id from current_app_user where role = 'Learner')
 );
 
-create policy if not exists learner_insert_own_submissions on submissions
+drop policy if exists learner_insert_own_submissions on submissions;
+create policy learner_insert_own_submissions on submissions
 for insert with check (
     learner_id in (select learner_id from current_app_user where role = 'Learner')
 );
 
-create policy if not exists client_admin_select_client_proofs on proof_files
+drop policy if exists client_admin_select_client_proofs on proof_files;
+create policy client_admin_select_client_proofs on proof_files
 for select using (
     client_id in (select client_id from current_app_user where role = 'ClientAdmin')
     and internal_note is null
