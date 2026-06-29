@@ -83,4 +83,4 @@ else:
         else:
             student_home_page()
 
-st.caption("AI Skill Growth OS · Data Export Delivery Pack · v4.10.0")
+st.caption("AI Skill Growth OS · Client Scoped Delivery Pack · v4.10.1")
