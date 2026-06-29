@@ -74,4 +74,4 @@ else:
         else:
             student_home_page()
 
-st.caption("AI Skill Growth OS · Founder Operation Context · v4.9.6")
+st.caption("AI Skill Growth OS · Role Permission Matrix · v4.9.7")
