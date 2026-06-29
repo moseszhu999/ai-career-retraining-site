@@ -7,6 +7,7 @@ import streamlit as st
 
 from frontend.audit_log import add_audit, init_audit_log, reset_audit_log
 from frontend.business_data import CONSULT_LEADS, PROOF_FILES, TASK_INSTANCES
+from frontend.exercise_bank import EXERCISES
 from frontend.training_records import ASSIGNMENTS, REVIEWS, SUBMISSIONS
 
 
@@ -96,6 +97,70 @@ def joined_records() -> pd.DataFrame:
         how="left",
     )
     return merged
+
+
+def _exercise_view() -> pd.DataFrame:
+    cols = ["exercise_id", "module", "difficulty", "related_task", "question", "correct_option", "explanation", "hint"]
+    return EXERCISES[[c for c in cols if c in EXERCISES.columns]].copy()
+
+
+def mcq_records() -> pd.DataFrame:
+    records = joined_records().copy()
+    if records.empty:
+        return records
+    meta = _exercise_view().rename(columns={"correct_option": "exercise_correct_option"})
+    enriched = records.merge(meta, on="exercise_id", how="left")
+    if "is_correct" in enriched.columns:
+        enriched["is_correct"] = enriched["is_correct"].fillna(False).astype(bool)
+    return enriched
+
+
+def mcq_module_stats() -> pd.DataFrame:
+    records = mcq_records()
+    if records.empty or "module" not in records.columns:
+        return pd.DataFrame(columns=["module", "attempts", "correct", "wrong", "accuracy"])
+    mcq = records[records["question_type"] == "单选题"].copy()
+    if mcq.empty:
+        return pd.DataFrame(columns=["module", "attempts", "correct", "wrong", "accuracy"])
+    grouped = mcq.groupby("module", dropna=False).agg(
+        attempts=("submission_id", "count"),
+        correct=("is_correct", "sum"),
+    ).reset_index()
+    grouped["correct"] = grouped["correct"].astype(int)
+    grouped["wrong"] = grouped["attempts"] - grouped["correct"]
+    grouped["accuracy"] = (grouped["correct"] / grouped["attempts"] * 100).round(1)
+    return grouped.sort_values(["accuracy", "attempts"], ascending=[True, False])
+
+
+def wrong_answer_records(learner_id: str | None = None) -> pd.DataFrame:
+    records = mcq_records()
+    if records.empty:
+        return records
+    wrong = records[(records["question_type"] == "单选题") & (~records["is_correct"].fillna(False).astype(bool))].copy()
+    if learner_id:
+        wrong = wrong[wrong["learner_id"] == learner_id]
+    return wrong
+
+
+def review_route_for_record(row: pd.Series) -> str:
+    if pd.isna(row.get("submission_id")):
+        return "等待提交"
+    if str(row.get("question_type", "")) == "单选题" and not bool(row.get("is_correct", False)):
+        return "需复习"
+    score = row.get("score")
+    auto_score = row.get("auto_score")
+    effective_score = score if pd.notna(score) else auto_score
+    if pd.notna(effective_score) and int(effective_score) >= 80:
+        return "Proof候选"
+    return "Founder复核"
+
+
+def review_queue_view() -> pd.DataFrame:
+    records = mcq_records()
+    if records.empty:
+        return records
+    records["review_route"] = records.apply(review_route_for_record, axis=1)
+    return records
 
 
 def operation_metrics() -> dict[str, int]:
