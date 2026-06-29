@@ -42,6 +42,24 @@ Chinese product statement:
 帮助企业定义、授权、验证、审批和审计 AI Agent 如何进入真实工作流，并通过 Proof Files 证明员工与岗位的 AI Agent 协同能力。
 ```
 
+## Consulting architecture pack
+
+v4.14.0 turns the repository into a consulting-grade enterprise architecture pack:
+
+```text
+BLM -> Scenario Process -> Application Architecture -> Data Architecture -> Technical Architecture
+```
+
+Core architecture documents:
+
+```text
+docs/business_architecture_blm_v4_14.md
+docs/scenario_process_architecture_v4_14.md
+docs/application_architecture_v4_14.md
+docs/data_architecture_v4_14.md
+docs/technical_architecture_v4_14.md
+```
+
 ## Core market insight
 
 Low-level coding and routine Agent supervision will both be compressed by more capable agents. The long-term enterprise problem is shifting from:
@@ -96,6 +114,7 @@ v4.11.0 Database Foundation / Supabase Migration Contract
 v4.11.1 Repository Read Layer
 v4.12.0 AI Agent Delivery Readiness Strategy
 v4.13.0 AI Agent Governance & Readiness Strategy
+v4.14.0 Consulting Architecture Pack
 ```
 
 v4.10.2 separates internal delivery packs from customer-safe delivery packs. Customer-facing exports use a field whitelist and hide internal notes, raw audit logs, Founder/Agent operation details, contract value, and potential lead value.
@@ -127,6 +146,16 @@ v4.13.0 adds the governance layer:
 ```text
 docs/v4_13_agent_governance_readiness_strategy.md
 supabase/agent_governance_extension_v4_13.sql
+```
+
+v4.14.0 adds the consulting architecture layer:
+
+```text
+docs/business_architecture_blm_v4_14.md
+docs/scenario_process_architecture_v4_14.md
+docs/application_architecture_v4_14.md
+docs/data_architecture_v4_14.md
+docs/technical_architecture_v4_14.md
 ```
 
 The Streamlit demo still defaults to session DataFrames. Supabase is introduced as the next backend target, not as a breaking runtime dependency.
