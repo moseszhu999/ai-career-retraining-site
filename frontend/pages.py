@@ -71,6 +71,28 @@ def _ensure_submission(exercise_id: str, learner_id: str, learner_name: str, coh
     )
 
 
+def _option_letter(option_text: str) -> str:
+    return option_text.split(".", 1)[0].strip() if "." in option_text else option_text[:1]
+
+
+def _mcq_score(exercise: pd.Series, selected_option: str) -> int:
+    correct = str(exercise.get("correct_option", "")).strip()
+    selected = _option_letter(selected_option)
+    if selected == correct:
+        return 88 if exercise["difficulty"] != "高级" else 84
+    return 62 if exercise["difficulty"] != "高级" else 58
+
+
+def _mcq_answer_summary(exercise: pd.Series, selected_option: str, note: str) -> str:
+    correct = str(exercise.get("correct_option", "")).strip()
+    selected = _option_letter(selected_option)
+    result = "正确" if selected == correct else "需复习"
+    summary = f"选择题作答：{selected_option}\n判定：{result}；正确选项：{correct}。"
+    if note:
+        summary += f"\n补充说明：{note}"
+    return summary
+
+
 def _record_board(learner_id: str | None = None) -> None:
     records = ops.joined_records()
     if learner_id:
@@ -116,7 +138,7 @@ def _render_exercise_bank(current_learner_name: str | None = None) -> None:
     st.markdown(f"""
 <div class='grid4'>
   <div class='card'><span class='mini'>练习题</span><div class='metric'>{metrics['exercise_count']}</div></div>
-  <div class='card'><span class='mini'>已布置</span><div class='metric'>{op_metrics['assignments']}</div></div>
+  <div class='card'><span class='mini'>选择题</span><div class='metric'>{metrics.get('mcq_count', 0)}</div></div>
   <div class='card'><span class='mini'>已提交</span><div class='metric'>{op_metrics['submissions']}</div></div>
   <div class='card'><span class='mini'>已Review</span><div class='metric'>{op_metrics['reviews']}</div></div>
 </div>
@@ -131,7 +153,7 @@ def _render_exercise_bank(current_learner_name: str | None = None) -> None:
         filtered = filtered[filtered["module"] == module]
     if difficulty != "全部":
         filtered = filtered[filtered["difficulty"] == difficulty]
-    st.dataframe(filtered[["exercise_id", "module", "difficulty", "related_task", "required_output"]], use_container_width=True, hide_index=True)
+    st.dataframe(filtered[["exercise_id", "module", "difficulty", "question_type", "related_task", "required_output"]], use_container_width=True, hide_index=True)
     if filtered.empty:
         st.info("当前筛选条件下没有练习题。")
         return
@@ -147,14 +169,18 @@ def _render_exercise_bank(current_learner_name: str | None = None) -> None:
         st.markdown(f"""
 <div class='editor'>
 <h3>{exercise['related_task']}</h3>
-{chip(exercise['difficulty'])}<span class='pill purple'>{exercise['module']}</span>
+{chip(exercise['difficulty'])}<span class='pill purple'>{exercise['module']}</span><span class='pill'>{exercise['question_type']}</span>
 <p><b>业务场景：</b>{exercise['scenario']}</p>
-<p><b>练习题：</b>{exercise['question']}</p>
-<p><b>要求交付物：</b>{exercise['required_output']}</p>
+<p><b>题目：</b>{exercise['question']}</p>
+<p><b>要求：</b>{exercise['required_output']}</p>
 </div>
 """, unsafe_allow_html=True)
-        answer_key = f"answer_{exercise['exercise_id']}_{learner_id}"
-        answer = st.text_area("学员作答 / 练习草稿", key=answer_key, height=220, placeholder="在这里写测试用例、流程分析、Q&A表或服务包摘要。")
+        options = list(exercise.get("options", []))
+        option_key = f"founder_mcq_{exercise['exercise_id']}_{learner_id}"
+        selected_option = st.radio("选择答案", options, key=option_key) if options else ""
+        note_key = f"founder_note_{exercise['exercise_id']}_{learner_id}"
+        note = st.text_area("补充说明（可选）", key=note_key, height=100, placeholder="可填写学员理由或讲师备注。")
+        answer = _mcq_answer_summary(exercise, selected_option, note) if selected_option else note
         c1, c2, c3 = st.columns(3)
         if c1.button("布置给当前学员", use_container_width=True, key=f"assign_{exercise['exercise_id']}"):
             assignment_id = ops.assign_exercise(
@@ -166,20 +192,20 @@ def _render_exercise_bank(current_learner_name: str | None = None) -> None:
             )
             _record_event(f"已布置 {assignment_id} · {exercise['exercise_id']} 给 {learner_name}")
             st.rerun()
-        if c2.button("提交作答", use_container_width=True, key=f"submit_{exercise['exercise_id']}"):
+        if c2.button("提交选择", use_container_width=True, key=f"submit_{exercise['exercise_id']}", disabled=not selected_option):
             submission_id = _ensure_submission(str(exercise["exercise_id"]), learner_id, learner_name, cohort_id, answer)
-            _record_event(f"{learner_name} 提交 {submission_id} · {exercise['exercise_id']}")
+            _record_event(f"{learner_name} 提交 {submission_id} · {exercise['exercise_id']} · {_option_letter(selected_option)}")
             st.rerun()
-        if c3.button("生成Review", type="primary", use_container_width=True, key=f"review_{exercise['exercise_id']}"):
+        if c3.button("生成Review", type="primary", use_container_width=True, key=f"review_{exercise['exercise_id']}", disabled=not selected_option):
             submission_id = _ensure_submission(str(exercise["exercise_id"]), learner_id, learner_name, cohort_id, answer)
-            score = 82 if exercise["difficulty"] != "高级" else 78
-            decision = "待Founder确认" if score >= 80 else "需修改"
+            score = _mcq_score(exercise, selected_option)
+            decision = "待Founder确认" if score >= 80 else "需复习"
             proof_ready = "候选" if score >= 80 else "否"
             ops.review_submission(
                 submission_id=submission_id,
                 reviewer="Agent",
                 score=score,
-                review_comment=f"Agent Review：{exercise['rubric']}。当前作答已生成初评。",
+                review_comment=f"Agent Review：{exercise['explanation']} {exercise['rubric']}",
                 decision=decision,
                 proof_ready=proof_ready,
             )
@@ -187,7 +213,8 @@ def _render_exercise_bank(current_learner_name: str | None = None) -> None:
             st.rerun()
     with right:
         st.markdown(f"<div class='card'><h3>提示</h3><p>{exercise['hint']}</p></div>", unsafe_allow_html=True)
-        with st.expander("查看标准答案 / Golden Solution"):
+        with st.expander("查看解析 / Golden Solution"):
+            st.write(exercise["explanation"])
             st.write(exercise["golden_solution"])
         with st.expander("查看评分标准"):
             st.write(exercise["rubric"])
@@ -209,13 +236,13 @@ def render_public_site() -> None:
         st.markdown(f"""
 <div class='grid4'>
   <div class='card'><span class='mini'>业务练习题</span><div class='metric'>{exercise_metrics['exercise_count']}</div></div>
-  <div class='card'><span class='mini'>布置记录</span><div class='metric'>{op_metrics['assignments']}</div></div>
+  <div class='card'><span class='mini'>选择题</span><div class='metric'>{exercise_metrics.get('mcq_count', 0)}</div></div>
   <div class='card'><span class='mini'>Proof Files</span><div class='metric'>{op_metrics['proof_files']}</div></div>
   <div class='card'><span class='mini'>线索金额</span><div class='metric'>¥{op_metrics['lead_value']:,}</div></div>
 </div>
 """, unsafe_allow_html=True)
         st.markdown("<div class='section'>实际业务状态机</div>", unsafe_allow_html=True)
-        st.markdown("<div class='grid4'><div class='flow-step'><b>1. 布置</b><br><span class='mini'>新增 Assignment 行。</span></div><div class='flow-step'><b>2. 提交</b><br><span class='mini'>新增或更新 Submission。</span></div><div class='flow-step'><b>3. Review</b><br><span class='mini'>新增或更新 Review。</span></div><div class='flow-step'><b>4. 入库</b><br><span class='mini'>新增 Proof File。</span></div></div>", unsafe_allow_html=True)
+        st.markdown("<div class='grid4'><div class='flow-step'><b>1. 选题</b><br><span class='mini'>选择题降低操作成本。</span></div><div class='flow-step'><b>2. 提交</b><br><span class='mini'>保存选择项和说明。</span></div><div class='flow-step'><b>3. Review</b><br><span class='mini'>按正确选项初评。</span></div><div class='flow-step'><b>4. 入库</b><br><span class='mini'>新增 Proof File。</span></div></div>", unsafe_allow_html=True)
     with right:
         st.markdown("<div class='login-box'><div class='panel'><h2>进入业务系统</h2><p>选择学员或Founder身份，操作会实时改变当前会话表。</p></div>", unsafe_allow_html=True)
         with st.form("public_login_form"):
@@ -233,7 +260,7 @@ def render_public_site() -> None:
         if c2.button("Founder运营Demo"):
             login_as("Founder", "Founder")
             st.rerun()
-        st.markdown("<div class='card'><h3>推荐操作顺序</h3><p>1. 打开练习题库<br>2. 布置给当前学员<br>3. 提交作答<br>4. 生成Review<br>5. 在Review Queue确认进入Proof Files<br>6. 去Proof Files查看新增证明</p></div></div>", unsafe_allow_html=True)
+        st.markdown("<div class='card'><h3>推荐操作顺序</h3><p>1. 打开练习题库<br>2. 选择题作答<br>3. 提交选择<br>4. 生成Review<br>5. 在Review Queue确认进入Proof Files<br>6. 去Proof Files查看新增证明</p></div></div>", unsafe_allow_html=True)
 
 
 def render_app_top() -> None:
@@ -295,7 +322,7 @@ def founder_dashboard() -> None:
     st.markdown(f"""
 <div class='grid4'>
   <div class='card decision'><span class='mini'>练习题</span><div class='metric'>{exercise_metrics['exercise_count']}</div></div>
-  <div class='card decision'><span class='mini'>布置</span><div class='metric'>{op_metrics['assignments']}</div></div>
+  <div class='card decision'><span class='mini'>选择题</span><div class='metric'>{exercise_metrics.get('mcq_count', 0)}</div></div>
   <div class='card decision'><span class='mini'>Proof Files</span><div class='metric'>{op_metrics['proof_files']}</div></div>
   <div class='card decision'><span class='mini'>线索金额</span><div class='metric'>¥{op_metrics['lead_value']:,}</div></div>
 </div>
@@ -327,7 +354,7 @@ def tasks_page() -> None:
     learner_name = st.selectbox("选择学员", list(learner_options.keys()), index=0)
     st.session_state.selected_learner_id = learner_options[learner_name]
     rows = _task_rows_for_selection()
-    st.markdown("<div class='panel'><span class='pill hot'>Proof Task + Editable Records</span><h2>按班级和学员处理真实训练任务</h2><p>布置、提交、Review 会真实更新当前会话状态表。</p></div>", unsafe_allow_html=True)
+    st.markdown("<div class='panel'><span class='pill hot'>Proof Task + Editable Records</span><h2>按班级和学员处理真实训练任务</h2><p>布置、提交、Review 会真实更新当前会话状态表。练习题以选择题为主，便于快速操作和自动初评。</p></div>", unsafe_allow_html=True)
     st.dataframe(rows[["day", "proof_task", "business_context", "required_output", "status", "progress", "proof_score", "founder_decision"]], use_container_width=True, hide_index=True)
     if not rows.empty:
         task_labels = [f"{r.day} · {r.proof_task} · {r.status}" for r in rows.itertuples()]
@@ -340,7 +367,7 @@ def tasks_page() -> None:
 """, unsafe_allow_html=True)
             draft_key = f"draft_{task['task_id']}"
             st.session_state.setdefault(draft_key, task["draft"])
-            st.text_area("Proof草稿 / 学员提交内容", key=draft_key, height=220)
+            st.text_area("Proof草稿 / 学员提交内容", key=draft_key, height=160)
             c1, c2, c3 = st.columns(3)
             if c1.button("保存草稿", type="primary", use_container_width=True):
                 _record_event(f"保存 {task['learner_name']} 的 {task['proof_task']} 草稿")
@@ -426,30 +453,3 @@ def consult_page() -> None:
             st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
         st.markdown(_event_panel(), unsafe_allow_html=True)
-
-
-def founder_queue() -> None:
-    pending = ops.joined_records()
-    st.markdown("<div class='panel'><span class='pill hot'>Review Queue</span><h2>Founder处理具体提交和线索</h2><p>确认、打回、沟通都会更新当前会话状态表。</p></div>", unsafe_allow_html=True)
-    st.markdown("<div class='section'>待处理训练记录</div>", unsafe_allow_html=True)
-    st.dataframe(pending[["assignment_id", "exercise_id", "learner_name", "status", "submitted_at", "score", "decision", "proof_ready"]], use_container_width=True, hide_index=True)
-    if not pending.empty:
-        label_map = {f"{r.assignment_id} · {r.learner_name} · {r.exercise_id}": r for r in pending.itertuples()}
-        selected = st.selectbox("选择处理项", list(label_map.keys()))
-        rec = label_map[selected]
-        st.markdown(f"<div class='queue-card decision'><h3>{rec.learner_name} · {rec.exercise_id}</h3><p><b>提交摘要：</b>{rec.answer_summary if pd.notna(rec.answer_summary) else '暂无'}<br><b>分数：</b>{rec.score if pd.notna(rec.score) else '未评分'}<br><b>决策：</b>{rec.decision if pd.notna(rec.decision) else '未Review'}<br><b>Proof Ready：</b>{rec.proof_ready if pd.notna(rec.proof_ready) else '否'}</p></div>", unsafe_allow_html=True)
-        c1, c2, c3 = st.columns(3)
-        if c1.button("确认进入Proof Files", type="primary", use_container_width=True):
-            ops.mark_assignment_proof_ready(str(rec.assignment_id))
-            _record_event(f"确认 {rec.learner_name} 的 {rec.exercise_id} 进入 Proof Files")
-            st.rerun()
-        if c2.button("要求重新提交", use_container_width=True):
-            ops.request_resubmission(str(rec.assignment_id))
-            _record_event(f"要求 {rec.learner_name} 重新提交 {rec.exercise_id}")
-            st.rerun()
-        if c3.button("标记已沟通", use_container_width=True):
-            _record_event(f"已和 {rec.learner_name} 沟通 {rec.exercise_id}")
-            st.info("已记录沟通。")
-    st.markdown("<div class='section'>待跟进 Leads</div>", unsafe_allow_html=True)
-    st.dataframe(ops.consult_leads()[["client_name", "package", "need", "status", "potential_value"]], use_container_width=True, hide_index=True)
-    st.markdown(_event_panel(), unsafe_allow_html=True)
