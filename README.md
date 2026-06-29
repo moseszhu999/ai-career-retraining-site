@@ -13,7 +13,7 @@ Current strategic positioning:
 企业 AI Agent 治理与能力证明系统
 ```
 
-The project is evolving from coding training and AI Agent supervision into an enterprise operating system for automating repeatable manual work with AI Agents while keeping work governable, auditable, and accountable.
+The project is evolving from coding training and AI Agent supervision into an enterprise operating system for automating repeatable value-chain work with AI Agents while keeping work governable, auditable, and accountable.
 
 ## Streamlit deploy settings
 
@@ -34,7 +34,7 @@ The correct consulting-company architecture sequence is:
 BLM -> Business Architecture -> Application Architecture -> Data Architecture -> Technical Architecture
 ```
 
-Scenario process belongs inside Business Architecture, not as a separate peer layer.
+Value chain belongs in BLM as the bridge from strategy to business architecture. Scenario process belongs inside Business Architecture, not as a separate peer layer.
 
 ## Consulting architecture pack
 
@@ -47,23 +47,22 @@ docs/application_architecture_v4_14.md
 docs/data_architecture_v4_14.md
 docs/technical_architecture_v4_14.md
 docs/agent_replacement_business_architecture_v4_15.md
+docs/value_chain_blm_alignment_v4_16.md
 ```
 
-v4.15.0 adds the missing breakout layer:
-
-```text
-Agent Replacement Business Architecture
-```
-
-The business architecture is now:
+The architecture is now:
 
 ```text
 BLM
+   -> market insight
+   -> strategic intent
+   -> value chain
+   -> value-chain automation opportunity
 -> Business Architecture
    -> capability map
    -> operating model
    -> scenario process
-   -> Agent replacement map
+   -> Agent automation map
    -> KPI model
 -> Application Architecture
 -> Data Architecture
@@ -72,22 +71,19 @@ BLM
 
 ## Core market insight
 
-The durable enterprise question is not only:
+The durable enterprise question is:
 
 ```text
-Can this enterprise govern AI Agent work?
-```
-
-It is also:
-
-```text
-Which repeatable manual work steps can be automated by AI Agents while preserving policy, evidence, approval, and accountability?
+Which value-chain work steps can AI Agents automate, and what governance is required before those outputs become enterprise results?
 ```
 
 The system therefore focuses on:
 
 ```text
-Agent replacement opportunity
+value-chain stage
+manual work step
+Agent automation opportunity
+replacement / automation level
 task eligibility
 human authority level
 Agent work request
@@ -101,14 +97,32 @@ readiness score
 manager / customer report
 ```
 
+## Enterprise value chain view
+
+A generic enterprise value chain:
+
+```text
+Market / Lead
+-> Customer Need
+-> Solution / Proposal
+-> Contract / Order
+-> Delivery / Execution
+-> Quality / Acceptance
+-> Customer Success / Support
+-> Renewal / Expansion
+-> Management / HR / Finance / Compliance support
+```
+
+The OS maps AI Agent automation opportunities and governance requirements across this value chain.
+
 ## Operating loop
 
 ```text
-Business task
--> Agent replacement eligibility
+Value-chain work step
+-> Agent automation opportunity
 -> Agent governance policy
 -> Human authority level
--> Agent executes replaceable step
+-> Agent executes replaceable / automatable step
 -> Evidence captured
 -> Risk classified
 -> Approval / revise / escalate
@@ -127,6 +141,7 @@ v4.12.0 AI Agent Delivery Readiness Strategy
 v4.13.0 AI Agent Governance & Readiness Strategy
 v4.14.0 Consulting Architecture Pack
 v4.15.0 Agent Replacement Business Architecture
+v4.16.0 Value Chain-aware BLM
 ```
 
 ## What this business sells
@@ -146,6 +161,7 @@ generic productivity bootcamp
 Sell this as:
 
 ```text
+Value Chain AI Automation Diagnosis
 Agent replacement opportunity map
 Agent governance policy templates
 role-based authority model
@@ -163,27 +179,28 @@ Agent automates repeatable work steps.
 Human / organization retains authority, responsibility, and accountability.
 ```
 
-Replacement levels:
+Replacement / automation levels:
 
 ```text
-R0 No Replacement
-R1 Draft Replacement
-R2 Task Execution Replacement
-R3 Workflow Step Replacement
+R0 No Automation
+R1 Draft Automation
+R2 Task Execution Automation
+R3 Workflow Step Automation
 R4 Conditional Autonomous Operation
 ```
 
-## Starter verticals
+## Starter value-chain verticals
 
-### Software / IT Delivery Governance
+### Software / IT Delivery
 
 Agent automation target:
 
 ```text
-issue summary
+requirement summary
 candidate file detection
 code / test / report drafting
 first-pass consistency check
+acceptance summary
 ```
 
 Human retained responsibility:
@@ -196,7 +213,7 @@ merge decision
 customer delivery responsibility
 ```
 
-### Business / PM Governance
+### Business / PM
 
 Agent automation target:
 
@@ -205,6 +222,7 @@ meeting minutes draft
 WBS draft
 risk register draft
 weekly report draft
+stakeholder issue summary
 ```
 
 Human retained responsibility:
@@ -217,15 +235,17 @@ customer-safe wording
 escalation decision
 ```
 
-### Sales / Service Governance
+### Sales / Service
 
 Agent automation target:
 
 ```text
 customer profile draft
+need summary
 follow-up message draft
 proposal outline
 objection response suggestions
+renewal value summary
 ```
 
 Human retained responsibility:
@@ -237,11 +257,12 @@ claim compliance
 commercial position
 ```
 
-### HR / Training Governance
+### HR / Training
 
 Agent automation target:
 
 ```text
+role requirement summary
 task template draft
 first-pass rubric scoring
 learner report draft
@@ -268,14 +289,16 @@ How many learners can supervise an AI coding agent?
 New KPI:
 
 ```text
-How many repeatable manual work steps can be automated by AI Agents while preserving policy, evidence, approval, and accountability?
+How many value-chain manual work steps can be automated by AI Agents while preserving policy, evidence, approval, and accountability?
 ```
 
 Core metrics:
 
 ```text
-Agent Replacement Opportunity Count
-Replacement Level Mix
+Value Chain Coverage
+Agent Automation Opportunity Count
+Replacement / Automation Level Mix
+Time Saved Estimate
 Agent Task Eligibility Accuracy
 Authority Level Fit
 Verification Completeness
@@ -302,6 +325,5 @@ regulated professional qualification training
 ## Strategic claim
 
 ```text
-We do not merely train employees to supervise AI.
-We help enterprises automate repeatable work with AI Agents while keeping the work governable, auditable, and accountable.
+We help enterprises identify value-chain work steps that AI Agents can automate, then govern those Agent outputs so they can safely enter formal business workflows.
 ```
