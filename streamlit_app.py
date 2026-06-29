@@ -29,6 +29,8 @@ else:
             founder_dashboard()
         elif st.session_state.current_view == "queue":
             founder_queue()
+        elif st.session_state.current_view == "tasks":
+            tasks_page()
         elif st.session_state.current_view == "portfolio":
             portfolio_page()
         else:
@@ -43,4 +45,4 @@ else:
         else:
             consult_page()
 
-st.caption("AI Skill Growth OS · Concrete Business Operation Site · v4.9.0")
+st.caption("AI Skill Growth OS · Business Practice Exercise Bank · v4.9.1")
