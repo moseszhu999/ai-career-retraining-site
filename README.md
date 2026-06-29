@@ -1,11 +1,14 @@
-# AI Skill Growth Education Platform
+# AI Agent Delivery Readiness OS
 
-Public Streamlit landing page for:
+Formerly: AI Skill Growth Education Platform.
+
+Current strategic positioning:
 
 ```text
-AI 技能成长教育平台
-用 AI 更快学会新技能，并做出可展示、可交付、可变现的成果。
+AI Agent 交付能力证明系统
 ```
+
+The project is evolving from a generic AI skill growth / coding training site into an operations system for training employees to safely supervise AI coding agents in real enterprise delivery tasks.
 
 ## Streamlit deploy settings
 
@@ -18,30 +21,72 @@ Main file path: streamlit_app.py
 Python: 3.12
 ```
 
-## Current product line: AI Skill Growth OS
+## Current product line
 
-The project has moved from a public landing page into an operations prototype for AI-driven career and enterprise training delivery.
+The product is no longer positioned as a Java / HTML / coding course.
 
-Current operating loop:
+It is positioned as:
+
+```text
+AI Agent Delivery Readiness OS
+```
+
+Chinese product statement:
+
+```text
+帮助企业训练员工安全使用 Claude Code / Codex / Cursor 等 AI 编程 Agent 完成真实软件交付，并通过可审计 Proof Files 证明交付监督能力。
+```
+
+## Core market insight
+
+AI coding agents will compress low-level coding work. The enterprise problem is shifting from:
+
+```text
+Can this person write code?
+```
+
+to:
+
+```text
+Can this person safely supervise AI-generated code in a real enterprise repository?
+```
+
+The system therefore focuses on proving:
+
+```text
+business understanding
+agent task brief quality
+repository context and constraints
+diff review accuracy
+test / verification completeness
+security / permission / data risk detection
+merge / reject / revise judgment
+customer-safe explanation
+```
+
+## Current operating loop
 
 ```text
 Client / Cohort / Learner
--> Exercise
--> Assignment
--> Submission
--> Review
--> Proof Files
--> Leads
+-> Agent Delivery Assignment
+-> Agent Task Brief
+-> AI Agent Output
+-> Learner Diff Review
+-> Verification Evidence
+-> Agent Delivery Review
+-> Proof-of-Agent-Work File
+-> Customer Safe Delivery Pack
+-> Leads / Expansion
 -> Audit
--> Reports
--> Exports
 ```
 
-Latest implementation milestone:
+## Latest implementation milestones
 
 ```text
 v4.10.2 Customer Safe Delivery Pack
 v4.11.0 Database Foundation / Supabase Migration Contract
+v4.11.1 Repository Read Layer
+v4.12.0 AI Agent Delivery Readiness Strategy
 ```
 
 v4.10.2 separates internal delivery packs from customer-safe delivery packs. Customer-facing exports use a field whitelist and hide internal notes, raw audit logs, Founder/Agent operation details, contract value, and potential lead value.
@@ -54,7 +99,132 @@ frontend/data_repository.py
 docs/v4_11_database_migration_plan.md
 ```
 
+v4.11.1 migrates Reports and Exports to the repository read layer:
+
+```text
+docs/v4_11_1_repository_read_layer.md
+```
+
+v4.12.0 adds the AI Agent Delivery Readiness pivot:
+
+```text
+docs/v4_12_agent_delivery_readiness_strategy.md
+docs/agent_delivery_task_spec_v4_12.md
+supabase/agent_delivery_extension_v4_12.sql
+```
+
 The Streamlit demo still defaults to session DataFrames. Supabase is introduced as the next backend target, not as a breaking runtime dependency.
+
+## Primary customer
+
+First beachhead:
+
+```text
+Enterprise software delivery teams with legacy Java / Web / SQL systems.
+```
+
+Especially suitable for:
+
+```text
+Japan-facing offshore delivery teams
+Java / Spring / MyBatis / SQL maintenance projects
+new-hire onboarding
+AI coding tool adoption programs
+quality and delivery managers who need evidence, not course completion
+```
+
+## What this business sells
+
+Do not sell this as:
+
+```text
+Java course
+HTML course
+prompt course
+AI tool demo
+```
+
+Sell this as:
+
+```text
+reduced AI-generated delivery risk
+faster new-hire readiness
+auditable proof of AI-supervised software work
+customer-safe delivery reports
+repeatable enterprise task library
+```
+
+## Product packaging
+
+### 5-Day AI Agent Delivery Bootcamp
+
+Goal:
+
+```text
+Show one complete AI-supervised delivery cycle and generate one Proof-of-Agent-Work File.
+```
+
+### 4-Week AI Agent Delivery Readiness Cohort
+
+Goal:
+
+```text
+Train a small cohort to handle repeated AI-assisted maintenance tasks with increasing complexity.
+```
+
+### 12-Week Enterprise AI Delivery Operating System
+
+Goal:
+
+```text
+Build an internal company workflow for safe AI coding agent adoption.
+```
+
+## Proof-of-Agent-Work File
+
+A Proof File should prove supervision quality, not just output quality.
+
+Required sections:
+
+```text
+1. Business request
+2. Agent tool used
+3. Agent task brief
+4. Repository context and constraints
+5. Diff summary
+6. Verification evidence
+7. Risk checklist result
+8. Human corrections
+9. Final merge / reject / revise decision
+10. Customer-safe delivery explanation
+11. Reviewer score and comments
+```
+
+## Core KPI
+
+Old KPI:
+
+```text
+How many learners submitted coding homework?
+```
+
+New KPI:
+
+```text
+How many learners can safely supervise an AI coding agent through a real delivery task?
+```
+
+Core metrics:
+
+```text
+Agent Task Brief Quality
+Context Constraint Quality
+Diff Review Accuracy
+Verification Completeness
+Risk Detection Rate
+Customer Explanation Quality
+Proof-of-Agent-Work Ready Rate
+```
 
 ## Product resource library
 
@@ -76,262 +246,7 @@ enterprise AI training
 compliance boundaries
 ```
 
-## Product positioning
-
-This is not limited to new hires.
-
-The platform is for working professionals and freelancers who need to:
-
-```text
-learn new skills
-improve current skills
-prepare for promotion
-switch jobs or roles
-pursue higher-paying opportunities
-learn monetizable freelance skills
-package services and deliver client work
-build visible work artifacts
-```
-
-## Core learning loop
-
-```text
-set skill goal
-learn with AI
-practice real tasks
-receive AI feedback
-revise output
-build portfolio artifacts
-package the skill into work or service value
-present the result
-```
-
-## Entry product: 2-hour trial lesson
-
-The site includes a dedicated page for:
-
-```text
-AI 技能成长 2 小时体验课
-Recommended price: 99 / 199 RMB
-```
-
-Trial lesson promise:
-
-```text
-1. diagnose one skill goal
-2. turn the goal into one micro real task
-3. use AI to create the first draft
-4. run one round of AI feedback and revision
-5. produce one small visible artifact
-6. recommend the next learning path
-```
-
-Example trial tasks:
-
-```text
-promotion report outline
-job-switching portfolio sample
-freelance service package draft
-sales script
-test case / bug report
-Japanese business email
-team AI workflow template
-```
-
-## Main paid product: 5-day skill growth camp
-
-The repository includes a full 5-day curriculum:
-
-```text
-five_day_skill_growth_camp_curriculum.md
-```
-
-Positioning:
-
-```text
-2-hour trial lesson
--> 5-day skill growth camp
--> 4-week advanced cohort / freelance monetization camp / enterprise training
-```
-
-5-day camp promise:
-
-```text
-1 skill growth roadmap
-3 visible portfolio artifacts
-1 AI feedback revision record
-1 outcome presentation script
-1 30-day action plan
-1 instructor review
-```
-
-Recommended price:
-
-```text
-3999 RMB
-```
-
-## Freelance monetization camp
-
-The repository includes a full 5-day freelance monetization curriculum:
-
-```text
-five_day_freelance_monetization_camp_curriculum.md
-```
-
-Positioning:
-
-```text
-skill learning
--> sample artifacts
--> service package
--> quote sheet
--> client outreach script
--> delivery SOP
--> review and price-up path
-```
-
-5-day freelance camp promise:
-
-```text
-1 sellable service package
-3 sample cases
-1 quote sheet
-1 client outreach script / profile intro
-1 client requirement checklist
-1 delivery SOP
-1 review and price-up plan
-```
-
-Recommended price:
-
-```text
-4999 RMB
-```
-
-## Enterprise AI training program
-
-The repository includes a full B2B enterprise training outline:
-
-```text
-enterprise_ai_training_program_outline.md
-```
-
-Positioning:
-
-```text
-AI lecture
--> enterprise sample class
--> department training camp
--> customized enterprise AI skill system
-```
-
-Enterprise product tiers:
-
-```text
-sample class: 3000 - 8000 RMB
-department training camp: 30000 RMB+
-custom enterprise training: 50000 - 200000 RMB+
-```
-
-Enterprise deliverables:
-
-```text
-AI skill map
-high-frequency task list
-AI workflow templates
-prompt template library
-employee practice tasks
-scoring standards
-sample outputs
-common error library
-presentation templates
-training review report
-follow-up recommendations
-```
-
-## Instructor manual
-
-The repository includes a full instructor delivery manual:
-
-```text
-trial_lesson_instructor_manual.md
-```
-
-It covers:
-
-```text
-lesson goal
-pre-class preparation
-standard 120-minute flow
-opening script
-goal diagnosis questions
-six trial task templates
-AI feedback standards
-closing script
-post-class record template
-qualification standards
-compliance boundaries
-```
-
-## Sales follow-up SOP
-
-The site includes a dedicated `跟进SOP` page for converting Feishu / WeCom leads into paid trial lessons.
-
-It covers:
-
-```text
-lead status pipeline
-5-minute first reply scripts
-qualification questions
-booking and payment scripts
-after-class conversion scripts
-objection handling
-Feishu follow-up record template
-```
-
-Recommended lead statuses:
-
-```text
-新线索
-已联系
-已约时间
-已付款
-已上课
-已转化
-未转化
-```
-
-## Lead capture
-
-The booking page supports:
-
-```text
-booking form
-consultation summary
-TXT download
-CSV download
-mailto link
-session lead table
-optional webhook submission
-```
-
-## Mainland-first lead saving
-
-For mainland China use cases, do **not** make Google Sheet the primary option.
-
-Recommended options:
-
-```text
-1. Feishu / Lark robot webhook
-2. WeCom / Enterprise WeChat robot
-3. Tencent Cloud Function
-4. Alibaba Cloud Function
-5. Self-hosted backend API
-6. Tencent Docs / WPS / Kingsoft form workflow via CSV import
-```
-
-### Optional Streamlit Secrets
+## Optional Streamlit Secrets
 
 Feishu / Lark robot:
 
@@ -359,12 +274,6 @@ OWNER_EMAIL = "your-email@example.com"
 
 If `LEAD_WEBHOOK_URL` is not configured, the site still works, but leads must be downloaded as TXT/CSV or sent manually.
 
-## Product promise
-
-```text
-Help professionals and freelancers use AI to learn and improve job skills faster, then prove their ability through reviewable work outcomes, service packages, and career or income narratives.
-```
-
 ## Compliance boundary
 
 Do not sell this as:
@@ -376,4 +285,11 @@ guaranteed employment
 salary guarantee
 guaranteed freelance income
 regulated professional qualification training
+```
+
+## Strategic claim
+
+```text
+We do not teach employees to generate more code.
+We train employees to safely turn AI-generated code into enterprise-acceptable delivery.
 ```
