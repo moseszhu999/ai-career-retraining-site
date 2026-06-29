@@ -45,4 +45,4 @@ else:
         else:
             consult_page()
 
-st.caption("AI Skill Growth OS · Business Practice Exercise Bank · v4.9.1")
+st.caption("AI Skill Growth OS · Assignment Submission Review Records · v4.9.2")
