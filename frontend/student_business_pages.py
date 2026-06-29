@@ -7,6 +7,12 @@ from frontend import operation_state as ops
 from frontend.auth_context import current_learner, resolve_logged_in_learner_id
 from frontend.business_data import COHORTS, SERVICE_PACKAGES
 from frontend.exercise_bank import EXERCISES
+from frontend.permissions import (
+    can_request_agent_review,
+    can_submit_own_work,
+    forbidden_message,
+    permission_summary_html,
+)
 from frontend.state import chip, set_view
 
 
@@ -39,8 +45,9 @@ def student_home_page() -> None:
     proofs = _student_proofs(str(learner["learner_name"]))
     current_task = tasks.iloc[0] if not tasks.empty else None
     title = current_task["proof_task"] if current_task is not None else "暂无任务"
+    st.markdown(permission_summary_html(), unsafe_allow_html=True)
     st.markdown(f"""
-<div class='hero'><span class='pill hot'>我的业务首页 · v4.9.5</span><h1>{learner['learner_name']}：今天完成<br><span>{title}</span></h1><p>你已经登录为学员，系统会自动绑定你的学员档案，不需要再选择班级或选择学员。</p><span class='pill'>班级：{cohort['cohort_name']}</span><span class='pill'>小组：{learner['group']}</span><span class='pill'>状态：{learner['status']}</span></div>
+<div class='hero'><span class='pill hot'>我的业务首页 · v4.9.7</span><h1>{learner['learner_name']}：今天完成<br><span>{title}</span></h1><p>你已经登录为学员，系统会自动绑定你的学员档案，不需要再选择班级或选择学员。你只能操作自己的作答和记录。</p><span class='pill'>班级：{cohort['cohort_name']}</span><span class='pill'>小组：{learner['group']}</span><span class='pill'>状态：{learner['status']}</span></div>
 """, unsafe_allow_html=True)
     st.markdown(f"""
 <div class='grid4'>
@@ -74,9 +81,11 @@ def student_home_page() -> None:
 
 def student_tasks_page() -> None:
     learner = _student_learner()
+    learner_id = str(learner["learner_id"])
     tasks = _student_tasks()
+    st.markdown(permission_summary_html(), unsafe_allow_html=True)
     st.markdown(f"""
-<div class='panel'><span class='pill hot'>我的练习题 / Proof Task</span><h2>{learner['learner_name']} 的训练任务</h2><p>学员端只显示你自己的任务和练习，不再出现班级/学员选择器。</p></div>
+<div class='panel'><span class='pill hot'>我的练习题 / Proof Task</span><h2>{learner['learner_name']} 的训练任务</h2><p>学员端只显示你自己的任务和练习，不再出现班级/学员选择器。提交和 Agent 初评只允许本人操作。</p></div>
 """, unsafe_allow_html=True)
     if tasks.empty:
         st.info("当前没有任务。")
@@ -103,13 +112,14 @@ def student_tasks_page() -> None:
     st.markdown(f"""
 <div class='editor'><h3>{exercise['related_task']}</h3>{chip(exercise['difficulty'])}<span class='pill purple'>{exercise['module']}</span><p><b>业务场景：</b>{exercise['scenario']}</p><p><b>练习题：</b>{exercise['question']}</p><p><b>要求交付物：</b>{exercise['required_output']}</p></div>
 """, unsafe_allow_html=True)
-    answer_key = f"student_answer_{exercise['exercise_id']}_{learner['learner_id']}"
+    answer_key = f"student_answer_{exercise['exercise_id']}_{learner_id}"
     answer = st.text_area("我的练习作答", key=answer_key, height=220)
     c1, c2 = st.columns(2)
-    if c1.button("提交我的作答", type="primary", use_container_width=True):
+    can_submit = can_submit_own_work(learner_id)
+    if c1.button("提交我的作答", type="primary", use_container_width=True, disabled=not can_submit):
         assignment_id = ops.assign_exercise(
             exercise_id=str(exercise["exercise_id"]),
-            learner_id=str(learner["learner_id"]),
+            learner_id=learner_id,
             learner_name=str(learner["learner_name"]),
             cohort_id=str(learner["cohort_id"]),
             note=str(exercise["related_task"]),
@@ -117,15 +127,15 @@ def student_tasks_page() -> None:
         ops.submit_assignment(
             assignment_id=assignment_id,
             exercise_id=str(exercise["exercise_id"]),
-            learner_id=str(learner["learner_id"]),
+            learner_id=learner_id,
             learner_name=str(learner["learner_name"]),
             answer_summary=answer or "学员已提交练习作答。",
         )
         st.success("已提交到我的训练记录。")
         st.rerun()
-    if c2.button("生成我的 Agent Review", use_container_width=True):
+    if c2.button("生成我的 Agent Review", use_container_width=True, disabled=not can_request_agent_review(learner_id)):
         records = ops.joined_records()
-        mine = records[(records["exercise_id"] == exercise["exercise_id"]) & (records["learner_id"] == learner["learner_id"])]
+        mine = records[(records["exercise_id"] == exercise["exercise_id"]) & (records["learner_id"] == learner_id)]
         if mine.empty:
             st.warning("请先提交作答。")
         else:
@@ -141,6 +151,8 @@ def student_tasks_page() -> None:
             )
             st.success("Agent Review 已生成。")
             st.rerun()
+    if not can_submit:
+        st.warning(forbidden_message("提交该学员作答"))
     with st.expander("查看提示"):
         st.write(exercise["hint"])
 
@@ -148,6 +160,7 @@ def student_tasks_page() -> None:
 def student_records_page() -> None:
     learner = _student_learner()
     records = _student_records()
+    st.markdown(permission_summary_html(), unsafe_allow_html=True)
     st.markdown(f"<div class='panel'><span class='pill hot'>我的训练记录</span><h2>{learner['learner_name']} 的 Assignment / Submission / Review</h2><p>只显示当前登录学员自己的记录。</p></div>", unsafe_allow_html=True)
     if records.empty:
         st.info("暂无训练记录。")
@@ -164,6 +177,7 @@ def student_records_page() -> None:
 def student_proof_files_page() -> None:
     learner = _student_learner()
     proofs = _student_proofs(str(learner["learner_name"]))
+    st.markdown(permission_summary_html(), unsafe_allow_html=True)
     st.markdown(f"<div class='panel'><span class='pill hot'>我的 Proof Files</span><h2>{learner['learner_name']} 的作品证明</h2><p>只显示当前登录学员自己的 Proof Files。</p></div>", unsafe_allow_html=True)
     if proofs.empty:
         st.info("暂无 Proof Files。完成练习并通过 Founder 确认后会出现在这里。")
@@ -175,5 +189,6 @@ def student_proof_files_page() -> None:
 
 
 def student_service_page() -> None:
+    st.markdown(permission_summary_html(), unsafe_allow_html=True)
     st.markdown("<div class='panel'><span class='pill hot'>服务包</span><h2>可选训练服务包</h2><p>学员端只展示服务包，不展示销售线索后台。</p></div>", unsafe_allow_html=True)
     st.dataframe(SERVICE_PACKAGES, use_container_width=True, hide_index=True)
