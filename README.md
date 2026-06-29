@@ -49,6 +49,7 @@ docs/technical_architecture_v4_14.md
 docs/agent_replacement_business_architecture_v4_15.md
 docs/value_chain_blm_alignment_v4_16.md
 docs/blm_value_chain_scope_correction_v4_16_1.md
+docs/business_process_architecture_v4_17.md
 ```
 
 The architecture is now interpreted as:
@@ -63,11 +64,13 @@ BLM
    -> business design
    -> KPI direction
 -> Business Process / Business Architecture
+   -> end-to-end process flow
+   -> scenario process
    -> capability map
    -> operating model
-   -> scenario process
    -> Agent automation map
    -> governance process
+   -> process KPI model
 -> Application Architecture
 -> Data Architecture
 -> Technical Architecture
@@ -85,6 +88,7 @@ The system therefore focuses on:
 
 ```text
 value-chain stage
+business process
 manual work step
 Agent automation opportunity
 automation level
@@ -117,23 +121,26 @@ Market / Lead
 -> Management / HR / Finance / Compliance support
 ```
 
-The value chain analysis happens inside BLM. Business Architecture then turns selected value-chain opportunities into business processes and operating models.
+The value chain analysis happens inside BLM. Business Process Architecture then turns selected value-chain opportunities into end-to-end processes and operating models.
 
-## Operating loop
+## Business process operating loop
 
 ```text
 Value-chain work step identified in BLM
 -> Business process selected
+-> Manual work step decomposed
 -> Agent automation opportunity defined
 -> Agent governance policy applied
 -> Human authority level checked
 -> Agent executes automatable step
 -> Evidence captured
--> Risk classified
+-> System / Agent pre-check performed
+-> Human verifies exceptions and risk
 -> Approval / revise / escalate
 -> Audit retained
 -> Proof File generated
 -> Manager / customer report produced
+-> KPI updated
 ```
 
 ## Latest implementation milestones
@@ -148,6 +155,7 @@ v4.14.0 Consulting Architecture Pack
 v4.15.0 Agent Replacement Business Architecture
 v4.16.0 Value Chain-aware BLM
 v4.16.1 BLM Value Chain Scope Correction
+v4.17.0 Business Process Architecture
 ```
 
 ## What this business sells
@@ -169,6 +177,7 @@ Sell this as:
 ```text
 Value Chain AI Automation Diagnosis
 Agent automation opportunity map
+business process automation design
 Agent governance policy templates
 role-based authority model
 risk and approval workflow
@@ -195,15 +204,48 @@ R3 Workflow Step Automation
 R4 Conditional Autonomous Operation
 ```
 
-## Starter value-chain verticals
+## Starter business processes
 
-### Software / IT Delivery
+### Lead-to-Proposal Automation
+
+Value chain:
+
+```text
+Market / Lead -> Customer Need -> Solution / Proposal
+```
+
+Agent automation target:
+
+```text
+customer profile draft
+need summary
+proposal outline
+objection response suggestions
+follow-up action draft
+```
+
+Human retained responsibility:
+
+```text
+buying context judgment
+price and scope boundary
+claim compliance
+commercial position
+```
+
+### Requirement-to-Delivery Automation
+
+Value chain:
+
+```text
+Customer Need -> Delivery / Execution -> Quality / Acceptance
+```
 
 Agent automation target:
 
 ```text
 requirement summary
-candidate file detection
+candidate file / task detection
 code / test / report drafting
 first-pass consistency check
 acceptance summary
@@ -219,51 +261,13 @@ merge decision
 customer delivery responsibility
 ```
 
-### Business / PM
+### Training-to-Readiness Automation
 
-Agent automation target:
-
-```text
-meeting minutes draft
-WBS draft
-risk register draft
-weekly report draft
-stakeholder issue summary
-```
-
-Human retained responsibility:
+Value chain:
 
 ```text
-fact verification
-owner / deadline confirmation
-scope boundary
-customer-safe wording
-escalation decision
+HR / Training -> Readiness Decision -> Manager Report
 ```
-
-### Sales / Service
-
-Agent automation target:
-
-```text
-customer profile draft
-need summary
-follow-up message draft
-proposal outline
-objection response suggestions
-renewal value summary
-```
-
-Human retained responsibility:
-
-```text
-relationship judgment
-price and scope boundary
-claim compliance
-commercial position
-```
-
-### HR / Training
 
 Agent automation target:
 
@@ -284,6 +288,32 @@ fairness / privacy
 manager decision
 ```
 
+### Support-to-Knowledge Automation
+
+Value chain:
+
+```text
+Customer Success / Support -> Knowledge Management
+```
+
+Agent automation target:
+
+```text
+support issue summary
+response draft
+knowledge-base article draft
+troubleshooting checklist
+```
+
+Human retained responsibility:
+
+```text
+customer context
+fact verification
+customer-safe wording
+escalation decision
+```
+
 ## Core KPI
 
 Old KPI:
@@ -302,16 +332,16 @@ Core metrics:
 
 ```text
 Value Chain Coverage
+Process Automation Coverage
 Agent Automation Opportunity Count
 Automation Level Mix
 Time Saved Estimate
-Agent Task Eligibility Accuracy
-Authority Level Fit
-Verification Completeness
-Risk Classification Accuracy
-Approval Decision Quality
-Audit Evidence Completeness
-Customer / Manager Explanation Quality
+Evidence Completeness Rate
+Approval Cycle Time
+Exception Rate
+Customer-Safe Output Rate
+Proof File Ready Rate
+Readiness Conversion Rate
 Governance-Ready Proof File Rate
 ```
 
@@ -331,5 +361,5 @@ regulated professional qualification training
 ## Strategic claim
 
 ```text
-Use value chain analysis inside BLM to identify work steps AI Agents can automate, then design business processes, applications, data, and technology to govern those outputs.
+Use value chain analysis inside BLM to identify work steps AI Agents can automate, then convert those opportunities into governed business processes supported by applications, data, and technology.
 ```
