@@ -83,4 +83,4 @@ else:
         else:
             student_home_page()
 
-st.caption("AI Skill Growth OS · Database Foundation · v4.11.0")
+st.caption("AI Skill Growth OS · Repository Read Layer · v4.11.1")
