@@ -31,7 +31,7 @@ from frontend.student_business_pages import (
 )
 from frontend.styles import apply_styles
 
-st.set_page_config(page_title="AI Agent Delivery Readiness OS", page_icon="🚀", layout="wide")
+st.set_page_config(page_title="AI Agent Governance & Readiness OS", page_icon="🚀", layout="wide")
 
 apply_styles()
 init_state()
@@ -83,4 +83,4 @@ else:
         else:
             student_home_page()
 
-st.caption("AI Agent Delivery Readiness OS · Proof-of-Agent-Work · v4.12.0")
+st.caption("AI Agent Governance & Readiness OS · Governable Agent Work · v4.13.0")
