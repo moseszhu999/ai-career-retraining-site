@@ -12,6 +12,7 @@ from frontend.business_pages import (
     learners_page,
     review_queue_page,
 )
+from frontend.export_pages import export_page
 from frontend.operation_state import init_operation_state
 from frontend.pages import (
     founder_dashboard,
@@ -62,6 +63,8 @@ else:
             leads_page()
         elif view == "report":
             delivery_report_page()
+        elif view == "export":
+            export_page()
         elif view == "audit":
             audit_log_page()
         else:
@@ -80,4 +83,4 @@ else:
         else:
             student_home_page()
 
-st.caption("AI Skill Growth OS · Enterprise Delivery Report · v4.9.9")
+st.caption("AI Skill Growth OS · Data Export Delivery Pack · v4.10.0")
