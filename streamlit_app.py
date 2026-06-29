@@ -16,10 +16,16 @@ from frontend.pages import (
     founder_queue,
     portfolio_page,
     render_public_site,
-    student_dashboard,
     tasks_page,
 )
 from frontend.state import init_state
+from frontend.student_business_pages import (
+    student_home_page,
+    student_proof_files_page,
+    student_records_page,
+    student_service_page,
+    student_tasks_page,
+)
 from frontend.styles import apply_styles
 
 st.set_page_config(page_title="AI Skill Growth OS", page_icon="🚀", layout="wide")
@@ -56,16 +62,16 @@ else:
             founder_dashboard()
     else:
         if view == "dashboard":
-            student_dashboard()
+            student_home_page()
         elif view == "tasks":
-            tasks_page()
+            student_tasks_page()
         elif view == "assignments":
-            assignments_page()
+            student_records_page()
         elif view == "portfolio":
-            portfolio_page()
+            student_proof_files_page()
         elif view == "consult":
-            leads_page()
+            student_service_page()
         else:
-            student_dashboard()
+            student_home_page()
 
-st.caption("AI Skill Growth OS · Split Business Operation Console · v4.9.4")
+st.caption("AI Skill Growth OS · Learner Bound Login Flow · v4.9.5")
