@@ -36,6 +36,28 @@ def _student_proofs(learner_name: str) -> pd.DataFrame:
     return ops.proof_files()[ops.proof_files()["learner_name"] == learner_name]
 
 
+def _option_letter(option_text: str) -> str:
+    return option_text.split(".", 1)[0].strip() if "." in option_text else option_text[:1]
+
+
+def _mcq_score(exercise: pd.Series, selected_option: str) -> int:
+    correct = str(exercise.get("correct_option", "")).strip()
+    selected = _option_letter(selected_option)
+    if selected == correct:
+        return 88 if exercise["difficulty"] != "高级" else 84
+    return 62 if exercise["difficulty"] != "高级" else 58
+
+
+def _mcq_answer_summary(exercise: pd.Series, selected_option: str, note: str) -> str:
+    correct = str(exercise.get("correct_option", "")).strip()
+    selected = _option_letter(selected_option)
+    result = "正确" if selected == correct else "需复习"
+    summary = f"选择题作答：{selected_option}\n判定：{result}；正确选项：{correct}。"
+    if note:
+        summary += f"\n补充说明：{note}"
+    return summary
+
+
 def student_home_page() -> None:
     learner = _student_learner()
     cohort = COHORTS[COHORTS["cohort_id"] == learner["cohort_id"]].iloc[0]
@@ -82,7 +104,7 @@ def student_tasks_page() -> None:
     learner_id = str(learner["learner_id"])
     tasks = _student_tasks()
     st.markdown(f"""
-<div class='panel'><span class='pill hot'>我的练习题 / Proof Task</span><h2>{learner['learner_name']} 的训练任务</h2><p>学员端只显示你自己的任务和练习，不再出现班级/学员选择器。提交和 Agent 初评只允许本人操作。</p></div>
+<div class='panel'><span class='pill hot'>我的练习题 / Proof Task</span><h2>{learner['learner_name']} 的训练任务</h2><p>学员端以选择题为主，先降低操作成本；补充说明作为可选证据。</p></div>
 """, unsafe_allow_html=True)
     if tasks.empty:
         st.info("当前没有任务。")
@@ -96,24 +118,28 @@ def student_tasks_page() -> None:
 """, unsafe_allow_html=True)
         draft_key = f"student_draft_{task['task_id']}"
         st.session_state.setdefault(draft_key, task["draft"])
-        st.text_area("我的作答 / Proof 草稿", key=draft_key, height=220)
+        st.text_area("我的作答 / Proof 草稿", key=draft_key, height=160)
     st.markdown("<div class='section'>可练习题库</div>", unsafe_allow_html=True)
     module = st.selectbox("练习模块", ["全部"] + sorted(EXERCISES["module"].unique().tolist()))
     filtered = EXERCISES if module == "全部" else EXERCISES[EXERCISES["module"] == module]
-    st.dataframe(filtered[["exercise_id", "module", "difficulty", "related_task", "required_output"]], use_container_width=True, hide_index=True)
+    table_cols = ["exercise_id", "module", "difficulty", "question_type", "related_task", "required_output"]
+    st.dataframe(filtered[table_cols], use_container_width=True, hide_index=True)
     if filtered.empty:
         return
     labels = [f"{r.exercise_id} · {r.related_task}" for r in filtered.itertuples()]
     selected = st.selectbox("选择练习题", labels)
     exercise = filtered.iloc[labels.index(selected)]
     st.markdown(f"""
-<div class='editor'><h3>{exercise['related_task']}</h3>{chip(exercise['difficulty'])}<span class='pill purple'>{exercise['module']}</span><p><b>业务场景：</b>{exercise['scenario']}</p><p><b>练习题：</b>{exercise['question']}</p><p><b>要求交付物：</b>{exercise['required_output']}</p></div>
+<div class='editor'><h3>{exercise['related_task']}</h3>{chip(exercise['difficulty'])}<span class='pill purple'>{exercise['module']}</span><span class='pill'>{exercise['question_type']}</span><p><b>业务场景：</b>{exercise['scenario']}</p><p><b>题目：</b>{exercise['question']}</p><p><b>要求：</b>{exercise['required_output']}</p></div>
 """, unsafe_allow_html=True)
-    answer_key = f"student_answer_{exercise['exercise_id']}_{learner_id}"
-    answer = st.text_area("我的练习作答", key=answer_key, height=220)
+    options = list(exercise.get("options", []))
+    option_key = f"student_mcq_{exercise['exercise_id']}_{learner_id}"
+    selected_option = st.radio("选择答案", options, key=option_key) if options else ""
+    note_key = f"student_note_{exercise['exercise_id']}_{learner_id}"
+    note = st.text_area("补充说明（可选）", key=note_key, height=100, placeholder="可以简单说明为什么选择这个答案。")
     c1, c2 = st.columns(2)
     can_submit = can_submit_own_work(learner_id)
-    if c1.button("提交我的作答", type="primary", use_container_width=True, disabled=not can_submit):
+    if c1.button("提交我的选择", type="primary", use_container_width=True, disabled=not can_submit or not selected_option):
         assignment_id = ops.assign_exercise(
             exercise_id=str(exercise["exercise_id"]),
             learner_id=learner_id,
@@ -126,25 +152,27 @@ def student_tasks_page() -> None:
             exercise_id=str(exercise["exercise_id"]),
             learner_id=learner_id,
             learner_name=str(learner["learner_name"]),
-            answer_summary=answer or "学员已提交练习作答。",
+            answer_summary=_mcq_answer_summary(exercise, selected_option, note),
         )
-        st.success("已提交到我的训练记录。")
+        st.success("已提交选择题作答。")
         st.rerun()
-    if c2.button("生成我的 Agent Review", use_container_width=True, disabled=not can_request_agent_review(learner_id)):
+    if c2.button("生成我的 Agent Review", use_container_width=True, disabled=not can_request_agent_review(learner_id) or not selected_option):
         records = ops.joined_records()
         mine = records[(records["exercise_id"] == exercise["exercise_id"]) & (records["learner_id"] == learner_id)]
         if mine.empty:
             st.warning("请先提交作答。")
         else:
             submission_id = str(mine.iloc[-1]["submission_id"])
-            score = 82 if exercise["difficulty"] != "高级" else 78
+            score = _mcq_score(exercise, selected_option)
+            decision = "待Founder确认" if score >= 80 else "需复习"
+            proof_ready = "候选" if score >= 80 else "否"
             ops.review_submission(
                 submission_id=submission_id,
                 reviewer="Agent",
                 score=score,
-                review_comment=f"Agent Review：{exercise['rubric']}。",
-                decision="待Founder确认" if score >= 80 else "需修改",
-                proof_ready="候选" if score >= 80 else "否",
+                review_comment=f"Agent Review：{exercise['explanation']} {exercise['rubric']}",
+                decision=decision,
+                proof_ready=proof_ready,
             )
             st.success("Agent Review 已生成。")
             st.rerun()
@@ -152,6 +180,9 @@ def student_tasks_page() -> None:
         st.warning(forbidden_message("提交该学员作答"))
     with st.expander("查看提示"):
         st.write(exercise["hint"])
+    with st.expander("查看解析 / 标准答案"):
+        st.write(exercise["explanation"])
+        st.write(exercise["golden_solution"])
 
 
 def student_records_page() -> None:
