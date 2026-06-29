@@ -5,6 +5,7 @@ from datetime import datetime
 import pandas as pd
 import streamlit as st
 
+from frontend.audit_log import add_audit, init_audit_log, reset_audit_log
 from frontend.business_data import CONSULT_LEADS, PROOF_FILES, TASK_INSTANCES
 from frontend.training_records import ASSIGNMENTS, REVIEWS, SUBMISSIONS
 
@@ -16,6 +17,7 @@ def init_operation_state() -> None:
     these getters/actions can be replaced by Supabase reads/writes without
     rewriting page UI.
     """
+    init_audit_log()
     table_defaults = {
         "op_task_instances": TASK_INSTANCES.copy(),
         "op_assignments": ASSIGNMENTS.copy(),
@@ -100,6 +102,14 @@ def assign_exercise(*, exercise_id: str, learner_id: str, learner_name: str, coh
         "note": note,
     }
     st.session_state.op_assignments = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+    add_audit(
+        action="布置练习题",
+        object_type="Assignment",
+        object_id=assignment_id,
+        before_status="无",
+        after_status="已布置",
+        summary=f"{learner_name} · {exercise_id} · {note}",
+    )
     return assignment_id
 
 
@@ -107,6 +117,7 @@ def submit_assignment(*, assignment_id: str, exercise_id: str, learner_id: str, 
     sub_df = submissions().copy()
     existing = sub_df[sub_df["assignment_id"] == assignment_id]
     submitted_at = datetime.now().strftime("%Y-%m-%d %H:%M")
+    before_status = "未提交" if existing.empty else str(existing.iloc[0]["status"])
     if existing.empty:
         submission_id = _next_id("sub", sub_df, "submission_id")
         new_row = {
@@ -126,12 +137,21 @@ def submit_assignment(*, assignment_id: str, exercise_id: str, learner_id: str, 
         sub_df.loc[idx, ["status", "submitted_at", "answer_summary"]] = ["已提交", submitted_at, answer_summary or "已提交练习作答。"]
         st.session_state.op_submissions = sub_df
     _set_assignment_status(assignment_id, "已提交")
+    add_audit(
+        action="提交作答",
+        object_type="Submission",
+        object_id=submission_id,
+        before_status=before_status,
+        after_status="已提交",
+        summary=f"{learner_name} · {exercise_id} · {answer_summary[:60] if answer_summary else '已提交练习作答'}",
+    )
     return submission_id
 
 
 def review_submission(*, submission_id: str, reviewer: str, score: int, review_comment: str, decision: str, proof_ready: str) -> str:
     rev_df = reviews().copy()
     existing = rev_df[rev_df["submission_id"] == submission_id]
+    before_status = "未Review" if existing.empty else str(existing.iloc[0]["decision"])
     if existing.empty:
         review_id = _next_id("rev", rev_df, "review_id")
         new_row = {
@@ -152,6 +172,14 @@ def review_submission(*, submission_id: str, reviewer: str, score: int, review_c
     assignment_row = submissions()[submissions()["submission_id"] == submission_id]
     if not assignment_row.empty:
         _set_assignment_status(str(assignment_row.iloc[0]["assignment_id"]), "已确认" if proof_ready == "是" else decision)
+    add_audit(
+        action="生成/更新Review",
+        object_type="Review",
+        object_id=review_id,
+        before_status=before_status,
+        after_status=decision,
+        summary=f"{reviewer} · {submission_id} · {score}分 · Proof Ready={proof_ready}",
+    )
     return review_id
 
 
@@ -161,6 +189,7 @@ def mark_assignment_proof_ready(assignment_id: str) -> None:
     if row_df.empty:
         return
     row = row_df.iloc[0]
+    before_status = str(row.get("status", ""))
     submission_id = row.get("submission_id")
     if pd.notna(submission_id):
         review_submission(
@@ -172,10 +201,21 @@ def mark_assignment_proof_ready(assignment_id: str) -> None:
             proof_ready="是",
         )
     _set_assignment_status(assignment_id, "已确认")
-    add_proof_file_from_record(assignment_id)
+    proof_id = add_proof_file_from_record(assignment_id)
+    add_audit(
+        action="确认进入Proof Files",
+        object_type="Assignment",
+        object_id=assignment_id,
+        before_status=before_status,
+        after_status="已确认",
+        summary=f"生成 Proof File：{proof_id or '已存在'}",
+    )
 
 
 def request_resubmission(assignment_id: str) -> None:
+    records = joined_records()
+    row_df = records[records["assignment_id"] == assignment_id]
+    before_status = str(row_df.iloc[0].get("status", "")) if not row_df.empty else ""
     _set_assignment_status(assignment_id, "需修改")
     records = joined_records()
     row_df = records[records["assignment_id"] == assignment_id]
@@ -188,6 +228,14 @@ def request_resubmission(assignment_id: str) -> None:
             decision="需修改",
             proof_ready="否",
         )
+    add_audit(
+        action="要求重新提交",
+        object_type="Assignment",
+        object_id=assignment_id,
+        before_status=before_status,
+        after_status="需修改",
+        summary="Founder要求补充证据后重新提交。",
+    )
 
 
 def add_proof_file_from_record(assignment_id: str) -> str | None:
@@ -212,6 +260,14 @@ def add_proof_file_from_record(assignment_id: str) -> str | None:
         "note": "由 Assignment / Submission / Review 状态机生成。",
     }
     st.session_state.op_proof_files = pd.concat([proof_df, pd.DataFrame([new_row])], ignore_index=True)
+    add_audit(
+        action="新增Proof File",
+        object_type="ProofFile",
+        object_id=proof_id,
+        before_status="无",
+        after_status="可展示",
+        summary=f"{row['learner_name']} · {title}",
+    )
     return proof_id
 
 
@@ -228,19 +284,46 @@ def add_lead(*, client_name: str, package: str, need: str, potential_value: int,
         "note": note,
     }
     st.session_state.op_consult_leads = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+    add_audit(
+        action="新增Lead",
+        object_type="Lead",
+        object_id=lead_id,
+        before_status="无",
+        after_status="新线索",
+        summary=f"{client_name} · {need} · ¥{potential_value:,}",
+    )
     return lead_id
 
 
 def update_lead_status(lead_id: str, status: str) -> None:
     df = consult_leads().copy()
+    target = df[df["lead_id"] == lead_id]
+    before_status = str(target.iloc[0]["status"]) if not target.empty else ""
     df.loc[df["lead_id"] == lead_id, "status"] = status
     st.session_state.op_consult_leads = df
+    add_audit(
+        action="更新Lead状态",
+        object_type="Lead",
+        object_id=lead_id,
+        before_status=before_status,
+        after_status=status,
+        summary=f"Lead状态从 {before_status} 改为 {status}",
+    )
 
 
 def reset_operation_state() -> None:
     for key in ["op_task_instances", "op_assignments", "op_submissions", "op_reviews", "op_proof_files", "op_consult_leads"]:
         st.session_state.pop(key, None)
+    reset_audit_log()
     init_operation_state()
+    add_audit(
+        action="重置测试数据",
+        object_type="System",
+        object_id="demo-state",
+        before_status="已存在",
+        after_status="已重置",
+        summary="当前会话业务状态表和审计日志已重置。",
+    )
 
 
 def _set_assignment_status(assignment_id: str, status: str) -> None:
