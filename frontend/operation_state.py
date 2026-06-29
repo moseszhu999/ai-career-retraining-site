@@ -55,9 +55,38 @@ def consult_leads() -> pd.DataFrame:
     return st.session_state.op_consult_leads
 
 
+def _submission_view() -> pd.DataFrame:
+    df = submissions().copy()
+    defaults = {
+        "question_type": "",
+        "selected_option": "",
+        "correct_option": "",
+        "is_correct": pd.NA,
+        "auto_score": pd.NA,
+        "answer_note": "",
+    }
+    for col, default in defaults.items():
+        if col not in df.columns:
+            df[col] = default
+    return df
+
+
 def joined_records() -> pd.DataFrame:
+    submission_cols = [
+        "assignment_id",
+        "submission_id",
+        "submitted_at",
+        "answer_summary",
+        "question_type",
+        "selected_option",
+        "correct_option",
+        "is_correct",
+        "auto_score",
+        "answer_note",
+        "status",
+    ]
     merged = assignments().merge(
-        submissions()[["assignment_id", "submission_id", "submitted_at", "answer_summary", "status"]].rename(columns={"status": "submission_status"}),
+        _submission_view()[submission_cols].rename(columns={"status": "submission_status"}),
         on="assignment_id",
         how="left",
     )
@@ -70,15 +99,20 @@ def joined_records() -> pd.DataFrame:
 
 
 def operation_metrics() -> dict[str, int]:
+    submission_df = _submission_view()
+    correct_series = submission_df["is_correct"].fillna(False)
+    total_mcq = int((submission_df["question_type"] == "单选题").sum())
     return {
         "assignments": int(len(assignments())),
         "submissions": int(len(submissions())),
         "reviews": int(len(reviews())),
         "proof_ready": int((reviews()["proof_ready"] == "是").sum()),
-        "need_revision": int((reviews()["decision"] == "需修改").sum()),
+        "need_revision": int((reviews()["decision"].isin(["需修改", "需复习"])).sum()),
         "proof_files": int(len(proof_files())),
         "leads": int(len(consult_leads())),
         "lead_value": int(consult_leads()["potential_value"].sum()),
+        "mcq_total": total_mcq,
+        "mcq_correct": int(correct_series.sum()),
     }
 
 
@@ -113,11 +147,35 @@ def assign_exercise(*, exercise_id: str, learner_id: str, learner_name: str, coh
     return assignment_id
 
 
-def submit_assignment(*, assignment_id: str, exercise_id: str, learner_id: str, learner_name: str, answer_summary: str) -> str:
-    sub_df = submissions().copy()
+def submit_assignment(
+    *,
+    assignment_id: str,
+    exercise_id: str,
+    learner_id: str,
+    learner_name: str,
+    answer_summary: str,
+    question_type: str = "",
+    selected_option: str = "",
+    correct_option: str = "",
+    is_correct: bool | None = None,
+    auto_score: int | None = None,
+    answer_note: str = "",
+) -> str:
+    sub_df = _submission_view()
     existing = sub_df[sub_df["assignment_id"] == assignment_id]
     submitted_at = datetime.now().strftime("%Y-%m-%d %H:%M")
     before_status = "未提交" if existing.empty else str(existing.iloc[0]["status"])
+    submitted_values = {
+        "status": "已提交",
+        "submitted_at": submitted_at,
+        "answer_summary": answer_summary or "已提交练习作答。",
+        "question_type": question_type,
+        "selected_option": selected_option,
+        "correct_option": correct_option,
+        "is_correct": is_correct,
+        "auto_score": auto_score,
+        "answer_note": answer_note,
+    }
     if existing.empty:
         submission_id = _next_id("sub", sub_df, "submission_id")
         new_row = {
@@ -126,15 +184,14 @@ def submit_assignment(*, assignment_id: str, exercise_id: str, learner_id: str, 
             "exercise_id": exercise_id,
             "learner_id": learner_id,
             "learner_name": learner_name,
-            "status": "已提交",
-            "submitted_at": submitted_at,
-            "answer_summary": answer_summary or "已提交练习作答。",
+            **submitted_values,
         }
         st.session_state.op_submissions = pd.concat([sub_df, pd.DataFrame([new_row])], ignore_index=True)
     else:
         submission_id = str(existing.iloc[0]["submission_id"])
         idx = existing.index[0]
-        sub_df.loc[idx, ["status", "submitted_at", "answer_summary"]] = ["已提交", submitted_at, answer_summary or "已提交练习作答。"]
+        for col, value in submitted_values.items():
+            sub_df.loc[idx, col] = value
         st.session_state.op_submissions = sub_df
     _set_assignment_status(assignment_id, "已提交")
     add_audit(
@@ -318,11 +375,11 @@ def reset_operation_state() -> None:
     init_operation_state()
     add_audit(
         action="重置测试数据",
-        object_type="System",
-        object_id="demo-state",
-        before_status="已存在",
+        object_type="SessionState",
+        object_id="operation_state",
+        before_status="已加载",
         after_status="已重置",
-        summary="当前会话业务状态表和审计日志已重置。",
+        summary="恢复默认业务测试数据。",
     )
 
 
