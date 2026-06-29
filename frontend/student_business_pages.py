@@ -11,7 +11,6 @@ from frontend.permissions import (
     can_request_agent_review,
     can_submit_own_work,
     forbidden_message,
-    permission_summary_html,
 )
 from frontend.state import chip, set_view
 
@@ -45,7 +44,6 @@ def student_home_page() -> None:
     proofs = _student_proofs(str(learner["learner_name"]))
     current_task = tasks.iloc[0] if not tasks.empty else None
     title = current_task["proof_task"] if current_task is not None else "暂无任务"
-    st.markdown(permission_summary_html(), unsafe_allow_html=True)
     st.markdown(f"""
 <div class='hero'><span class='pill hot'>我的业务首页 · v4.9.7</span><h1>{learner['learner_name']}：今天完成<br><span>{title}</span></h1><p>你已经登录为学员，系统会自动绑定你的学员档案，不需要再选择班级或选择学员。你只能操作自己的作答和记录。</p><span class='pill'>班级：{cohort['cohort_name']}</span><span class='pill'>小组：{learner['group']}</span><span class='pill'>状态：{learner['status']}</span></div>
 """, unsafe_allow_html=True)
@@ -83,7 +81,6 @@ def student_tasks_page() -> None:
     learner = _student_learner()
     learner_id = str(learner["learner_id"])
     tasks = _student_tasks()
-    st.markdown(permission_summary_html(), unsafe_allow_html=True)
     st.markdown(f"""
 <div class='panel'><span class='pill hot'>我的练习题 / Proof Task</span><h2>{learner['learner_name']} 的训练任务</h2><p>学员端只显示你自己的任务和练习，不再出现班级/学员选择器。提交和 Agent 初评只允许本人操作。</p></div>
 """, unsafe_allow_html=True)
@@ -160,7 +157,6 @@ def student_tasks_page() -> None:
 def student_records_page() -> None:
     learner = _student_learner()
     records = _student_records()
-    st.markdown(permission_summary_html(), unsafe_allow_html=True)
     st.markdown(f"<div class='panel'><span class='pill hot'>我的训练记录</span><h2>{learner['learner_name']} 的 Assignment / Submission / Review</h2><p>只显示当前登录学员自己的记录。</p></div>", unsafe_allow_html=True)
     if records.empty:
         st.info("暂无训练记录。")
@@ -177,7 +173,6 @@ def student_records_page() -> None:
 def student_proof_files_page() -> None:
     learner = _student_learner()
     proofs = _student_proofs(str(learner["learner_name"]))
-    st.markdown(permission_summary_html(), unsafe_allow_html=True)
     st.markdown(f"<div class='panel'><span class='pill hot'>我的 Proof Files</span><h2>{learner['learner_name']} 的作品证明</h2><p>只显示当前登录学员自己的 Proof Files。</p></div>", unsafe_allow_html=True)
     if proofs.empty:
         st.info("暂无 Proof Files。完成练习并通过 Founder 确认后会出现在这里。")
@@ -189,6 +184,5 @@ def student_proof_files_page() -> None:
 
 
 def student_service_page() -> None:
-    st.markdown(permission_summary_html(), unsafe_allow_html=True)
     st.markdown("<div class='panel'><span class='pill hot'>服务包</span><h2>可选训练服务包</h2><p>学员端只展示服务包，不展示销售线索后台。</p></div>", unsafe_allow_html=True)
     st.dataframe(SERVICE_PACKAGES, use_container_width=True, hide_index=True)
