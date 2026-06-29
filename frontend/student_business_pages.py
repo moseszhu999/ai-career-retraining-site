@@ -36,6 +36,10 @@ def _student_proofs(learner_name: str) -> pd.DataFrame:
     return ops.proof_files()[ops.proof_files()["learner_name"] == learner_name]
 
 
+def _existing_cols(df: pd.DataFrame, cols: list[str]) -> list[str]:
+    return [c for c in cols if c in df.columns]
+
+
 def _option_letter(option_text: str) -> str:
     return option_text.split(".", 1)[0].strip() if "." in option_text else option_text[:1]
 
@@ -77,16 +81,17 @@ def student_home_page() -> None:
     tasks = _student_tasks()
     records = _student_records()
     proofs = _student_proofs(str(learner["learner_name"]))
+    wrong = ops.wrong_answer_records(str(learner["learner_id"]))
     current_task = tasks.iloc[0] if not tasks.empty else None
     title = current_task["proof_task"] if current_task is not None else "暂无任务"
     st.markdown(f"""
-<div class='hero'><span class='pill hot'>我的业务首页 · v4.9.7</span><h1>{learner['learner_name']}：今天完成<br><span>{title}</span></h1><p>你已经登录为学员，系统会自动绑定你的学员档案，不需要再选择班级或选择学员。你只能操作自己的作答和记录。</p><span class='pill'>班级：{cohort['cohort_name']}</span><span class='pill'>小组：{learner['group']}</span><span class='pill'>状态：{learner['status']}</span></div>
+<div class='hero'><span class='pill hot'>我的业务首页 · v4.20.0</span><h1>{learner['learner_name']}：今天完成<br><span>{title}</span></h1><p>你已经登录为学员，系统会自动绑定你的学员档案。选择题会自动记录选项、正确项、正确率和错题复习。</p><span class='pill'>班级：{cohort['cohort_name']}</span><span class='pill'>小组：{learner['group']}</span><span class='pill'>状态：{learner['status']}</span></div>
 """, unsafe_allow_html=True)
     st.markdown(f"""
 <div class='grid4'>
   <div class='card'><span class='mini'>训练进度</span><div class='metric'>{learner['progress']}%</div></div>
   <div class='card'><span class='mini'>我的任务</span><div class='metric'>{len(tasks)}</div></div>
-  <div class='card'><span class='mini'>我的记录</span><div class='metric'>{len(records)}</div></div>
+  <div class='card'><span class='mini'>我的错题</span><div class='metric'>{len(wrong)}</div></div>
   <div class='card'><span class='mini'>我的 Proof Files</span><div class='metric'>{len(proofs)}</div></div>
 </div>
 """, unsafe_allow_html=True)
@@ -94,7 +99,7 @@ def student_home_page() -> None:
     if c1.button("打开我的练习题", type="primary", use_container_width=True):
         set_view("tasks")
         st.rerun()
-    if c2.button("查看我的记录", use_container_width=True):
+    if c2.button("查看我的错题/记录", use_container_width=True):
         set_view("assignments")
         st.rerun()
     if c3.button("查看我的 Proof Files", use_container_width=True):
@@ -109,7 +114,7 @@ def student_home_page() -> None:
     if records.empty:
         st.info("当前没有你的训练记录。")
     else:
-        display_cols = ["assignment_id", "exercise_id", "status", "submitted_at", "selected_option", "is_correct", "score", "decision", "proof_ready"]
+        display_cols = _existing_cols(records, ["assignment_id", "exercise_id", "status", "submitted_at", "selected_option", "is_correct", "score", "decision", "proof_ready"])
         st.dataframe(records[display_cols], use_container_width=True, hide_index=True)
 
 
@@ -204,11 +209,12 @@ def student_tasks_page() -> None:
 def student_records_page() -> None:
     learner = _student_learner()
     records = _student_records()
-    st.markdown(f"<div class='panel'><span class='pill hot'>我的训练记录</span><h2>{learner['learner_name']} 的 Assignment / Submission / Review</h2><p>只显示当前登录学员自己的记录。</p></div>", unsafe_allow_html=True)
+    wrong = ops.wrong_answer_records(str(learner["learner_id"]))
+    st.markdown(f"<div class='panel'><span class='pill hot'>我的训练记录</span><h2>{learner['learner_name']} 的 Assignment / Submission / Review</h2><p>这里显示选择、正确答案、自动初评和错题复习。</p></div>", unsafe_allow_html=True)
     if records.empty:
         st.info("暂无训练记录。")
         return
-    display_cols = ["assignment_id", "exercise_id", "status", "submitted_at", "selected_option", "correct_option", "is_correct", "auto_score", "score", "decision", "proof_ready"]
+    display_cols = _existing_cols(records, ["assignment_id", "exercise_id", "status", "submitted_at", "selected_option", "correct_option", "is_correct", "auto_score", "score", "decision", "proof_ready"])
     st.dataframe(records[display_cols], use_container_width=True, hide_index=True)
     labels = [f"{r.assignment_id} · {r.exercise_id} · {r.status}" for r in records.itertuples()]
     selected = st.selectbox("查看我的记录详情", labels)
@@ -216,6 +222,16 @@ def student_records_page() -> None:
     st.markdown(f"""
 <div class='detail'><h3>{row['exercise_id']}</h3>{chip(row['status'])}<p><b>提交时间：</b>{row['submitted_at'] if pd.notna(row['submitted_at']) else '未提交'}<br><b>选择：</b>{row['selected_option'] if pd.notna(row.get('selected_option')) else '暂无'} / 正确：{row['correct_option'] if pd.notna(row.get('correct_option')) else '暂无'}<br><b>提交摘要：</b>{row['answer_summary'] if pd.notna(row['answer_summary']) else '暂无'}<br><b>Review：</b>{row['decision'] if pd.notna(row['decision']) else '未Review'}<br><b>Proof Ready：</b>{row['proof_ready'] if pd.notna(row['proof_ready']) else '否'}</p></div>
 """, unsafe_allow_html=True)
+    st.markdown("<div class='section'>我的错题复习</div>", unsafe_allow_html=True)
+    if wrong.empty:
+        st.success("当前没有错题。")
+    else:
+        wrong_cols = _existing_cols(wrong, ["exercise_id", "module", "related_task", "selected_option", "correct_option", "explanation", "hint"])
+        st.dataframe(wrong[wrong_cols], use_container_width=True, hide_index=True)
+        wrong_labels = [f"{r.exercise_id} · {r.related_task}" for r in wrong.itertuples()]
+        selected_wrong = st.selectbox("选择错题查看解析", wrong_labels)
+        wrow = wrong.iloc[wrong_labels.index(selected_wrong)]
+        st.markdown(f"<div class='detail'><h3>{wrow['related_task']}</h3><p><b>你的选择：</b>{wrow['selected_option']}<br><b>正确答案：</b>{wrow['correct_option']}<br><b>解析：</b>{wrow.get('explanation', '暂无')}<br><b>提示：</b>{wrow.get('hint', '暂无')}</p></div>", unsafe_allow_html=True)
 
 
 def student_proof_files_page() -> None:
