@@ -18,6 +18,44 @@ Main file path: streamlit_app.py
 Python: 3.12
 ```
 
+## Current product line: AI Skill Growth OS
+
+The project has moved from a public landing page into an operations prototype for AI-driven career and enterprise training delivery.
+
+Current operating loop:
+
+```text
+Client / Cohort / Learner
+-> Exercise
+-> Assignment
+-> Submission
+-> Review
+-> Proof Files
+-> Leads
+-> Audit
+-> Reports
+-> Exports
+```
+
+Latest implementation milestone:
+
+```text
+v4.10.2 Customer Safe Delivery Pack
+v4.11.0 Database Foundation / Supabase Migration Contract
+```
+
+v4.10.2 separates internal delivery packs from customer-safe delivery packs. Customer-facing exports use a field whitelist and hide internal notes, raw audit logs, Founder/Agent operation details, contract value, and potential lead value.
+
+v4.11.0 adds the durable SaaS migration foundation:
+
+```text
+supabase/schema_v4_11.sql
+frontend/data_repository.py
+docs/v4_11_database_migration_plan.md
+```
+
+The Streamlit demo still defaults to session DataFrames. Supabase is introduced as the next backend target, not as a breaking runtime dependency.
+
 ## Product resource library
 
 The repository includes a unified resource index:
@@ -286,7 +324,7 @@ Recommended options:
 
 ```text
 1. Feishu / Lark robot webhook
-2. WeCom / Enterprise WeChat robot webhook
+2. WeCom / Enterprise WeChat robot
 3. Tencent Cloud Function
 4. Alibaba Cloud Function
 5. Self-hosted backend API
