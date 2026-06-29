@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import streamlit as st
 
+from frontend.audit_pages import audit_log_page
 from frontend.business_pages import (
     assignments_page,
     clients_page,
@@ -58,6 +59,8 @@ else:
             portfolio_page()
         elif view == "consult":
             leads_page()
+        elif view == "audit":
+            audit_log_page()
         else:
             founder_dashboard()
     else:
@@ -74,4 +77,4 @@ else:
         else:
             student_home_page()
 
-st.caption("AI Skill Growth OS · Role Permission Matrix · v4.9.7")
+st.caption("AI Skill Growth OS · Operation Audit Log · v4.9.8")
