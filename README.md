@@ -28,13 +28,13 @@ Python: 3.12
 
 ## Correct consulting architecture sequence
 
-The correct consulting-company architecture sequence is:
+The correct consulting-company architecture sequence remains:
 
 ```text
-BLM -> Business Architecture -> Application Architecture -> Data Architecture -> Technical Architecture
+BLM -> Business Process / Business Architecture -> Application Architecture -> Data Architecture -> Technical Architecture
 ```
 
-Value chain belongs in BLM as the bridge from strategy to business architecture. Scenario process belongs inside Business Architecture, not as a separate peer layer.
+Value chain is one part of BLM. It is not a separate layer after BLM. Scenario process belongs inside Business Process / Business Architecture.
 
 ## Consulting architecture pack
 
@@ -48,22 +48,26 @@ docs/data_architecture_v4_14.md
 docs/technical_architecture_v4_14.md
 docs/agent_replacement_business_architecture_v4_15.md
 docs/value_chain_blm_alignment_v4_16.md
+docs/blm_value_chain_scope_correction_v4_16_1.md
 ```
 
-The architecture is now:
+The architecture is now interpreted as:
 
 ```text
 BLM
    -> market insight
    -> strategic intent
-   -> value chain
+   -> value chain analysis
    -> value-chain automation opportunity
--> Business Architecture
+   -> innovation focus
+   -> business design
+   -> KPI direction
+-> Business Process / Business Architecture
    -> capability map
    -> operating model
    -> scenario process
    -> Agent automation map
-   -> KPI model
+   -> governance process
 -> Application Architecture
 -> Data Architecture
 -> Technical Architecture
@@ -83,7 +87,7 @@ The system therefore focuses on:
 value-chain stage
 manual work step
 Agent automation opportunity
-replacement / automation level
+automation level
 task eligibility
 human authority level
 Agent work request
@@ -113,16 +117,17 @@ Market / Lead
 -> Management / HR / Finance / Compliance support
 ```
 
-The OS maps AI Agent automation opportunities and governance requirements across this value chain.
+The value chain analysis happens inside BLM. Business Architecture then turns selected value-chain opportunities into business processes and operating models.
 
 ## Operating loop
 
 ```text
-Value-chain work step
--> Agent automation opportunity
--> Agent governance policy
--> Human authority level
--> Agent executes replaceable / automatable step
+Value-chain work step identified in BLM
+-> Business process selected
+-> Agent automation opportunity defined
+-> Agent governance policy applied
+-> Human authority level checked
+-> Agent executes automatable step
 -> Evidence captured
 -> Risk classified
 -> Approval / revise / escalate
@@ -142,6 +147,7 @@ v4.13.0 AI Agent Governance & Readiness Strategy
 v4.14.0 Consulting Architecture Pack
 v4.15.0 Agent Replacement Business Architecture
 v4.16.0 Value Chain-aware BLM
+v4.16.1 BLM Value Chain Scope Correction
 ```
 
 ## What this business sells
@@ -162,7 +168,7 @@ Sell this as:
 
 ```text
 Value Chain AI Automation Diagnosis
-Agent replacement opportunity map
+Agent automation opportunity map
 Agent governance policy templates
 role-based authority model
 risk and approval workflow
@@ -172,14 +178,14 @@ customer-safe governance reports
 Proof Files for AI-supervised enterprise tasks
 ```
 
-## Replacement vs accountability boundary
+## Automation vs accountability boundary
 
 ```text
 Agent automates repeatable work steps.
 Human / organization retains authority, responsibility, and accountability.
 ```
 
-Replacement / automation levels:
+Automation levels:
 
 ```text
 R0 No Automation
@@ -297,7 +303,7 @@ Core metrics:
 ```text
 Value Chain Coverage
 Agent Automation Opportunity Count
-Replacement / Automation Level Mix
+Automation Level Mix
 Time Saved Estimate
 Agent Task Eligibility Accuracy
 Authority Level Fit
@@ -325,5 +331,5 @@ regulated professional qualification training
 ## Strategic claim
 
 ```text
-We help enterprises identify value-chain work steps that AI Agents can automate, then govern those Agent outputs so they can safely enter formal business workflows.
+Use value chain analysis inside BLM to identify work steps AI Agents can automate, then design business processes, applications, data, and technology to govern those outputs.
 ```
