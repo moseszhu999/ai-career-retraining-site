@@ -83,4 +83,4 @@ else:
         else:
             student_home_page()
 
-st.caption("AI Agent Governance & Readiness OS · Governable Agent Work · v4.13.0")
+st.caption("AI Agent Governance & Readiness OS · Consulting Architecture Pack · v4.14.0")
