@@ -50,6 +50,7 @@ docs/agent_replacement_business_architecture_v4_15.md
 docs/value_chain_blm_alignment_v4_16.md
 docs/blm_value_chain_scope_correction_v4_16_1.md
 docs/business_process_architecture_v4_17.md
+docs/application_architecture_refresh_v4_18.md
 ```
 
 The architecture is now interpreted as:
@@ -72,6 +73,11 @@ BLM
    -> governance process
    -> process KPI model
 -> Application Architecture
+   -> value chain diagnosis applications
+   -> automation opportunity applications
+   -> business process applications
+   -> governed Agent work applications
+   -> evidence / approval / proof / report applications
 -> Data Architecture
 -> Technical Architecture
 ```
@@ -121,7 +127,7 @@ Market / Lead
 -> Management / HR / Finance / Compliance support
 ```
 
-The value chain analysis happens inside BLM. Business Process Architecture then turns selected value-chain opportunities into end-to-end processes and operating models.
+The value chain analysis happens inside BLM. Business Process Architecture turns selected value-chain opportunities into end-to-end processes. Application Architecture turns those processes into system modules.
 
 ## Business process operating loop
 
@@ -143,6 +149,27 @@ Value-chain work step identified in BLM
 -> KPI updated
 ```
 
+## Application architecture domains
+
+v4.18.0 refreshes the application architecture around these domains:
+
+```text
+Value Chain Diagnosis Center
+Automation Opportunity Map
+Business Process Center
+Governance Policy Center
+Authority & Role Center
+Agent Work Request Center
+Evidence & Verification Center
+Risk & Approval Workflow Center
+Proof File Center
+Readiness & Capability Center
+Reporting & Export Center
+Audit & Compliance Center
+Client / Cohort / Department Center
+Service & Commercialization Center
+```
+
 ## Latest implementation milestones
 
 ```text
@@ -156,6 +183,7 @@ v4.15.0 Agent Replacement Business Architecture
 v4.16.0 Value Chain-aware BLM
 v4.16.1 BLM Value Chain Scope Correction
 v4.17.0 Business Process Architecture
+v4.18.0 Application Architecture Refresh
 ```
 
 ## What this business sells
@@ -361,5 +389,5 @@ regulated professional qualification training
 ## Strategic claim
 
 ```text
-Use value chain analysis inside BLM to identify work steps AI Agents can automate, then convert those opportunities into governed business processes supported by applications, data, and technology.
+Use value chain analysis inside BLM to identify work steps AI Agents can automate, then convert those opportunities into governed business processes and application modules supported by data and technology architecture.
 ```
