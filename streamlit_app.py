@@ -9,11 +9,11 @@ from frontend.business_pages import (
     leads_page,
     learners_page,
     render_business_top,
+    review_queue_page,
 )
 from frontend.operation_state import init_operation_state
 from frontend.pages import (
     founder_dashboard,
-    founder_queue,
     portfolio_page,
     render_public_site,
     tasks_page,
@@ -53,7 +53,7 @@ else:
         elif view == "assignments":
             assignments_page()
         elif view == "queue":
-            founder_queue()
+            review_queue_page()
         elif view == "portfolio":
             portfolio_page()
         elif view == "consult":
@@ -74,4 +74,4 @@ else:
         else:
             student_home_page()
 
-st.caption("AI Skill Growth OS · Learner Bound Login Flow · v4.9.5")
+st.caption("AI Skill Growth OS · Founder Operation Context · v4.9.6")
