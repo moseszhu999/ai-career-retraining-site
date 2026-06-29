@@ -58,6 +58,19 @@ def _mcq_answer_summary(exercise: pd.Series, selected_option: str, note: str) ->
     return summary
 
 
+def _mcq_payload(exercise: pd.Series, selected_option: str, note: str) -> dict[str, object]:
+    selected = _option_letter(selected_option)
+    correct = str(exercise.get("correct_option", "")).strip()
+    return {
+        "question_type": str(exercise.get("question_type", "单选题")),
+        "selected_option": selected,
+        "correct_option": correct,
+        "is_correct": selected == correct,
+        "auto_score": _mcq_score(exercise, selected_option),
+        "answer_note": note,
+    }
+
+
 def student_home_page() -> None:
     learner = _student_learner()
     cohort = COHORTS[COHORTS["cohort_id"] == learner["cohort_id"]].iloc[0]
@@ -96,7 +109,8 @@ def student_home_page() -> None:
     if records.empty:
         st.info("当前没有你的训练记录。")
     else:
-        st.dataframe(records[["assignment_id", "exercise_id", "status", "submitted_at", "score", "decision", "proof_ready"]], use_container_width=True, hide_index=True)
+        display_cols = ["assignment_id", "exercise_id", "status", "submitted_at", "selected_option", "is_correct", "score", "decision", "proof_ready"]
+        st.dataframe(records[display_cols], use_container_width=True, hide_index=True)
 
 
 def student_tasks_page() -> None:
@@ -137,6 +151,7 @@ def student_tasks_page() -> None:
     selected_option = st.radio("选择答案", options, key=option_key) if options else ""
     note_key = f"student_note_{exercise['exercise_id']}_{learner_id}"
     note = st.text_area("补充说明（可选）", key=note_key, height=100, placeholder="可以简单说明为什么选择这个答案。")
+    payload = _mcq_payload(exercise, selected_option, note) if selected_option else {}
     c1, c2 = st.columns(2)
     can_submit = can_submit_own_work(learner_id)
     if c1.button("提交我的选择", type="primary", use_container_width=True, disabled=not can_submit or not selected_option):
@@ -153,6 +168,7 @@ def student_tasks_page() -> None:
             learner_id=learner_id,
             learner_name=str(learner["learner_name"]),
             answer_summary=_mcq_answer_summary(exercise, selected_option, note),
+            **payload,
         )
         st.success("已提交选择题作答。")
         st.rerun()
@@ -163,7 +179,7 @@ def student_tasks_page() -> None:
             st.warning("请先提交作答。")
         else:
             submission_id = str(mine.iloc[-1]["submission_id"])
-            score = _mcq_score(exercise, selected_option)
+            score = int(payload.get("auto_score", _mcq_score(exercise, selected_option)))
             decision = "待Founder确认" if score >= 80 else "需复习"
             proof_ready = "候选" if score >= 80 else "否"
             ops.review_submission(
@@ -192,12 +208,13 @@ def student_records_page() -> None:
     if records.empty:
         st.info("暂无训练记录。")
         return
-    st.dataframe(records[["assignment_id", "exercise_id", "status", "submitted_at", "answer_summary", "score", "decision", "proof_ready"]], use_container_width=True, hide_index=True)
+    display_cols = ["assignment_id", "exercise_id", "status", "submitted_at", "selected_option", "correct_option", "is_correct", "auto_score", "score", "decision", "proof_ready"]
+    st.dataframe(records[display_cols], use_container_width=True, hide_index=True)
     labels = [f"{r.assignment_id} · {r.exercise_id} · {r.status}" for r in records.itertuples()]
     selected = st.selectbox("查看我的记录详情", labels)
     row = records.iloc[labels.index(selected)]
     st.markdown(f"""
-<div class='detail'><h3>{row['exercise_id']}</h3>{chip(row['status'])}<p><b>提交时间：</b>{row['submitted_at'] if pd.notna(row['submitted_at']) else '未提交'}<br><b>提交摘要：</b>{row['answer_summary'] if pd.notna(row['answer_summary']) else '暂无'}<br><b>Review：</b>{row['decision'] if pd.notna(row['decision']) else '未Review'}<br><b>Proof Ready：</b>{row['proof_ready'] if pd.notna(row['proof_ready']) else '否'}</p></div>
+<div class='detail'><h3>{row['exercise_id']}</h3>{chip(row['status'])}<p><b>提交时间：</b>{row['submitted_at'] if pd.notna(row['submitted_at']) else '未提交'}<br><b>选择：</b>{row['selected_option'] if pd.notna(row.get('selected_option')) else '暂无'} / 正确：{row['correct_option'] if pd.notna(row.get('correct_option')) else '暂无'}<br><b>提交摘要：</b>{row['answer_summary'] if pd.notna(row['answer_summary']) else '暂无'}<br><b>Review：</b>{row['decision'] if pd.notna(row['decision']) else '未Review'}<br><b>Proof Ready：</b>{row['proof_ready'] if pd.notna(row['proof_ready']) else '否'}</p></div>
 """, unsafe_allow_html=True)
 
 
