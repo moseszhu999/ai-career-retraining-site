@@ -13,7 +13,7 @@ Current strategic positioning:
 企业 AI Agent 治理与能力证明系统
 ```
 
-The project is evolving from coding training and AI Agent supervision into an enterprise operating system for making AI Agent work governable, auditable, and accountable.
+The project is evolving from coding training and AI Agent supervision into an enterprise operating system for automating repeatable manual work with AI Agents while keeping work governable, auditable, and accountable.
 
 ## Streamlit deploy settings
 
@@ -26,29 +26,17 @@ Main file path: streamlit_app.py
 Python: 3.12
 ```
 
-## Current product line
+## Correct consulting architecture sequence
 
-The product is no longer positioned as a Java / HTML / coding course, and it should not remain limited to AI Agent supervision.
-
-It is positioned as:
+The correct consulting-company architecture sequence is:
 
 ```text
-AI Agent Governance & Readiness OS
+BLM -> Business Architecture -> Application Architecture -> Data Architecture -> Technical Architecture
 ```
 
-Chinese product statement:
-
-```text
-帮助企业定义、授权、验证、审批和审计 AI Agent 如何进入真实工作流，并通过 Proof Files 证明员工与岗位的 AI Agent 协同能力。
-```
+Scenario process belongs inside Business Architecture, not as a separate peer layer.
 
 ## Consulting architecture pack
-
-v4.14.0 turns the repository into a consulting-grade enterprise architecture pack:
-
-```text
-BLM -> Scenario Process -> Application Architecture -> Data Architecture -> Technical Architecture
-```
 
 Core architecture documents:
 
@@ -58,25 +46,48 @@ docs/scenario_process_architecture_v4_14.md
 docs/application_architecture_v4_14.md
 docs/data_architecture_v4_14.md
 docs/technical_architecture_v4_14.md
+docs/agent_replacement_business_architecture_v4_15.md
+```
+
+v4.15.0 adds the missing breakout layer:
+
+```text
+Agent Replacement Business Architecture
+```
+
+The business architecture is now:
+
+```text
+BLM
+-> Business Architecture
+   -> capability map
+   -> operating model
+   -> scenario process
+   -> Agent replacement map
+   -> KPI model
+-> Application Architecture
+-> Data Architecture
+-> Technical Architecture
 ```
 
 ## Core market insight
 
-Low-level coding and routine Agent supervision will both be compressed by more capable agents. The long-term enterprise problem is shifting from:
+The durable enterprise question is not only:
 
 ```text
-Can this person supervise AI output?
+Can this enterprise govern AI Agent work?
 ```
 
-to:
+It is also:
 
 ```text
-Can this enterprise safely let AI Agent work enter formal business workflows?
+Which repeatable manual work steps can be automated by AI Agents while preserving policy, evidence, approval, and accountability?
 ```
 
-The system therefore focuses on proving and governing:
+The system therefore focuses on:
 
 ```text
+Agent replacement opportunity
 task eligibility
 human authority level
 Agent work request
@@ -90,20 +101,20 @@ readiness score
 manager / customer report
 ```
 
-## Current operating loop
+## Operating loop
 
 ```text
 Business task
--> Agent eligibility rule
+-> Agent replacement eligibility
+-> Agent governance policy
 -> Human authority level
--> Agent work request
--> Agent output
--> Verification evidence
--> Risk classification
--> Approval / reject / revise / escalate
--> Audit record
--> Proof File
--> Manager / Customer Report
+-> Agent executes replaceable step
+-> Evidence captured
+-> Risk classified
+-> Approval / revise / escalate
+-> Audit retained
+-> Proof File generated
+-> Manager / customer report produced
 ```
 
 ## Latest implementation milestones
@@ -115,70 +126,7 @@ v4.11.1 Repository Read Layer
 v4.12.0 AI Agent Delivery Readiness Strategy
 v4.13.0 AI Agent Governance & Readiness Strategy
 v4.14.0 Consulting Architecture Pack
-```
-
-v4.10.2 separates internal delivery packs from customer-safe delivery packs. Customer-facing exports use a field whitelist and hide internal notes, raw audit logs, Founder/Agent operation details, contract value, and potential lead value.
-
-v4.11.0 adds the durable SaaS migration foundation:
-
-```text
-supabase/schema_v4_11.sql
-frontend/data_repository.py
-docs/v4_11_database_migration_plan.md
-```
-
-v4.11.1 migrates Reports and Exports to the repository read layer:
-
-```text
-docs/v4_11_1_repository_read_layer.md
-```
-
-v4.12.0 adds the AI Agent Delivery Readiness pivot:
-
-```text
-docs/v4_12_agent_delivery_readiness_strategy.md
-docs/agent_delivery_task_spec_v4_12.md
-supabase/agent_delivery_extension_v4_12.sql
-```
-
-v4.13.0 adds the governance layer:
-
-```text
-docs/v4_13_agent_governance_readiness_strategy.md
-supabase/agent_governance_extension_v4_13.sql
-```
-
-v4.14.0 adds the consulting architecture layer:
-
-```text
-docs/business_architecture_blm_v4_14.md
-docs/scenario_process_architecture_v4_14.md
-docs/application_architecture_v4_14.md
-docs/data_architecture_v4_14.md
-docs/technical_architecture_v4_14.md
-```
-
-The Streamlit demo still defaults to session DataFrames. Supabase is introduced as the next backend target, not as a breaking runtime dependency.
-
-## Primary customer
-
-First beachhead remains narrow, but the architecture is wider.
-
-Initial wedge:
-
-```text
-Enterprise software delivery teams with legacy Java / Web / SQL systems.
-```
-
-Expanded governance market:
-
-```text
-software / IT delivery
-business analysis / PMO
-sales / service operations
-HR / training readiness
-customer support / knowledge work
-supply chain / operations workflows
+v4.15.0 Agent Replacement Business Architecture
 ```
 
 ## What this business sells
@@ -198,6 +146,7 @@ generic productivity bootcamp
 Sell this as:
 
 ```text
+Agent replacement opportunity map
 Agent governance policy templates
 role-based authority model
 risk and approval workflow
@@ -207,117 +156,105 @@ customer-safe governance reports
 Proof Files for AI-supervised enterprise tasks
 ```
 
-## Governance concepts
-
-### Agent Eligibility
+## Replacement vs accountability boundary
 
 ```text
-Agent Allowed
-Agent Allowed With Human Review
-Senior Approval Required
-Manual Only
-Restricted / Regulated
+Agent automates repeatable work steps.
+Human / organization retains authority, responsibility, and accountability.
 ```
 
-### Human Authority Level
+Replacement levels:
 
 ```text
-L0 Observer
-L1 Assisted Operator
-L2 Supervised Operator
-L3 Trusted Operator
-L4 Approver
-L5 Release Owner
-```
-
-### Risk Level
-
-```text
-Low
-Medium
-High
-Critical
-```
-
-### Approval Rule
-
-```text
-auto-log only
-human review required
-senior approval required
-security review required
-customer approval required
-manual-only / no Agent use
+R0 No Replacement
+R1 Draft Replacement
+R2 Task Execution Replacement
+R3 Workflow Step Replacement
+R4 Conditional Autonomous Operation
 ```
 
 ## Starter verticals
 
-### 1. Software / IT Delivery Governance
+### Software / IT Delivery Governance
 
-Focus:
+Agent automation target:
 
 ```text
-diff review
-test evidence
+issue summary
+candidate file detection
+code / test / report drafting
+first-pass consistency check
+```
+
+Human retained responsibility:
+
+```text
+business meaning
+touched scope
 security / permission / data risk
 merge decision
-release responsibility
+customer delivery responsibility
 ```
 
-### 2. Business / PM Governance
+### Business / PM Governance
 
-Focus:
+Agent automation target:
 
 ```text
-fact accuracy
-missing stakeholder checks
-deadline / owner correctness
+meeting minutes draft
+WBS draft
+risk register draft
+weekly report draft
+```
+
+Human retained responsibility:
+
+```text
+fact verification
+owner / deadline confirmation
+scope boundary
 customer-safe wording
-escalation judgment
+escalation decision
 ```
 
-### 3. Sales / Service Governance
+### Sales / Service Governance
 
-Focus:
+Agent automation target:
 
 ```text
+customer profile draft
+follow-up message draft
+proposal outline
+objection response suggestions
+```
+
+Human retained responsibility:
+
+```text
+relationship judgment
+price and scope boundary
 claim compliance
-price / scope boundary
-customer need fit
-next-action clarity
-no guarantee wording
+commercial position
 ```
 
-### 4. HR / Training Governance
+### HR / Training Governance
 
-Focus:
+Agent automation target:
 
 ```text
-evidence-based evaluation
-no fake certification
+task template draft
+first-pass rubric scoring
+learner report draft
+training path suggestion
+```
+
+Human retained responsibility:
+
+```text
+role requirement alignment
+final readiness decision
 fairness / privacy
-manager decision support
-```
-
-## Proof File
-
-A Proof File should prove not only output quality or supervision quality, but also governance quality.
-
-Required sections:
-
-```text
-1. Business task
-2. Agent eligibility rule
-3. Human authority level
-4. Agent work request
-5. Agent output summary
-6. Verification evidence
-7. Risk classification
-8. Human correction notes
-9. Approval / reject / revise / escalate decision
-10. Responsible person / role
-11. Customer-safe or manager-safe explanation
-12. Reviewer score and comments
+manager decision
 ```
 
 ## Core KPI
@@ -331,12 +268,14 @@ How many learners can supervise an AI coding agent?
 New KPI:
 
 ```text
-How many employees can safely move Agent work through enterprise policy, evidence, approval, and accountability?
+How many repeatable manual work steps can be automated by AI Agents while preserving policy, evidence, approval, and accountability?
 ```
 
 Core metrics:
 
 ```text
+Agent Replacement Opportunity Count
+Replacement Level Mix
 Agent Task Eligibility Accuracy
 Authority Level Fit
 Verification Completeness
@@ -346,44 +285,6 @@ Audit Evidence Completeness
 Customer / Manager Explanation Quality
 Governance-Ready Proof File Rate
 ```
-
-## Product resource library
-
-The repository includes a unified resource index:
-
-```text
-product_resource_library.md
-```
-
-Use it as the main navigation document for sales, lead follow-up, trial delivery, enterprise AI training, and compliance boundaries.
-
-## Optional Streamlit Secrets
-
-Feishu / Lark robot:
-
-```toml
-LEAD_WEBHOOK_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/xxxx"
-WEBHOOK_PROVIDER = "feishu"
-OWNER_EMAIL = "your-email@example.com"
-```
-
-WeCom / Enterprise WeChat robot:
-
-```toml
-LEAD_WEBHOOK_URL = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxxx"
-WEBHOOK_PROVIDER = "wecom"
-OWNER_EMAIL = "your-email@example.com"
-```
-
-Generic backend API, Tencent Cloud Function, Alibaba Cloud Function, Supabase, etc.:
-
-```toml
-LEAD_WEBHOOK_URL = "https://your-api-endpoint"
-WEBHOOK_PROVIDER = "generic"
-OWNER_EMAIL = "your-email@example.com"
-```
-
-If `LEAD_WEBHOOK_URL` is not configured, the site still works, but leads must be downloaded as TXT/CSV or sent manually.
 
 ## Compliance boundary
 
@@ -402,5 +303,5 @@ regulated professional qualification training
 
 ```text
 We do not merely train employees to supervise AI.
-We help enterprises make AI Agent work governable, auditable, and accountable.
+We help enterprises automate repeatable work with AI Agents while keeping the work governable, auditable, and accountable.
 ```
