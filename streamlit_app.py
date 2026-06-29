@@ -43,4 +43,4 @@ else:
         else:
             consult_page()
 
-st.caption("AI Skill Growth OS · Modular Frontend Structure · v4.7.6")
+st.caption("AI Skill Growth OS · Frontend Service Layer · v4.7.7")
