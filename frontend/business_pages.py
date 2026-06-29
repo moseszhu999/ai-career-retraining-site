@@ -12,6 +12,13 @@ from frontend.founder_context import (
     set_cohort_context,
     set_learner_context,
 )
+from frontend.permissions import (
+    can_confirm_proof,
+    can_request_resubmission,
+    can_update_leads,
+    forbidden_message,
+    permission_summary_html,
+)
 from frontend.state import chip, logout, set_view
 
 
@@ -19,7 +26,7 @@ def render_business_top() -> None:
     st.markdown(
         f"""
 <div class='top'>
-  <div class='brand'>AI Skill Growth OS<small>v4.9.6 · Founder Operation Context</small></div>
+  <div class='brand'>AI Skill Growth OS<small>v4.9.7 · Role Permission Console</small></div>
   <div>{chip(st.session_state.role)}<span class='pill'>{st.session_state.user_name}</span><span class='pill'>最近：{st.session_state.last_event}</span></div>
 </div>
 """,
@@ -55,6 +62,7 @@ def render_business_top() -> None:
         st.rerun()
     if st.session_state.role == "Founder":
         st.markdown(founder_context_bar(), unsafe_allow_html=True)
+    st.markdown(permission_summary_html(), unsafe_allow_html=True)
 
 
 def clients_page() -> None:
@@ -146,7 +154,7 @@ def learners_page() -> None:
 
 
 def assignments_page() -> None:
-    st.markdown("<div class='panel'><span class='pill hot'>Assignment 管理</span><h2>布置、提交、Review、Proof Ready 状态表</h2><p>选择记录后会同步当前 Assignment 和当前学员。</p></div>", unsafe_allow_html=True)
+    st.markdown("<div class='panel'><span class='pill hot'>Assignment 管理</span><h2>布置、提交、Review、Proof Ready 状态表</h2><p>选择记录后会同步当前 Assignment 和当前学员。确认/打回按钮需要 Founder 权限。</p></div>", unsafe_allow_html=True)
     records = ops.joined_records()
     a, b, c, d = st.columns(4)
     a.metric("Assignments", len(ops.assignments()))
@@ -165,22 +173,24 @@ def assignments_page() -> None:
     set_learner_context(str(row["learner_id"]))
     st.markdown(f"<div class='queue-card decision'><h3>{row['learner_name']} · {row['exercise_id']}</h3><p><b>提交摘要：</b>{row['answer_summary'] if pd.notna(row.get('answer_summary')) else '暂无'}<br><b>分数：</b>{row['score'] if pd.notna(row.get('score')) else '未评分'}<br><b>决策：</b>{row['decision'] if pd.notna(row.get('decision')) else '未Review'}</p></div>", unsafe_allow_html=True)
     c1, c2, c3 = st.columns(3)
-    if c1.button("确认进入 Proof Files", type="primary", use_container_width=True):
+    if c1.button("确认进入 Proof Files", type="primary", use_container_width=True, disabled=not can_confirm_proof()):
         ops.mark_assignment_proof_ready(str(row["assignment_id"]))
         st.success("已确认并生成/更新 Proof File。")
         st.rerun()
-    if c2.button("要求重新提交", use_container_width=True):
+    if c2.button("要求重新提交", use_container_width=True, disabled=not can_request_resubmission()):
         ops.request_resubmission(str(row["assignment_id"]))
         st.warning("已更新为需修改。")
         st.rerun()
     if c3.button("去 Review Queue", use_container_width=True):
         set_view("queue")
         st.rerun()
+    if not can_confirm_proof():
+        st.warning(forbidden_message("确认 Proof / 打回修改"))
 
 
 def review_queue_page() -> None:
     records = ops.joined_records()
-    st.markdown("<div class='panel'><span class='pill hot'>Review Queue</span><h2>Founder处理具体提交</h2><p>选择待处理记录后，当前运营视角会显示对应客户、班级、学员和Assignment。</p></div>", unsafe_allow_html=True)
+    st.markdown("<div class='panel'><span class='pill hot'>Review Queue</span><h2>Founder处理具体提交</h2><p>选择待处理记录后，当前运营视角会显示对应客户、班级、学员和Assignment。确认/打回按钮需要 Founder 权限。</p></div>", unsafe_allow_html=True)
     st.dataframe(records[["assignment_id", "exercise_id", "learner_name", "status", "submitted_at", "score", "decision", "proof_ready"]], use_container_width=True, hide_index=True)
     if records.empty:
         return
@@ -191,20 +201,22 @@ def review_queue_page() -> None:
     set_learner_context(str(rec["learner_id"]))
     st.markdown(f"<div class='queue-card decision'><h3>{rec['learner_name']} · {rec['exercise_id']}</h3><p><b>提交摘要：</b>{rec['answer_summary'] if pd.notna(rec.get('answer_summary')) else '暂无'}<br><b>分数：</b>{rec['score'] if pd.notna(rec.get('score')) else '未评分'}<br><b>决策：</b>{rec['decision'] if pd.notna(rec.get('decision')) else '未Review'}<br><b>Proof Ready：</b>{rec['proof_ready'] if pd.notna(rec.get('proof_ready')) else '否'}</p></div>", unsafe_allow_html=True)
     c1, c2, c3 = st.columns(3)
-    if c1.button("确认进入Proof Files", type="primary", use_container_width=True):
+    if c1.button("确认进入Proof Files", type="primary", use_container_width=True, disabled=not can_confirm_proof()):
         ops.mark_assignment_proof_ready(str(rec["assignment_id"]))
         st.success("已确认进入 Proof Files。")
         st.rerun()
-    if c2.button("要求重新提交", use_container_width=True):
+    if c2.button("要求重新提交", use_container_width=True, disabled=not can_request_resubmission()):
         ops.request_resubmission(str(rec["assignment_id"]))
         st.warning("已要求重新提交。")
         st.rerun()
-    if c3.button("标记已沟通", use_container_width=True):
+    if c3.button("标记已沟通", use_container_width=True, disabled=not can_request_resubmission()):
         st.info("已记录沟通。")
+    if not can_confirm_proof():
+        st.warning(forbidden_message("处理 Review Queue"))
 
 
 def leads_page() -> None:
-    st.markdown("<div class='panel'><span class='pill hot'>Leads / 服务包</span><h2>服务包报价、销售线索、跟进状态</h2><p>这里是把训练交付转成产品化收入的业务页。</p></div>", unsafe_allow_html=True)
+    st.markdown("<div class='panel'><span class='pill hot'>Leads / 服务包</span><h2>服务包报价、销售线索、跟进状态</h2><p>这里是把训练交付转成产品化收入的业务页。修改线索状态需要 Founder 权限。</p></div>", unsafe_allow_html=True)
     leads = ops.consult_leads()
     st.markdown(f"""
 <div class='grid4'>
@@ -225,24 +237,26 @@ def leads_page() -> None:
             selected = st.selectbox("选择线索改状态", labels)
             lead_id = selected.split(" · ")[0]
             c1, c2, c3 = st.columns(3)
-            if c1.button("已联系", use_container_width=True):
+            if c1.button("已联系", use_container_width=True, disabled=not can_update_leads()):
                 ops.update_lead_status(lead_id, "已联系")
                 st.rerun()
-            if c2.button("已预约", use_container_width=True):
+            if c2.button("已预约", use_container_width=True, disabled=not can_update_leads()):
                 ops.update_lead_status(lead_id, "已预约")
                 st.rerun()
-            if c3.button("已成交", type="primary", use_container_width=True):
+            if c3.button("已成交", type="primary", use_container_width=True, disabled=not can_update_leads()):
                 ops.update_lead_status(lead_id, "已成交")
                 st.rerun()
+            if not can_update_leads():
+                st.warning(forbidden_message("修改 Leads 状态"))
     with right:
-        st.markdown("<div class='lead-card'><h3>新增线索</h3><p>写入当前会话 Leads 表。</p>", unsafe_allow_html=True)
-        with st.form("lead_form_v496"):
+        st.markdown("<div class='lead-card'><h3>新增线索</h3><p>写入当前会话 Leads 表。需要 Founder 权限。</p>", unsafe_allow_html=True)
+        with st.form("lead_form_v497"):
             client = st.text_input("客户名", value="某软件外包公司")
             package = st.text_input("服务包", value="企业训练版")
             need = st.text_input("需求", value="Java新人训练标准包")
             budget = st.number_input("预算 / 潜在金额", min_value=0, value=30000, step=1000)
             note = st.text_area("备注", value="希望把新人培训从讲师交付转成标准任务包。")
-            ok = st.form_submit_button("新增线索", type="primary")
+            ok = st.form_submit_button("新增线索", type="primary", disabled=not can_update_leads())
         if ok:
             ops.add_lead(client_name=client, package=package, need=need, potential_value=int(budget), note=note)
             st.rerun()
