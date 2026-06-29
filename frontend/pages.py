@@ -60,7 +60,20 @@ def _ensure_assignment(exercise_id: str, learner_id: str, learner_name: str, coh
     )
 
 
-def _ensure_submission(exercise_id: str, learner_id: str, learner_name: str, cohort_id: str, answer: str) -> str:
+def _ensure_submission(
+    exercise_id: str,
+    learner_id: str,
+    learner_name: str,
+    cohort_id: str,
+    answer: str,
+    *,
+    question_type: str = "",
+    selected_option: str = "",
+    correct_option: str = "",
+    is_correct: bool | None = None,
+    auto_score: int | None = None,
+    answer_note: str = "",
+) -> str:
     assignment_id = _ensure_assignment(exercise_id, learner_id, learner_name, cohort_id, f"{exercise_id} 自动布置")
     return ops.submit_assignment(
         assignment_id=assignment_id,
@@ -68,6 +81,12 @@ def _ensure_submission(exercise_id: str, learner_id: str, learner_name: str, coh
         learner_id=learner_id,
         learner_name=learner_name,
         answer_summary=answer or "已提交练习作答。",
+        question_type=question_type,
+        selected_option=selected_option,
+        correct_option=correct_option,
+        is_correct=is_correct,
+        auto_score=auto_score,
+        answer_note=answer_note,
     )
 
 
@@ -93,16 +112,26 @@ def _mcq_answer_summary(exercise: pd.Series, selected_option: str, note: str) ->
     return summary
 
 
+def _mcq_payload(exercise: pd.Series, selected_option: str, note: str) -> dict[str, object]:
+    selected = _option_letter(selected_option)
+    correct = str(exercise.get("correct_option", "")).strip()
+    return {
+        "question_type": str(exercise.get("question_type", "单选题")),
+        "selected_option": selected,
+        "correct_option": correct,
+        "is_correct": selected == correct,
+        "auto_score": _mcq_score(exercise, selected_option),
+        "answer_note": note,
+    }
+
+
 def _record_board(learner_id: str | None = None) -> None:
     records = ops.joined_records()
     if learner_id:
         records = records[records["learner_id"] == learner_id]
     st.markdown("<div class='section'>Assignment / Submission / Review 状态表</div>", unsafe_allow_html=True)
-    st.dataframe(
-        records[["assignment_id", "exercise_id", "learner_name", "status", "submitted_at", "score", "decision", "proof_ready"]],
-        use_container_width=True,
-        hide_index=True,
-    )
+    display_cols = ["assignment_id", "exercise_id", "learner_name", "status", "submitted_at", "selected_option", "is_correct", "score", "decision", "proof_ready"]
+    st.dataframe(records[display_cols], use_container_width=True, hide_index=True)
     if records.empty:
         return
     labels = [f"{r.assignment_id} · {r.learner_name} · {r.exercise_id}" for r in records.itertuples()]
@@ -114,7 +143,7 @@ def _record_board(learner_id: str | None = None) -> None:
 <div class='detail'>
 <h3>{row['exercise_id']} · {row['learner_name']}</h3>
 {chip(row['status'])}
-<p><b>布置时间：</b>{row['assigned_at']}<br><b>截止时间：</b>{row['due_date']}<br><b>提交时间：</b>{row['submitted_at'] if pd.notna(row['submitted_at']) else '未提交'}<br><b>提交摘要：</b>{row['answer_summary'] if pd.notna(row['answer_summary']) else '暂无'}</p>
+<p><b>布置时间：</b>{row['assigned_at']}<br><b>截止时间：</b>{row['due_date']}<br><b>提交时间：</b>{row['submitted_at'] if pd.notna(row['submitted_at']) else '未提交'}<br><b>选择：</b>{row['selected_option'] if pd.notna(row.get('selected_option')) else '暂无'} / 正确：{row['correct_option'] if pd.notna(row.get('correct_option')) else '暂无'}<br><b>提交摘要：</b>{row['answer_summary'] if pd.notna(row['answer_summary']) else '暂无'}</p>
 </div>
 """, unsafe_allow_html=True)
     with right:
@@ -139,7 +168,7 @@ def _render_exercise_bank(current_learner_name: str | None = None) -> None:
 <div class='grid4'>
   <div class='card'><span class='mini'>练习题</span><div class='metric'>{metrics['exercise_count']}</div></div>
   <div class='card'><span class='mini'>选择题</span><div class='metric'>{metrics.get('mcq_count', 0)}</div></div>
-  <div class='card'><span class='mini'>已提交</span><div class='metric'>{op_metrics['submissions']}</div></div>
+  <div class='card'><span class='mini'>正确提交</span><div class='metric'>{op_metrics.get('mcq_correct', 0)}</div></div>
   <div class='card'><span class='mini'>已Review</span><div class='metric'>{op_metrics['reviews']}</div></div>
 </div>
 """, unsafe_allow_html=True)
@@ -181,6 +210,7 @@ def _render_exercise_bank(current_learner_name: str | None = None) -> None:
         note_key = f"founder_note_{exercise['exercise_id']}_{learner_id}"
         note = st.text_area("补充说明（可选）", key=note_key, height=100, placeholder="可填写学员理由或讲师备注。")
         answer = _mcq_answer_summary(exercise, selected_option, note) if selected_option else note
+        payload = _mcq_payload(exercise, selected_option, note) if selected_option else {}
         c1, c2, c3 = st.columns(3)
         if c1.button("布置给当前学员", use_container_width=True, key=f"assign_{exercise['exercise_id']}"):
             assignment_id = ops.assign_exercise(
@@ -193,12 +223,12 @@ def _render_exercise_bank(current_learner_name: str | None = None) -> None:
             _record_event(f"已布置 {assignment_id} · {exercise['exercise_id']} 给 {learner_name}")
             st.rerun()
         if c2.button("提交选择", use_container_width=True, key=f"submit_{exercise['exercise_id']}", disabled=not selected_option):
-            submission_id = _ensure_submission(str(exercise["exercise_id"]), learner_id, learner_name, cohort_id, answer)
+            submission_id = _ensure_submission(str(exercise["exercise_id"]), learner_id, learner_name, cohort_id, answer, **payload)
             _record_event(f"{learner_name} 提交 {submission_id} · {exercise['exercise_id']} · {_option_letter(selected_option)}")
             st.rerun()
         if c3.button("生成Review", type="primary", use_container_width=True, key=f"review_{exercise['exercise_id']}", disabled=not selected_option):
-            submission_id = _ensure_submission(str(exercise["exercise_id"]), learner_id, learner_name, cohort_id, answer)
-            score = _mcq_score(exercise, selected_option)
+            submission_id = _ensure_submission(str(exercise["exercise_id"]), learner_id, learner_name, cohort_id, answer, **payload)
+            score = int(payload.get("auto_score", _mcq_score(exercise, selected_option)))
             decision = "待Founder确认" if score >= 80 else "需复习"
             proof_ready = "候选" if score >= 80 else "否"
             ops.review_submission(
@@ -237,8 +267,8 @@ def render_public_site() -> None:
 <div class='grid4'>
   <div class='card'><span class='mini'>业务练习题</span><div class='metric'>{exercise_metrics['exercise_count']}</div></div>
   <div class='card'><span class='mini'>选择题</span><div class='metric'>{exercise_metrics.get('mcq_count', 0)}</div></div>
+  <div class='card'><span class='mini'>正确提交</span><div class='metric'>{op_metrics.get('mcq_correct', 0)}</div></div>
   <div class='card'><span class='mini'>Proof Files</span><div class='metric'>{op_metrics['proof_files']}</div></div>
-  <div class='card'><span class='mini'>线索金额</span><div class='metric'>¥{op_metrics['lead_value']:,}</div></div>
 </div>
 """, unsafe_allow_html=True)
         st.markdown("<div class='section'>实际业务状态机</div>", unsafe_allow_html=True)
@@ -323,8 +353,8 @@ def founder_dashboard() -> None:
 <div class='grid4'>
   <div class='card decision'><span class='mini'>练习题</span><div class='metric'>{exercise_metrics['exercise_count']}</div></div>
   <div class='card decision'><span class='mini'>选择题</span><div class='metric'>{exercise_metrics.get('mcq_count', 0)}</div></div>
+  <div class='card decision'><span class='mini'>正确提交</span><div class='metric'>{op_metrics.get('mcq_correct', 0)}</div></div>
   <div class='card decision'><span class='mini'>Proof Files</span><div class='metric'>{op_metrics['proof_files']}</div></div>
-  <div class='card decision'><span class='mini'>线索金额</span><div class='metric'>¥{op_metrics['lead_value']:,}</div></div>
 </div>
 """, unsafe_allow_html=True)
     left, right = st.columns([1.25, .75])
