@@ -10,7 +10,7 @@ st.set_page_config(page_title="AI Skill Growth OS", page_icon="🚀", layout="wi
 st.markdown(
     """
 <style>
-.main .block-container{max-width:1180px;padding-top:.7rem;padding-bottom:4rem}.site-top{border:1px solid #dbeafe;border-radius:1.25rem;background:rgba(255,255,255,.96);box-shadow:0 12px 30px rgba(15,23,42,.06);padding:.9rem 1rem;margin:.3rem 0 1rem;display:flex;justify-content:space-between;gap:1rem;align-items:center}.brand{font-size:1.18rem;font-weight:980;color:#0f172a}.brand small{display:block;color:#64748b;font-size:.82rem;font-weight:850}.landing-nav{display:flex;gap:.55rem;flex-wrap:wrap;align-items:center}.pill{display:inline-block;border-radius:999px;padding:.28rem .64rem;font-size:.8rem;font-weight:900;border:1px solid #e2e8f0;background:#f8fafc;color:#475569;margin:.1rem .16rem}.hot{background:linear-gradient(90deg,#4f46e5,#06b6d4);border:none;color:white}.green{background:#dcfce7;color:#166534;border-color:#bbf7d0}.orange{background:#ffedd5;color:#9a3412;border-color:#fed7aa}.blue{background:#dbeafe;color:#1e40af;border-color:#bfdbfe}.purple{background:#ede9fe;color:#5b21b6;border-color:#ddd6fe}.hero{border:1px solid #c7d2fe;border-radius:1.5rem;background:radial-gradient(circle at right,#ecfeff,#eef2ff 45%,#fff);padding:2rem;margin:.8rem 0 1rem}.hero h1{font-size:2.6rem;line-height:1.06;margin:.25rem 0;color:#0f172a}.hero h1 span{background:linear-gradient(90deg,#4f46e5,#06b6d4);-webkit-background-clip:text;color:transparent}.hero p{max-width:860px;color:#475569;line-height:1.75;font-size:1.03rem}.hero-actions{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1rem}.section{font-size:1.45rem;font-weight:950;margin:1.2rem 0 .45rem;color:#0f172a}.sub{color:#64748b;line-height:1.65;margin-bottom:.8rem}.grid2{display:grid;grid-template-columns:1.05fr .95fr;gap:1rem}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}.card{border:1px solid #e2e8f0;border-radius:1.1rem;background:white;padding:1rem;box-shadow:0 8px 20px rgba(15,23,42,.04)}.card h3{margin:.1rem 0 .45rem;color:#111827}.card p{color:#64748b;line-height:1.58}.metric{font-size:2rem;font-weight:980;color:#0f172a}.panel{border:1px solid #dbeafe;border-radius:1.2rem;background:linear-gradient(135deg,#fff,#f8fafc);padding:1.1rem;margin:.9rem 0}.panel h2{margin:.15rem 0;color:#0f172a}.quote{white-space:pre-wrap;background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1rem;line-height:1.65}.timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:.55rem}.timeline div{background:white;border:1px solid #c7d2fe;border-radius:1rem;padding:.8rem;text-align:center}.timeline b{display:block;color:#4f46e5}.progress{height:.65rem;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:.45rem}.bar{height:100%;background:linear-gradient(90deg,#4f46e5,#06b6d4)}.ok{border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:1rem;padding:1rem}.warn{border:1px solid #fed7aa;background:#fff7ed;color:#7c2d12;border-radius:1rem;padding:1rem}.mini{font-size:.85rem;color:#64748b;line-height:1.55}.proof{border:1px solid #e0e7ff;border-radius:1rem;background:white;padding:1rem}.nav-row{display:flex;gap:.5rem;flex-wrap:wrap;margin:.4rem 0 1rem}.decision{border-left:5px solid #6366f1}.muted{opacity:.75}.task-shell{display:grid;grid-template-columns:.85fr 1.35fr .95fr;gap:1rem;align-items:start}.task-rail{border:1px solid #e0e7ff;border-radius:1.1rem;background:#f8fafc;padding:.85rem}.task-mini{border:1px solid #e2e8f0;border-radius:.95rem;background:white;padding:.85rem;margin:.55rem 0}.task-mini.active{border-color:#6366f1;box-shadow:0 8px 20px rgba(99,102,241,.12)}.task-mini b{display:block;color:#0f172a}.editor-panel{border:1px solid #c7d2fe;border-radius:1.2rem;background:white;padding:1rem;box-shadow:0 10px 24px rgba(79,70,229,.06)}.side-stack{display:grid;gap:.85rem}.history{border:1px solid #e2e8f0;border-radius:1rem;background:white;padding:.9rem;max-height:260px;overflow:auto}.history-item{border-bottom:1px solid #f1f5f9;padding:.55rem 0;color:#475569}.history-item:last-child{border-bottom:none}.toolbar{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}.task-status-line{border:1px solid #e0e7ff;background:#f8fafc;border-radius:1rem;padding:.75rem;margin:.75rem 0;color:#475569}.result-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:1rem 0}.result-strip div{border:1px solid #dbeafe;border-radius:1rem;background:white;padding:1rem}.result-strip b{font-size:1.3rem;color:#0f172a}.flow-step{border:1px solid #e0e7ff;border-radius:1rem;background:#fff;padding:1rem;position:relative}.flow-step b{display:block;color:#3730a3;margin-bottom:.35rem}.faq{border:1px solid #e2e8f0;border-radius:1rem;background:#fff;padding:1rem;margin:.55rem 0}.login-box{position:sticky;top:1rem}.trust-row{display:flex;gap:.5rem;flex-wrap:wrap;margin:.75rem 0}.demo-window{border:1px solid #c7d2fe;border-radius:1.2rem;background:#0f172a;color:#e2e8f0;padding:1rem;line-height:1.7}.demo-window b{color:#fff}@media(max-width:900px){.site-top{display:block}.grid2,.grid3,.grid4,.timeline,.task-shell,.toolbar,.result-strip{grid-template-columns:1fr}.hero h1{font-size:2rem}.nav-row,.hero-actions{display:block}}
+.main .block-container{max-width:1180px;padding-top:.7rem;padding-bottom:4rem}.site-top{border:1px solid #dbeafe;border-radius:1.25rem;background:rgba(255,255,255,.96);box-shadow:0 12px 30px rgba(15,23,42,.06);padding:.9rem 1rem;margin:.3rem 0 1rem;display:flex;justify-content:space-between;gap:1rem;align-items:center}.brand{font-size:1.18rem;font-weight:980;color:#0f172a}.brand small{display:block;color:#64748b;font-size:.82rem;font-weight:850}.landing-nav{display:flex;gap:.55rem;flex-wrap:wrap;align-items:center}.pill{display:inline-block;border-radius:999px;padding:.28rem .64rem;font-size:.8rem;font-weight:900;border:1px solid #e2e8f0;background:#f8fafc;color:#475569;margin:.1rem .16rem}.hot{background:linear-gradient(90deg,#4f46e5,#06b6d4);border:none;color:white}.green{background:#dcfce7;color:#166534;border-color:#bbf7d0}.orange{background:#ffedd5;color:#9a3412;border-color:#fed7aa}.blue{background:#dbeafe;color:#1e40af;border-color:#bfdbfe}.purple{background:#ede9fe;color:#5b21b6;border-color:#ddd6fe}.hero{border:1px solid #c7d2fe;border-radius:1.5rem;background:radial-gradient(circle at right,#ecfeff,#eef2ff 45%,#fff);padding:2rem;margin:.8rem 0 1rem}.hero h1{font-size:2.6rem;line-height:1.06;margin:.25rem 0;color:#0f172a}.hero h1 span{background:linear-gradient(90deg,#4f46e5,#06b6d4);-webkit-background-clip:text;color:transparent}.hero p{max-width:860px;color:#475569;line-height:1.75;font-size:1.03rem}.hero-actions{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1rem}.section{font-size:1.45rem;font-weight:950;margin:1.2rem 0 .45rem;color:#0f172a}.sub{color:#64748b;line-height:1.65;margin-bottom:.8rem}.grid2{display:grid;grid-template-columns:1.05fr .95fr;gap:1rem}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}.card{border:1px solid #e2e8f0;border-radius:1.1rem;background:white;padding:1rem;box-shadow:0 8px 20px rgba(15,23,42,.04)}.card h3{margin:.1rem 0 .45rem;color:#111827}.card p{color:#64748b;line-height:1.58}.metric{font-size:2rem;font-weight:980;color:#0f172a}.panel{border:1px solid #dbeafe;border-radius:1.2rem;background:linear-gradient(135deg,#fff,#f8fafc);padding:1.1rem;margin:.9rem 0}.panel h2{margin:.15rem 0;color:#0f172a}.quote{white-space:pre-wrap;background:#0f172a;color:#e2e8f0;border-radius:1rem;padding:1rem;line-height:1.65}.timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:.55rem}.timeline div{background:white;border:1px solid #c7d2fe;border-radius:1rem;padding:.8rem;text-align:center}.timeline b{display:block;color:#4f46e5}.progress{height:.65rem;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:.45rem}.bar{height:100%;background:linear-gradient(90deg,#4f46e5,#06b6d4)}.ok{border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:1rem;padding:1rem}.warn{border:1px solid #fed7aa;background:#fff7ed;color:#7c2d12;border-radius:1rem;padding:1rem}.mini{font-size:.85rem;color:#64748b;line-height:1.55}.proof{border:1px solid #e0e7ff;border-radius:1rem;background:white;padding:1rem}.nav-row{display:flex;gap:.5rem;flex-wrap:wrap;margin:.4rem 0 1rem}.decision{border-left:5px solid #6366f1}.muted{opacity:.75}.task-shell{display:grid;grid-template-columns:.85fr 1.35fr .95fr;gap:1rem;align-items:start}.task-rail{border:1px solid #e0e7ff;border-radius:1.1rem;background:#f8fafc;padding:.85rem}.task-mini{border:1px solid #e2e8f0;border-radius:.95rem;background:white;padding:.85rem;margin:.55rem 0}.task-mini.active{border-color:#6366f1;box-shadow:0 8px 20px rgba(99,102,241,.12)}.task-mini b{display:block;color:#0f172a}.editor-panel{border:1px solid #c7d2fe;border-radius:1.2rem;background:white;padding:1rem;box-shadow:0 10px 24px rgba(79,70,229,.06)}.side-stack{display:grid;gap:.85rem}.history{border:1px solid #e2e8f0;border-radius:1rem;background:white;padding:.9rem;max-height:260px;overflow:auto}.history-item{border-bottom:1px solid #f1f5f9;padding:.55rem 0;color:#475569}.history-item:last-child{border-bottom:none}.toolbar{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}.task-status-line{border:1px solid #e0e7ff;background:#f8fafc;border-radius:1rem;padding:.75rem;margin:.75rem 0;color:#475569}.result-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:1rem 0}.result-strip div{border:1px solid #dbeafe;border-radius:1rem;background:white;padding:1rem}.result-strip b{font-size:1.3rem;color:#0f172a}.flow-step{border:1px solid #e0e7ff;border-radius:1rem;background:#fff;padding:1rem;position:relative}.flow-step b{display:block;color:#3730a3;margin-bottom:.35rem}.faq{border:1px solid #e2e8f0;border-radius:1rem;background:#fff;padding:1rem;margin:.55rem 0}.login-box{position:sticky;top:1rem}.trust-row{display:flex;gap:.5rem;flex-wrap:wrap;margin:.75rem 0}.demo-window{border:1px solid #c7d2fe;border-radius:1.2rem;background:#0f172a;color:#e2e8f0;padding:1rem;line-height:1.7}.demo-window b{color:#fff}.portfolio-shell{display:grid;grid-template-columns:.95fr 1.45fr .9fr;gap:1rem;align-items:start}.portfolio-list{border:1px solid #e0e7ff;border-radius:1.1rem;background:#f8fafc;padding:.85rem}.portfolio-mini{border:1px solid #e2e8f0;border-radius:1rem;background:white;padding:.85rem;margin:.55rem 0}.portfolio-mini.active{border-color:#6366f1;box-shadow:0 8px 20px rgba(99,102,241,.12)}.portfolio-detail{border:1px solid #c7d2fe;border-radius:1.2rem;background:white;padding:1rem;box-shadow:0 10px 24px rgba(79,70,229,.06)}.evidence-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.7rem}.evidence{border:1px dashed #c7d2fe;border-radius:1rem;background:#f8fafc;padding:.85rem}.share-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.55rem}.share-grid div{border:1px solid #e2e8f0;border-radius:1rem;background:white;padding:.75rem}.score-card{border:1px solid #c7d2fe;border-radius:1.2rem;background:linear-gradient(135deg,#eef2ff,#fff);padding:1rem;text-align:center}.score-card b{font-size:2.2rem;color:#3730a3}@media(max-width:900px){.site-top{display:block}.grid2,.grid3,.grid4,.timeline,.task-shell,.toolbar,.result-strip,.portfolio-shell,.evidence-grid,.share-grid{grid-template-columns:1fr}.hero h1{font-size:2rem}.nav-row,.hero-actions{display:block}}
 </style>
 """,
     unsafe_allow_html=True,
@@ -49,6 +49,7 @@ def init_state() -> None:
         "submitted": False,
         "portfolio_candidate": False,
         "portfolio_approved": False,
+        "active_portfolio_index": 0,
         "consult_summary": "",
         "lead_status": "新线索",
         "last_event": "尚未开始互动",
@@ -112,6 +113,18 @@ def recommend_package(identity: str, goal: str) -> tuple[str, str, list[str]]:
     return "个人成长版", "适合职场新人、在岗提升、升职准备、转岗跳槽和作品集建设。", ["明确成长目标", "完成5天任务", "获得Agent反馈", "沉淀作品集", "生成30天行动计划"]
 
 
+def portfolio_df() -> pd.DataFrame:
+    rows = [
+        ["目标拆解", "5天成长路线图", "86", "可展示", "职业成长", "目标清晰、路径可执行。", "把个人目标拆成5天任务，能说明路线和交付物。"],
+        ["测试用例作品", "测试用例 + Bug报告", "64", "修改中", "软件测试", "还缺权限、安全、边界。", "已经覆盖基础登录，但需要补充权限、安全和边界测试。"],
+        ["复杂需求拆解", "流程 + 异常分支", "--", "待点评", "业务分析", "等待Agent正式点评。", "适合作为业务分析或测试分析作品候选。"],
+    ]
+    if st.session_state.portfolio_candidate:
+        status = "可展示" if st.session_state.portfolio_approved else "待点评"
+        rows.append(["登录测试作品", "测试用例 + Bug报告草稿", "待定", status, "软件测试", "已提交给Agent，等待确认是否可展示。", "来自当前会话的提交记录，后续可沉淀成作品集材料。"])
+    return pd.DataFrame(rows, columns=["作品", "证明材料", "评分", "状态", "方向", "说明", "Agent摘要"])
+
+
 def render_public_top() -> None:
     st.markdown(
         """
@@ -131,7 +144,7 @@ def render_public_site() -> None:
         st.markdown(
             """
 <div class='hero'>
-<span class='pill hot'>登录前官网 · v4.7.2</span>
+<span class='pill hot'>登录前官网 · v4.7.3</span>
 <h1>不是看课，而是每天完成一个<br><span>能变成作品集的任务</span></h1>
 <p>AI Skill Growth OS 帮助个人、自由职业者和企业新人从“学习内容”进入“完成任务”。登录后会进入真实应用工作台：写草稿、请求AI反馈、提交Agent、沉淀作品集。</p>
 <div class='hero-actions'><span class='pill hot'>体验学员工作台</span><span class='pill'>查看任务闭环</span><span class='pill'>生成咨询路径</span></div>
@@ -360,17 +373,88 @@ def tasks_page() -> None:
 
 
 def portfolio_page() -> None:
-    rows = [
-        ["目标拆解", "5天成长路线图", "86", "可展示", "职业成长", "目标清晰、路径可执行。"],
-        ["测试用例作品", "测试用例 + Bug报告", "64", "修改中", "软件测试", "还缺权限、安全、边界。"],
-        ["复杂需求拆解", "流程 + 异常分支", "--", "待点评", "业务分析", "等待Agent正式点评。"],
-    ]
-    if st.session_state.portfolio_candidate:
-        status = "可展示" if st.session_state.portfolio_approved else "待点评"
-        rows.append(["登录测试作品", "测试用例 + Bug报告草稿", "待定", status, "软件测试", "已提交给Agent，等待确认是否可展示。"])
-    df = pd.DataFrame(rows, columns=["作品", "证明材料", "评分", "状态", "方向", "说明"])
-    st.markdown("<div class='panel'><span class='pill hot'>Portfolio</span><h2>作品集会根据任务状态变化</h2><p>提交给Agent后，这里会出现新的候选作品；Founder确认后变成可展示。</p></div>", unsafe_allow_html=True)
-    st.markdown("<div class='grid3'>" + "".join(f"<div class='proof'><h3>{row['作品']}</h3>{chip(row['状态'])}<span class='pill purple'>{row['方向']}</span><p><b>证明材料：</b>{row['证明材料']}</p><p><b>评分：</b>{row['评分']}</p><p>{row['说明']}</p></div>" for _, row in df.iterrows()) + "</div>", unsafe_allow_html=True)
+    df = portfolio_df()
+    visible_df = df
+    st.markdown("<div class='panel'><span class='pill hot'>Portfolio</span><h2>作品集工作台</h2><p>作品集不只是卡片列表，而是证明材料管理页：筛选、查看详情、确认状态、准备导出和分享。</p></div>", unsafe_allow_html=True)
+    st.markdown(f"""
+<div class='grid4'>
+  <div class='card'><span class='mini'>全部作品</span><div class='metric'>{len(df)}</div></div>
+  <div class='card'><span class='mini'>可展示</span><div class='metric'>{int((df['状态'] == '可展示').sum())}</div></div>
+  <div class='card'><span class='mini'>修改中</span><div class='metric'>{int((df['状态'] == '修改中').sum())}</div></div>
+  <div class='card'><span class='mini'>待点评</span><div class='metric'>{int((df['状态'] == '待点评').sum())}</div></div>
+</div>
+""", unsafe_allow_html=True)
+    f1, f2 = st.columns([.7, 1.3])
+    with f1:
+        status_filter = st.selectbox("状态筛选", ["全部", "可展示", "修改中", "待点评"])
+    with f2:
+        keyword = st.text_input("搜索作品", placeholder="输入作品名、方向或证明材料")
+    if status_filter != "全部":
+        visible_df = visible_df[visible_df["状态"] == status_filter]
+    if keyword.strip():
+        key = keyword.strip()
+        visible_df = visible_df[visible_df.apply(lambda row: key in " ".join(str(v) for v in row.values), axis=1)]
+    if visible_df.empty:
+        st.info("没有匹配的作品。")
+        return
+    if st.session_state.active_portfolio_index >= len(visible_df):
+        st.session_state.active_portfolio_index = 0
+    active = visible_df.iloc[int(st.session_state.active_portfolio_index)]
+    st.markdown("<div class='portfolio-shell'>", unsafe_allow_html=True)
+    left, mid, right = st.columns([.95, 1.45, .9])
+    with left:
+        st.markdown("<div class='portfolio-list'><h3>作品列表</h3><p class='mini'>筛选后点击查看详情。</p>", unsafe_allow_html=True)
+        for pos, (_, row) in enumerate(visible_df.iterrows()):
+            active_class = " active" if pos == st.session_state.active_portfolio_index else ""
+            st.markdown(f"<div class='portfolio-mini{active_class}'><b>{row['作品']}</b>{chip(row['状态'])}<span class='pill purple'>{row['方向']}</span><p class='mini'>{row['证明材料']}</p></div>", unsafe_allow_html=True)
+            if st.button(f"查看作品 {pos + 1}", key=f"portfolio_open_{pos}", use_container_width=True):
+                st.session_state.active_portfolio_index = pos
+                log_event(f"查看作品：{row['作品']}")
+                st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
+    with mid:
+        st.markdown(f"""
+<div class='portfolio-detail'>
+<h3>{active['作品']}</h3>
+{chip(active['状态'])}<span class='pill purple'>{active['方向']}</span>
+<p><b>证明材料：</b>{active['证明材料']}<br><b>评分：</b>{active['评分']}<br><b>说明：</b>{active['说明']}</p>
+</div>
+""", unsafe_allow_html=True)
+        st.markdown(f"<div class='quote'>【Agent点评摘要】\n{active['Agent摘要']}\n\n建议按“背景 → 方法 → 结果 → 证据 → 复盘”整理成可展示版本。</div>", unsafe_allow_html=True)
+        st.markdown("<div class='section'>证据结构</div>", unsafe_allow_html=True)
+        st.markdown("""
+<div class='evidence-grid'>
+  <div class='evidence'><b>背景</b><br><span class='mini'>为什么做这个作品，解决什么问题。</span></div>
+  <div class='evidence'><b>方法</b><br><span class='mini'>如何拆解任务、设计测试或完成分析。</span></div>
+  <div class='evidence'><b>结果</b><br><span class='mini'>最终产出的文档、表格、案例或草稿。</span></div>
+  <div class='evidence'><b>复盘</b><br><span class='mini'>Agent指出什么，你如何改进。</span></div>
+</div>
+""", unsafe_allow_html=True)
+        st.markdown("<div class='section'>导出 / 分享占位</div>", unsafe_allow_html=True)
+        st.markdown("""
+<div class='share-grid'>
+  <div><b>导出PDF</b><br><span class='mini'>后续生成作品集PDF。</span></div>
+  <div><b>分享链接</b><br><span class='mini'>后续给面试官或客户查看。</span></div>
+  <div><b>加入咨询材料</b><br><span class='mini'>后续用于转化。</span></div>
+</div>
+""", unsafe_allow_html=True)
+    with right:
+        st.markdown(f"<div class='score-card'><span class='mini'>作品评分</span><br><b>{active['评分']}</b><p>{active['状态']}</p></div>", unsafe_allow_html=True)
+        st.markdown("<div class='card'><h3>可展示检查</h3><p>1. 别人能看懂<br>2. 有证明材料<br>3. 可复用到面试/客户/汇报<br>4. 有Agent点评记录</p></div>", unsafe_allow_html=True)
+        if st.session_state.role == "Founder" and st.session_state.portfolio_candidate and not st.session_state.portfolio_approved:
+            if st.button("Founder确认可展示", type="primary", use_container_width=True):
+                st.session_state.portfolio_approved = True
+                st.session_state.task_status = "Agent已点评"
+                log_event("Founder在作品集页确认可展示")
+                st.rerun()
+            if st.button("Founder打回修改", use_container_width=True):
+                st.session_state.task_status = "AI已反馈"
+                st.session_state.submitted = False
+                st.session_state.portfolio_approved = False
+                log_event("Founder在作品集页打回修改")
+                st.rerun()
+        st.markdown("<div class='history'><h3>操作历史</h3>" + "".join(f"<div class='history-item'>{item}</div>" for item in st.session_state.action_history) + "</div>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
     st.dataframe(df, use_container_width=True, hide_index=True)
 
 
@@ -383,7 +467,7 @@ def consult_page() -> None:
         goal = st.selectbox("你最想解决什么？", ["学新技能", "提升现有技能", "做作品集", "升职表达", "换工作 / 高薪跳槽", "自由职业接单", "企业内训"])
     package, reason, steps = recommend_package(identity, goal)
     st.markdown(f"<div class='card'><h3>推荐路径：{package}</h3><p>{reason}</p><p>{' → '.join(steps)}</p></div>", unsafe_allow_html=True)
-    with st.form("consult_form_v472"):
+    with st.form("consult_form_v473"):
         name = st.text_input("姓名 / 称呼")
         contact = st.text_input("联系方式，选填")
         note = st.text_area("补充说明")
@@ -433,4 +517,4 @@ else:
         else:
             consult_page()
 
-st.caption("AI Skill Growth OS · Commercial Landing + SaaS Workbench · v4.7.2")
+st.caption("AI Skill Growth OS · SaaS Portfolio Workspace · v4.7.3")
