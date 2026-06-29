@@ -5,18 +5,9 @@ from datetime import datetime
 import pandas as pd
 import streamlit as st
 
-from frontend.business_data import (
-    CLIENTS,
-    COHORTS,
-    CONSULT_LEADS,
-    LEARNERS,
-    PROOF_FILES,
-    SERVICE_PACKAGES,
-    TASK_INSTANCES,
-    get_business_metrics,
-)
+from frontend import operation_state as ops
+from frontend.business_data import CLIENTS, COHORTS, LEARNERS, SERVICE_PACKAGES, get_business_metrics
 from frontend.exercise_bank import EXERCISES, get_exercise_metrics
-from frontend.training_records import ASSIGNMENTS, SUBMISSIONS, REVIEWS, get_training_record_metrics, joined_records
 from frontend.state import chip, log_event, login_as, logout, set_view
 
 
@@ -48,18 +39,43 @@ def _selected_learner_id() -> str:
 
 
 def _task_rows_for_selection() -> pd.DataFrame:
-    rows = TASK_INSTANCES[TASK_INSTANCES["cohort_id"] == _selected_cohort_id()]
+    rows = ops.task_instances()[ops.task_instances()["cohort_id"] == _selected_cohort_id()]
     learner_id = _selected_learner_id()
     if learner_id:
         rows = rows[rows["learner_id"] == learner_id]
     return rows.copy()
 
 
+def _ensure_assignment(exercise_id: str, learner_id: str, learner_name: str, cohort_id: str, note: str) -> str:
+    records = ops.joined_records()
+    found = records[(records["exercise_id"] == exercise_id) & (records["learner_id"] == learner_id)]
+    if not found.empty:
+        return str(found.iloc[0]["assignment_id"])
+    return ops.assign_exercise(
+        exercise_id=exercise_id,
+        learner_id=learner_id,
+        learner_name=learner_name,
+        cohort_id=cohort_id,
+        note=note,
+    )
+
+
+def _ensure_submission(exercise_id: str, learner_id: str, learner_name: str, cohort_id: str, answer: str) -> str:
+    assignment_id = _ensure_assignment(exercise_id, learner_id, learner_name, cohort_id, f"{exercise_id} 自动布置")
+    return ops.submit_assignment(
+        assignment_id=assignment_id,
+        exercise_id=exercise_id,
+        learner_id=learner_id,
+        learner_name=learner_name,
+        answer_summary=answer or "已提交练习作答。",
+    )
+
+
 def _record_board(learner_id: str | None = None) -> None:
-    records = joined_records()
+    records = ops.joined_records()
     if learner_id:
         records = records[records["learner_id"] == learner_id]
-    st.markdown("<div class='section'>Assignment / Submission / Review 记录</div>", unsafe_allow_html=True)
+    st.markdown("<div class='section'>Assignment / Submission / Review 状态表</div>", unsafe_allow_html=True)
     st.dataframe(
         records[["assignment_id", "exercise_id", "learner_name", "status", "submitted_at", "score", "decision", "proof_ready"]],
         use_container_width=True,
@@ -83,24 +99,26 @@ def _record_board(learner_id: str | None = None) -> None:
         st.markdown(f"""
 <div class='score-card'><span class='mini'>Review Score</span><br><b>{int(row['score']) if pd.notna(row['score']) else '--'}</b><p>{row['decision'] if pd.notna(row['decision']) else '未Review'}</p></div>
 """, unsafe_allow_html=True)
-        if st.button("标记进入 Proof Files", type="primary", use_container_width=True, key=f"proof_{row['assignment_id']}"):
-            _record_event(f"{row['learner_name']} 的 {row['exercise_id']} 已标记进入 Proof Files")
-            st.success("已写入业务操作记录。")
+        if st.button("确认进入 Proof Files", type="primary", use_container_width=True, key=f"proof_{row['assignment_id']}"):
+            ops.mark_assignment_proof_ready(str(row["assignment_id"]))
+            _record_event(f"{row['learner_name']} 的 {row['exercise_id']} 已进入 Proof Files")
+            st.rerun()
         if st.button("要求重新提交", use_container_width=True, key=f"redo_{row['assignment_id']}"):
+            ops.request_resubmission(str(row["assignment_id"]))
             _record_event(f"要求 {row['learner_name']} 重新提交 {row['exercise_id']}")
-            st.warning("已写入业务操作记录。")
+            st.rerun()
 
 
 def _render_exercise_bank(current_learner_name: str | None = None) -> None:
     st.markdown("<div class='section'>业务练习题库</div>", unsafe_allow_html=True)
     metrics = get_exercise_metrics()
-    record_metrics = get_training_record_metrics()
+    op_metrics = ops.operation_metrics()
     st.markdown(f"""
 <div class='grid4'>
   <div class='card'><span class='mini'>练习题</span><div class='metric'>{metrics['exercise_count']}</div></div>
-  <div class='card'><span class='mini'>已布置</span><div class='metric'>{record_metrics['assignments']}</div></div>
-  <div class='card'><span class='mini'>已提交</span><div class='metric'>{record_metrics['submissions']}</div></div>
-  <div class='card'><span class='mini'>已Review</span><div class='metric'>{record_metrics['reviews']}</div></div>
+  <div class='card'><span class='mini'>已布置</span><div class='metric'>{op_metrics['assignments']}</div></div>
+  <div class='card'><span class='mini'>已提交</span><div class='metric'>{op_metrics['submissions']}</div></div>
+  <div class='card'><span class='mini'>已Review</span><div class='metric'>{op_metrics['reviews']}</div></div>
 </div>
 """, unsafe_allow_html=True)
     m1, m2 = st.columns(2)
@@ -120,6 +138,10 @@ def _render_exercise_bank(current_learner_name: str | None = None) -> None:
     labels = [f"{r.exercise_id} · {r.module} · {r.related_task}" for r in filtered.itertuples()]
     selected = st.selectbox("选择练习题", labels)
     exercise = filtered.iloc[labels.index(selected)]
+    learner = LEARNERS[LEARNERS["learner_id"] == _selected_learner_id()].iloc[0]
+    learner_id = str(learner["learner_id"])
+    learner_name = current_learner_name or str(learner["learner_name"])
+    cohort_id = str(learner["cohort_id"])
     left, right = st.columns([1.2, .8])
     with left:
         st.markdown(f"""
@@ -131,21 +153,38 @@ def _render_exercise_bank(current_learner_name: str | None = None) -> None:
 <p><b>要求交付物：</b>{exercise['required_output']}</p>
 </div>
 """, unsafe_allow_html=True)
-        answer_key = f"answer_{exercise['exercise_id']}_{_selected_learner_id()}"
-        st.text_area("学员作答 / 练习草稿", key=answer_key, height=220, placeholder="在这里写测试用例、流程分析、Q&A表或服务包摘要。")
+        answer_key = f"answer_{exercise['exercise_id']}_{learner_id}"
+        answer = st.text_area("学员作答 / 练习草稿", key=answer_key, height=220, placeholder="在这里写测试用例、流程分析、Q&A表或服务包摘要。")
         c1, c2, c3 = st.columns(3)
         if c1.button("布置给当前学员", use_container_width=True, key=f"assign_{exercise['exercise_id']}"):
-            target = current_learner_name or LEARNERS[LEARNERS["learner_id"] == _selected_learner_id()].iloc[0]["learner_name"]
-            _record_event(f"已布置练习题 {exercise['exercise_id']} 给 {target}")
-            st.success("已写入业务操作记录。")
+            assignment_id = ops.assign_exercise(
+                exercise_id=str(exercise["exercise_id"]),
+                learner_id=learner_id,
+                learner_name=learner_name,
+                cohort_id=cohort_id,
+                note=str(exercise["related_task"]),
+            )
+            _record_event(f"已布置 {assignment_id} · {exercise['exercise_id']} 给 {learner_name}")
+            st.rerun()
         if c2.button("提交作答", use_container_width=True, key=f"submit_{exercise['exercise_id']}"):
-            target = current_learner_name or LEARNERS[LEARNERS["learner_id"] == _selected_learner_id()].iloc[0]["learner_name"]
-            _record_event(f"{target} 提交练习题 {exercise['exercise_id']}")
-            st.success("已写入提交记录。")
+            submission_id = _ensure_submission(str(exercise["exercise_id"]), learner_id, learner_name, cohort_id, answer)
+            _record_event(f"{learner_name} 提交 {submission_id} · {exercise['exercise_id']}")
+            st.rerun()
         if c3.button("生成Review", type="primary", use_container_width=True, key=f"review_{exercise['exercise_id']}"):
-            target = current_learner_name or LEARNERS[LEARNERS["learner_id"] == _selected_learner_id()].iloc[0]["learner_name"]
-            _record_event(f"已生成 {target} 的练习题 {exercise['exercise_id']} Review")
-            st.success("已写入Review记录。")
+            submission_id = _ensure_submission(str(exercise["exercise_id"]), learner_id, learner_name, cohort_id, answer)
+            score = 82 if exercise["difficulty"] != "高级" else 78
+            decision = "待Founder确认" if score >= 80 else "需修改"
+            proof_ready = "候选" if score >= 80 else "否"
+            ops.review_submission(
+                submission_id=submission_id,
+                reviewer="Agent",
+                score=score,
+                review_comment=f"Agent Review：{exercise['rubric']}。当前作答已生成初评。",
+                decision=decision,
+                proof_ready=proof_ready,
+            )
+            _record_event(f"已生成 {learner_name} 的 {exercise['exercise_id']} Review：{score}分")
+            st.rerun()
     with right:
         st.markdown(f"<div class='card'><h3>提示</h3><p>{exercise['hint']}</p></div>", unsafe_allow_html=True)
         with st.expander("查看标准答案 / Golden Solution"):
@@ -158,27 +197,27 @@ def _render_exercise_bank(current_learner_name: str | None = None) -> None:
 def render_public_site() -> None:
     metrics = get_business_metrics()
     exercise_metrics = get_exercise_metrics()
-    record_metrics = get_training_record_metrics()
+    op_metrics = ops.operation_metrics()
     st.markdown("""
-<div class='top'><div class='brand'>AI Skill Growth OS<small>Concrete Business Ops · Assignment / Submission / Review</small></div><div class='nav'><span class='pill'>Clients</span><span class='pill'>Cohorts</span><span class='pill'>Exercises</span><span class='pill'>Records</span><span class='pill hot'>进入业务系统</span></div></div>
+<div class='top'><div class='brand'>AI Skill Growth OS<small>Concrete Business Ops · Mutable State Tables</small></div><div class='nav'><span class='pill'>Clients</span><span class='pill'>Cohorts</span><span class='pill'>Exercises</span><span class='pill'>State Machine</span><span class='pill hot'>进入业务系统</span></div></div>
 """, unsafe_allow_html=True)
     left, right = st.columns([1.2, .8])
     with left:
         st.markdown("""
-<div class='hero'><span class='pill hot'>业务运营版 · v4.9.2</span><h1>练习题不是展示，<br><span>要有布置、提交、Review记录</span></h1><p>当前测试业务固定为：信华信日本业务部 2026 Java新人训练营。系统现在追踪 Assignment、Submission、Review 和是否进入 Skill Proof Files。</p></div>
+<div class='hero'><span class='pill hot'>业务运营版 · v4.9.3</span><h1>练习题进入<br><span>可编辑业务状态机</span></h1><p>当前测试业务固定为：信华信日本业务部 2026 Java新人训练营。系统现在不仅展示 Assignment、Submission、Review，还会在按钮操作后更新当前会话数据表。</p></div>
 """, unsafe_allow_html=True)
         st.markdown(f"""
 <div class='grid4'>
   <div class='card'><span class='mini'>业务练习题</span><div class='metric'>{exercise_metrics['exercise_count']}</div></div>
-  <div class='card'><span class='mini'>布置记录</span><div class='metric'>{record_metrics['assignments']}</div></div>
-  <div class='card'><span class='mini'>提交记录</span><div class='metric'>{record_metrics['submissions']}</div></div>
-  <div class='card'><span class='mini'>Review记录</span><div class='metric'>{record_metrics['reviews']}</div></div>
+  <div class='card'><span class='mini'>布置记录</span><div class='metric'>{op_metrics['assignments']}</div></div>
+  <div class='card'><span class='mini'>Proof Files</span><div class='metric'>{op_metrics['proof_files']}</div></div>
+  <div class='card'><span class='mini'>线索金额</span><div class='metric'>¥{op_metrics['lead_value']:,}</div></div>
 </div>
 """, unsafe_allow_html=True)
-        st.markdown("<div class='section'>实际业务闭环</div>", unsafe_allow_html=True)
-        st.markdown("<div class='grid4'><div class='flow-step'><b>1. 布置 Assignment</b><br><span class='mini'>练习题绑定学员和截止日期。</span></div><div class='flow-step'><b>2. 学员 Submission</b><br><span class='mini'>记录作答内容和提交时间。</span></div><div class='flow-step'><b>3. Agent / Founder Review</b><br><span class='mini'>评分、点评、决策。</span></div><div class='flow-step'><b>4. Proof 入库</b><br><span class='mini'>优秀结果进入 Proof Files。</span></div></div>", unsafe_allow_html=True)
+        st.markdown("<div class='section'>实际业务状态机</div>", unsafe_allow_html=True)
+        st.markdown("<div class='grid4'><div class='flow-step'><b>1. 布置</b><br><span class='mini'>新增 Assignment 行。</span></div><div class='flow-step'><b>2. 提交</b><br><span class='mini'>新增或更新 Submission。</span></div><div class='flow-step'><b>3. Review</b><br><span class='mini'>新增或更新 Review。</span></div><div class='flow-step'><b>4. 入库</b><br><span class='mini'>新增 Proof File。</span></div></div>", unsafe_allow_html=True)
     with right:
-        st.markdown("<div class='login-box'><div class='panel'><h2>进入业务系统</h2><p>选择学员或Founder身份，查看练习题库和训练记录。</p></div>", unsafe_allow_html=True)
+        st.markdown("<div class='login-box'><div class='panel'><h2>进入业务系统</h2><p>选择学员或Founder身份，操作会实时改变当前会话表。</p></div>", unsafe_allow_html=True)
         with st.form("public_login_form"):
             name = st.text_input("姓名 / 体验名", value="学员Demo")
             role = st.selectbox("选择身份", ["学员", "Founder"])
@@ -194,7 +233,7 @@ def render_public_site() -> None:
         if c2.button("Founder运营Demo"):
             login_as("Founder", "Founder")
             st.rerun()
-        st.markdown("<div class='card'><h3>推荐操作顺序</h3><p>1. Founder运营Demo<br>2. 打开练习题库<br>3. 布置给当前学员<br>4. 提交作答<br>5. 生成Review<br>6. 在Review Queue确认是否进入Proof Files</p></div></div>", unsafe_allow_html=True)
+        st.markdown("<div class='card'><h3>推荐操作顺序</h3><p>1. 打开练习题库<br>2. 布置给当前学员<br>3. 提交作答<br>4. 生成Review<br>5. 在Review Queue确认进入Proof Files<br>6. 去Proof Files查看新增证明</p></div></div>", unsafe_allow_html=True)
 
 
 def render_app_top() -> None:
@@ -209,19 +248,20 @@ def render_app_top() -> None:
         if col.button(label, type="primary" if st.session_state.current_view == view else "secondary", use_container_width=True):
             set_view(view)
             st.rerun()
-    if cols[-1].button("退出", use_container_width=True):
-        logout()
+    if cols[-1].button("重置测试数据", use_container_width=True):
+        ops.reset_operation_state()
+        _record_event("已重置当前会话业务状态表")
         st.rerun()
 
 
 def student_dashboard() -> None:
     learner = LEARNERS[LEARNERS["learner_id"] == _selected_learner_id()].iloc[0]
     cohort = COHORTS[COHORTS["cohort_id"] == learner["cohort_id"]].iloc[0]
-    task_rows = TASK_INSTANCES[TASK_INSTANCES["learner_id"] == learner["learner_id"]]
+    task_rows = ops.task_instances()[ops.task_instances()["learner_id"] == learner["learner_id"]]
     current_task = task_rows.iloc[0]
-    learner_records = joined_records()[joined_records()["learner_id"] == learner["learner_id"]]
+    learner_records = ops.joined_records()[ops.joined_records()["learner_id"] == learner["learner_id"]]
     st.markdown(f"""
-<div class='hero'><span class='pill hot'>学员业务首页 · v4.9.2</span><h1>{learner['learner_name']}：今天完成<br><span>{current_task['proof_task']}</span></h1><p>班级：{cohort['cohort_name']}。现在可以看到分配给你的练习、提交记录和Review结果。</p><span class='pill'>小组：{learner['group']}</span><span class='pill'>状态：{learner['status']}</span><span class='pill'>Assignments：{len(learner_records)}</span><span class='pill'>Proof Files：{learner['proof_files']}</span></div>
+<div class='hero'><span class='pill hot'>学员业务首页 · v4.9.3</span><h1>{learner['learner_name']}：今天完成<br><span>{current_task['proof_task']}</span></h1><p>班级：{cohort['cohort_name']}。现在可以看到分配给你的练习、提交记录、Review结果和Proof状态。</p><span class='pill'>小组：{learner['group']}</span><span class='pill'>状态：{learner['status']}</span><span class='pill'>Assignments：{len(learner_records)}</span><span class='pill'>Proof Files：{len(ops.proof_files()[ops.proof_files()['learner_name'] == learner['learner_name']])}</span></div>
 """, unsafe_allow_html=True)
     st.markdown(f"""
 <div class='grid4'>
@@ -241,23 +281,23 @@ def student_dashboard() -> None:
     if c3.button("生成下一步训练路径", use_container_width=True):
         set_view("consult")
         st.rerun()
-    _record_board(learner_id=learner["learner_id"])
+    _record_board(learner_id=str(learner["learner_id"]))
     st.markdown(_event_panel(), unsafe_allow_html=True)
 
 
 def founder_dashboard() -> None:
     metrics = get_business_metrics()
     exercise_metrics = get_exercise_metrics()
-    record_metrics = get_training_record_metrics()
+    op_metrics = ops.operation_metrics()
     st.markdown("""
-<div class='hero'><span class='pill hot'>Founder运营首页 · v4.9.2</span><h1>现在是训练业务运营系统，<br><span>练习题有完整记录链</span></h1><p>这里直接管理客户、班级、学员、练习题、Assignment、Submission、Review、Proof Files 和 Leads。</p></div>
+<div class='hero'><span class='pill hot'>Founder运营首页 · v4.9.3</span><h1>现在是训练业务运营系统，<br><span>按钮会改变业务状态</span></h1><p>这里直接管理客户、班级、学员、练习题、Assignment、Submission、Review、Proof Files 和 Leads。</p></div>
 """, unsafe_allow_html=True)
     st.markdown(f"""
 <div class='grid4'>
   <div class='card decision'><span class='mini'>练习题</span><div class='metric'>{exercise_metrics['exercise_count']}</div></div>
-  <div class='card decision'><span class='mini'>布置</span><div class='metric'>{record_metrics['assignments']}</div></div>
-  <div class='card decision'><span class='mini'>提交</span><div class='metric'>{record_metrics['submissions']}</div></div>
-  <div class='card decision'><span class='mini'>Proof Ready</span><div class='metric'>{record_metrics['proof_ready']}</div></div>
+  <div class='card decision'><span class='mini'>布置</span><div class='metric'>{op_metrics['assignments']}</div></div>
+  <div class='card decision'><span class='mini'>Proof Files</span><div class='metric'>{op_metrics['proof_files']}</div></div>
+  <div class='card decision'><span class='mini'>线索金额</span><div class='metric'>¥{op_metrics['lead_value']:,}</div></div>
 </div>
 """, unsafe_allow_html=True)
     left, right = st.columns([1.25, .75])
@@ -268,7 +308,7 @@ def founder_dashboard() -> None:
         _record_board()
     with right:
         st.markdown("<div class='section'>今日运营建议</div>", unsafe_allow_html=True)
-        st.markdown("<div class='card'><h3>先看需修改和Proof Ready</h3><p>田中悠真需要补Q&A场景；山本結衣已可进入客户汇报材料。</p></div>", unsafe_allow_html=True)
+        st.markdown("<div class='card'><h3>处理候选和需修改</h3><p>确认优秀提交进入 Proof Files；对证据不足的记录要求重新提交。</p></div>", unsafe_allow_html=True)
         if st.button("处理 Review Queue", type="primary", use_container_width=True):
             set_view("queue")
             st.rerun()
@@ -287,7 +327,7 @@ def tasks_page() -> None:
     learner_name = st.selectbox("选择学员", list(learner_options.keys()), index=0)
     st.session_state.selected_learner_id = learner_options[learner_name]
     rows = _task_rows_for_selection()
-    st.markdown("<div class='panel'><span class='pill hot'>Proof Task + Assignment Records</span><h2>按班级和学员处理真实训练任务</h2><p>这里的练习题不只是题库，还能形成 Assignment、Submission 和 Review 记录。</p></div>", unsafe_allow_html=True)
+    st.markdown("<div class='panel'><span class='pill hot'>Proof Task + Editable Records</span><h2>按班级和学员处理真实训练任务</h2><p>布置、提交、Review 会真实更新当前会话状态表。</p></div>", unsafe_allow_html=True)
     st.dataframe(rows[["day", "proof_task", "business_context", "required_output", "status", "progress", "proof_score", "founder_decision"]], use_container_width=True, hide_index=True)
     if not rows.empty:
         task_labels = [f"{r.day} · {r.proof_task} · {r.status}" for r in rows.itertuples()]
@@ -323,9 +363,9 @@ def tasks_page() -> None:
 
 
 def portfolio_page() -> None:
-    st.markdown("<div class='panel'><span class='pill hot'>Skill Proof Files 业务库</span><h2>按学员沉淀可展示作品证明</h2><p>这里不再是静态作品集，而是训练交付后的证明文件库。</p></div>", unsafe_allow_html=True)
+    st.markdown("<div class='panel'><span class='pill hot'>Skill Proof Files 业务库</span><h2>按学员沉淀可展示作品证明</h2><p>这里会显示通过状态机新增的 Proof Files。</p></div>", unsafe_allow_html=True)
     status = st.selectbox("状态筛选", ["全部", "可展示", "待Review", "修改中"])
-    df = PROOF_FILES.copy()
+    df = ops.proof_files().copy()
     if status != "全部":
         df = df[df["status"] == status]
     st.dataframe(df, use_container_width=True, hide_index=True)
@@ -346,37 +386,51 @@ def portfolio_page() -> None:
 
 
 def consult_page() -> None:
-    st.markdown("<div class='panel'><span class='pill hot'>Leads / 服务包运营</span><h2>把训练交付转成可销售服务包</h2><p>这里管理真实测试线索、服务包报价和跟进状态。</p></div>", unsafe_allow_html=True)
+    st.markdown("<div class='panel'><span class='pill hot'>Leads / 服务包运营</span><h2>把训练交付转成可销售服务包</h2><p>新增线索和状态变更会真实更新当前会话 Leads 表。</p></div>", unsafe_allow_html=True)
     left, right = st.columns([1.15, .85])
     with left:
         st.markdown("<div class='section'>服务包</div>", unsafe_allow_html=True)
         st.dataframe(SERVICE_PACKAGES, use_container_width=True, hide_index=True)
         st.markdown("<div class='section'>线索列表</div>", unsafe_allow_html=True)
-        st.dataframe(CONSULT_LEADS, use_container_width=True, hide_index=True)
+        leads_df = ops.consult_leads()
+        st.dataframe(leads_df, use_container_width=True, hide_index=True)
+        if not leads_df.empty:
+            lead_labels = [f"{r.lead_id} · {r.client_name} · {r.status}" for r in leads_df.itertuples()]
+            selected_lead = st.selectbox("选择线索改状态", lead_labels)
+            lead_id = selected_lead.split(" · ")[0]
+            c1, c2, c3 = st.columns(3)
+            if c1.button("标记已联系", use_container_width=True):
+                ops.update_lead_status(lead_id, "已联系")
+                _record_event(f"{lead_id} 已标记为已联系")
+                st.rerun()
+            if c2.button("标记已预约", use_container_width=True):
+                ops.update_lead_status(lead_id, "已预约")
+                _record_event(f"{lead_id} 已标记为已预约")
+                st.rerun()
+            if c3.button("标记已成交", type="primary", use_container_width=True):
+                ops.update_lead_status(lead_id, "已成交")
+                _record_event(f"{lead_id} 已标记为已成交")
+                st.rerun()
     with right:
         st.markdown("<div class='lead-card'><h3>新增测试线索</h3><p>用于模拟真实业务：客户、需求、预算、状态。</p>", unsafe_allow_html=True)
-        with st.form("lead_form_v492"):
+        with st.form("lead_form_v493"):
             client = st.text_input("客户名", value="某软件外包公司")
+            package = st.text_input("服务包", value="企业训练版")
             need = st.text_input("需求", value="Java新人训练标准包")
             budget = st.number_input("预算 / 潜在金额", min_value=0, value=30000, step=1000)
             note = st.text_area("备注", value="希望把新人培训从讲师交付转成标准任务包。")
-            ok = st.form_submit_button("生成测试线索", type="primary")
+            ok = st.form_submit_button("新增线索到状态表", type="primary")
         if ok:
-            _record_event(f"新增线索：{client} · {need} · ¥{budget:,}")
-            st.success("测试线索已加入业务操作记录。")
+            lead_id = ops.add_lead(client_name=client, package=package, need=need, potential_value=int(budget), note=note)
+            _record_event(f"新增线索 {lead_id}：{client} · {need} · ¥{budget:,}")
+            st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
-        if st.button("标记 JHC 线索已预约", use_container_width=True):
-            _record_event("JHC Java新人训练标准包线索已标记为已预约")
-            st.success("状态已更新到操作记录。")
-        if st.button("标记比特顽童线索已联系", use_container_width=True):
-            _record_event("比特顽童讲师训练包线索已标记为已联系")
-            st.success("状态已更新到操作记录。")
         st.markdown(_event_panel(), unsafe_allow_html=True)
 
 
 def founder_queue() -> None:
-    pending = joined_records()
-    st.markdown("<div class='panel'><span class='pill hot'>Review Queue</span><h2>Founder处理具体提交和线索</h2><p>这里显示 Assignment / Submission / Review 记录：哪些学员已提交，哪些需修改，哪些可进入Proof Files。</p></div>", unsafe_allow_html=True)
+    pending = ops.joined_records()
+    st.markdown("<div class='panel'><span class='pill hot'>Review Queue</span><h2>Founder处理具体提交和线索</h2><p>确认、打回、沟通都会更新当前会话状态表。</p></div>", unsafe_allow_html=True)
     st.markdown("<div class='section'>待处理训练记录</div>", unsafe_allow_html=True)
     st.dataframe(pending[["assignment_id", "exercise_id", "learner_name", "status", "submitted_at", "score", "decision", "proof_ready"]], use_container_width=True, hide_index=True)
     if not pending.empty:
@@ -386,14 +440,16 @@ def founder_queue() -> None:
         st.markdown(f"<div class='queue-card decision'><h3>{rec.learner_name} · {rec.exercise_id}</h3><p><b>提交摘要：</b>{rec.answer_summary if pd.notna(rec.answer_summary) else '暂无'}<br><b>分数：</b>{rec.score if pd.notna(rec.score) else '未评分'}<br><b>决策：</b>{rec.decision if pd.notna(rec.decision) else '未Review'}<br><b>Proof Ready：</b>{rec.proof_ready if pd.notna(rec.proof_ready) else '否'}</p></div>", unsafe_allow_html=True)
         c1, c2, c3 = st.columns(3)
         if c1.button("确认进入Proof Files", type="primary", use_container_width=True):
+            ops.mark_assignment_proof_ready(str(rec.assignment_id))
             _record_event(f"确认 {rec.learner_name} 的 {rec.exercise_id} 进入 Proof Files")
-            st.success("已确认。")
+            st.rerun()
         if c2.button("要求重新提交", use_container_width=True):
+            ops.request_resubmission(str(rec.assignment_id))
             _record_event(f"要求 {rec.learner_name} 重新提交 {rec.exercise_id}")
-            st.warning("已打回。")
+            st.rerun()
         if c3.button("标记已沟通", use_container_width=True):
             _record_event(f"已和 {rec.learner_name} 沟通 {rec.exercise_id}")
             st.info("已记录沟通。")
     st.markdown("<div class='section'>待跟进 Leads</div>", unsafe_allow_html=True)
-    st.dataframe(CONSULT_LEADS[["client_name", "package", "need", "status", "potential_value"]], use_container_width=True, hide_index=True)
+    st.dataframe(ops.consult_leads()[["client_name", "package", "need", "status", "potential_value"]], use_container_width=True, hide_index=True)
     st.markdown(_event_panel(), unsafe_allow_html=True)
