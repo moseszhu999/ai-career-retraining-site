@@ -6,9 +6,7 @@ from io import BytesIO
 import pandas as pd
 import streamlit as st
 
-from frontend import operation_state as ops
-from frontend.audit_log import audit_logs
-from frontend.business_data import CLIENTS, COHORTS, LEARNERS
+from frontend.data_repository import TrainingRepository, get_repository
 from frontend.permissions import can_manage_operations, forbidden_message, permission_summary_html
 from frontend.report_pages import _report_text
 
@@ -26,42 +24,52 @@ def _excel_bytes(tables: dict[str, pd.DataFrame]) -> bytes:
     return output.getvalue()
 
 
-def _export_tables() -> dict[str, pd.DataFrame]:
+def _export_tables(repo: TrainingRepository) -> dict[str, pd.DataFrame]:
     return {
-        "training_records": ops.joined_records(),
-        "assignments": ops.assignments(),
-        "submissions": ops.submissions(),
-        "reviews": ops.reviews(),
-        "proof_files": ops.proof_files(),
-        "leads": ops.consult_leads(),
-        "audit_logs": audit_logs(),
+        "training_records": repo.joined_records(),
+        "assignments": repo.assignments(),
+        "submissions": repo.submissions(),
+        "reviews": repo.reviews(),
+        "proof_files": repo.proof_files(),
+        "leads": repo.consult_leads(),
+        "audit_logs": repo.audit_logs(),
     }
 
 
-def _client_tables(client_id: str) -> dict[str, pd.DataFrame]:
-    client_df = CLIENTS[CLIENTS["client_id"] == client_id].copy()
-    cohorts_df = COHORTS[COHORTS["client_id"] == client_id].copy()
-    cohort_ids = cohorts_df["cohort_id"].tolist()
-    learners_df = LEARNERS[LEARNERS["cohort_id"].isin(cohort_ids)].copy()
-    learner_names = learners_df["learner_name"].tolist()
-    learner_ids = learners_df["learner_id"].tolist()
+def _client_tables(repo: TrainingRepository, client_id: str) -> dict[str, pd.DataFrame]:
+    clients = repo.clients()
+    cohorts = repo.cohorts()
+    learners = repo.learners()
+    assignments = repo.assignments()
+    submissions = repo.submissions()
+    reviews = repo.reviews()
+    records = repo.joined_records()
+    tasks = repo.task_instances()
+    proofs = repo.proof_files()
+    leads = repo.consult_leads()
 
-    assignments_df = ops.assignments()[ops.assignments()["cohort_id"].isin(cohort_ids)].copy()
-    assignment_ids = assignments_df["assignment_id"].tolist()
-    submissions_df = ops.submissions()[ops.submissions()["assignment_id"].isin(assignment_ids)].copy()
-    submission_ids = submissions_df["submission_id"].tolist()
-    reviews_df = ops.reviews()[ops.reviews()["submission_id"].isin(submission_ids)].copy()
-    records_df = ops.joined_records()[ops.joined_records()["cohort_id"].isin(cohort_ids)].copy()
-    tasks_df = ops.task_instances()[ops.task_instances()["learner_id"].isin(learner_ids)].copy()
-    proof_df = ops.proof_files()[ops.proof_files()["learner_name"].isin(learner_names)].copy()
+    client_df = clients[clients["client_id"] == client_id].copy() if "client_id" in clients.columns else pd.DataFrame()
+    cohorts_df = cohorts[cohorts["client_id"] == client_id].copy() if "client_id" in cohorts.columns else pd.DataFrame()
+    cohort_ids = cohorts_df["cohort_id"].tolist() if "cohort_id" in cohorts_df.columns else []
+    learners_df = learners[learners["cohort_id"].isin(cohort_ids)].copy() if "cohort_id" in learners.columns else pd.DataFrame()
+    learner_names = learners_df["learner_name"].tolist() if "learner_name" in learners_df.columns else []
+    learner_ids = learners_df["learner_id"].tolist() if "learner_id" in learners_df.columns else []
 
-    client_name = str(client_df.iloc[0]["client_name"]) if not client_df.empty else ""
-    leads = ops.consult_leads()
-    leads_df = leads[leads["client_name"] == client_name].copy()
-    if leads_df.empty and client_name:
+    assignments_df = assignments[assignments["cohort_id"].isin(cohort_ids)].copy() if "cohort_id" in assignments.columns else pd.DataFrame()
+    assignment_ids = assignments_df["assignment_id"].tolist() if "assignment_id" in assignments_df.columns else []
+    submissions_df = submissions[submissions["assignment_id"].isin(assignment_ids)].copy() if "assignment_id" in submissions.columns else pd.DataFrame()
+    submission_ids = submissions_df["submission_id"].tolist() if "submission_id" in submissions_df.columns else []
+    reviews_df = reviews[reviews["submission_id"].isin(submission_ids)].copy() if "submission_id" in reviews.columns else pd.DataFrame()
+    records_df = records[records["cohort_id"].isin(cohort_ids)].copy() if "cohort_id" in records.columns else pd.DataFrame()
+    tasks_df = tasks[tasks["learner_id"].isin(learner_ids)].copy() if "learner_id" in tasks.columns else pd.DataFrame()
+    proof_df = proofs[proofs["learner_name"].isin(learner_names)].copy() if "learner_name" in proofs.columns else pd.DataFrame()
+
+    client_name = str(client_df.iloc[0]["client_name"]) if not client_df.empty and "client_name" in client_df.columns else ""
+    leads_df = leads[leads["client_name"] == client_name].copy() if client_name and "client_name" in leads.columns else pd.DataFrame()
+    if leads_df.empty and client_name and "client_name" in leads.columns:
         leads_df = leads[leads["client_name"].str.contains(client_name[:4], na=False)].copy()
 
-    audit_df = _client_audits(assignment_ids, submissions_df, reviews_df, proof_df, leads_df, learner_names)
+    audit_df = _client_audits(repo.audit_logs(), assignment_ids, submissions_df, reviews_df, proof_df, leads_df, learner_names)
 
     return {
         "client": client_df,
@@ -79,6 +87,7 @@ def _client_tables(client_id: str) -> dict[str, pd.DataFrame]:
 
 
 def _client_audits(
+    audits: pd.DataFrame,
     assignment_ids: list[str],
     submissions_df: pd.DataFrame,
     reviews_df: pd.DataFrame,
@@ -86,22 +95,23 @@ def _client_audits(
     leads_df: pd.DataFrame,
     learner_names: list[str],
 ) -> pd.DataFrame:
-    audits = audit_logs().copy()
+    audits = audits.copy()
     object_ids = set(assignment_ids)
-    if not submissions_df.empty:
+    if not submissions_df.empty and "submission_id" in submissions_df.columns:
         object_ids.update(submissions_df["submission_id"].tolist())
-    if not reviews_df.empty:
+    if not reviews_df.empty and "review_id" in reviews_df.columns:
         object_ids.update(reviews_df["review_id"].tolist())
-    if not proof_df.empty:
+    if not proof_df.empty and "proof_id" in proof_df.columns:
         object_ids.update(proof_df["proof_id"].tolist())
-    if not leads_df.empty:
+    if not leads_df.empty and "lead_id" in leads_df.columns:
         object_ids.update(leads_df["lead_id"].tolist())
 
-    if audits.empty:
+    if audits.empty or "object_id" not in audits.columns:
         return audits
     mask = audits["object_id"].isin(object_ids)
-    for name in learner_names:
-        mask = mask | audits["summary"].str.contains(str(name), na=False)
+    if "summary" in audits.columns:
+        for name in learner_names:
+            mask = mask | audits["summary"].str.contains(str(name), na=False)
     return audits[mask].copy()
 
 
@@ -131,7 +141,7 @@ def _public_leads(leads: pd.DataFrame) -> pd.DataFrame:
         "跟进中": "需求沟通进行中。",
         "已转化": "已进入正式服务推进。",
     }
-    if not public.empty:
+    if not public.empty and "状态" in public.columns:
         public["业务状态说明"] = public["状态"].map(status_text).fillna("需求已记录，等待后续沟通。")
     else:
         public["业务状态说明"] = []
@@ -152,13 +162,15 @@ def _public_updates(audits: pd.DataFrame) -> pd.DataFrame:
         "更新Lead状态": "后续需求状态已更新",
     }
     rows = []
-    for row in audits.sort_values("time", ascending=False).itertuples():
-        if row.action == "重置测试数据":
+    time_sort = audits.sort_values("time", ascending=False) if "time" in audits.columns else audits
+    for row in time_sort.itertuples():
+        action = str(getattr(row, "action", ""))
+        if action == "重置测试数据":
             continue
         rows.append({
-            "更新时间": row.time,
-            "交付事件": action_names.get(row.action, "交付状态已更新"),
-            "状态变化": f"{row.before_status} → {row.after_status}",
+            "更新时间": getattr(row, "time", ""),
+            "交付事件": action_names.get(action, "交付状态已更新"),
+            "状态变化": f"{getattr(row, 'before_status', '')} → {getattr(row, 'after_status', '')}",
         })
     return pd.DataFrame(rows, columns=["更新时间", "交付事件", "状态变化"])
 
@@ -184,22 +196,22 @@ def _client_public_tables(tables: dict[str, pd.DataFrame]) -> dict[str, pd.DataF
 
 
 def _client_report_text(client_id: str, tables: dict[str, pd.DataFrame]) -> str:
-    client_name = str(tables["client"].iloc[0]["client_name"]) if not tables["client"].empty else client_id
-    contract_value = int(tables["client"].iloc[0]["contract_value"]) if not tables["client"].empty else 0
+    client_name = str(tables["client"].iloc[0]["client_name"]) if not tables["client"].empty and "client_name" in tables["client"].columns else client_id
+    contract_value = int(tables["client"].iloc[0]["contract_value"]) if not tables["client"].empty and "contract_value" in tables["client"].columns else 0
     records = tables["training_records"]
     reviews = tables["reviews"]
     proofs = tables["proof_files"]
     leads = tables["leads"]
     audits = tables["audit_logs"]
 
-    proof_ready = int((reviews["proof_ready"] == "是").sum()) if not reviews.empty else 0
-    need_revision = int((reviews["decision"] == "需修改").sum()) if not reviews.empty else 0
-    lead_value = int(leads["potential_value"].sum()) if not leads.empty else 0
+    proof_ready = int((reviews["proof_ready"] == "是").sum()) if not reviews.empty and "proof_ready" in reviews.columns else 0
+    need_revision = int((reviews["decision"] == "需修改").sum()) if not reviews.empty and "decision" in reviews.columns else 0
+    lead_value = int(leads["potential_value"].sum()) if not leads.empty and "potential_value" in leads.columns else 0
 
     proof_lines = "\n".join(
         f"- {r.learner_name}：《{r.title}》{int(r.score)}分，状态：{r.status}"
         for r in proofs.sort_values("score", ascending=False).head(5).itertuples()
-    ) or "- 暂无可展示 Proof File。"
+    ) if not proofs.empty and "score" in proofs.columns else "- 暂无可展示 Proof File。"
 
     revision_rows = records[records["decision"] == "需修改"] if not records.empty and "decision" in records.columns else pd.DataFrame()
     revision_lines = "\n".join(
@@ -210,11 +222,12 @@ def _client_report_text(client_id: str, tables: dict[str, pd.DataFrame]) -> str:
     lead_lines = "\n".join(
         f"- {r.need}：{r.status}，金额：¥{int(r.potential_value):,}"
         for r in leads.itertuples()
-    ) or "- 暂无客户线索。"
+    ) if not leads.empty and "potential_value" in leads.columns else "- 暂无客户线索。"
 
+    audit_sort = audits.sort_values("time", ascending=False).head(8) if not audits.empty and "time" in audits.columns else pd.DataFrame()
     audit_lines = "\n".join(
         f"- {r.time}｜{r.actor}｜{r.action}｜{r.object_type}:{r.object_id}｜{r.before_status}→{r.after_status}"
-        for r in audits.sort_values("time", ascending=False).head(8).itertuples()
+        for r in audit_sort.itertuples()
     ) or "- 暂无该客户相关操作日志。"
 
     return f"""# {client_name} 客户交付包周报（内部版）
@@ -256,14 +269,14 @@ def _client_report_text(client_id: str, tables: dict[str, pd.DataFrame]) -> str:
 
 
 def _client_public_report_text(client_id: str, public_tables: dict[str, pd.DataFrame], raw_tables: dict[str, pd.DataFrame]) -> str:
-    client_name = str(raw_tables["client"].iloc[0]["client_name"]) if not raw_tables["client"].empty else client_id
-    service_package = str(raw_tables["client"].iloc[0]["service_package"]) if not raw_tables["client"].empty else "AI Skill Growth OS"
+    client_name = str(raw_tables["client"].iloc[0]["client_name"]) if not raw_tables["client"].empty and "client_name" in raw_tables["client"].columns else client_id
+    service_package = str(raw_tables["client"].iloc[0]["service_package"]) if not raw_tables["client"].empty and "service_package" in raw_tables["client"].columns else "AI Skill Growth OS"
     records, reviews = raw_tables["training_records"], raw_tables["reviews"]
-    proof_ready = int((reviews["proof_ready"] == "是").sum()) if not reviews.empty else 0
-    need_revision = int((reviews["decision"] == "需修改").sum()) if not reviews.empty else 0
+    proof_ready = int((reviews["proof_ready"] == "是").sum()) if not reviews.empty and "proof_ready" in reviews.columns else 0
+    need_revision = int((reviews["decision"] == "需修改").sum()) if not reviews.empty and "decision" in reviews.columns else 0
 
     proofs = public_tables["作品证明"]
-    proof_lines = "- 暂无可展示作品证明。" if proofs.empty else "\n".join(
+    proof_lines = "- 暂无可展示作品证明。" if proofs.empty or "分数" not in proofs.columns else "\n".join(
         f"- {r['学员']}：《{r['作品标题']}》，状态：{r['状态']}，分数：{int(r['分数'])}"
         for _, r in proofs.sort_values("分数", ascending=False).head(5).iterrows()
     )
@@ -325,7 +338,8 @@ def export_page() -> None:
         st.warning(forbidden_message("导出企业交付数据"))
         return
 
-    tables = _export_tables()
+    repo = get_repository()
+    tables = _export_tables(repo)
     st.markdown(f"""
 <div class='grid4'>
   <div class='card'><span class='mini'>训练记录</span><div class='metric'>{len(tables['training_records'])}</div></div>
@@ -368,10 +382,15 @@ def export_page() -> None:
     )
 
     st.markdown("<div class='section'>按客户导出交付包</div>", unsafe_allow_html=True)
-    client_options = dict(zip(CLIENTS["client_name"], CLIENTS["client_id"]))
+    clients = repo.clients()
+    if clients.empty or "client_name" not in clients.columns or "client_id" not in clients.columns:
+        st.info("暂无可导出的客户。")
+        return
+
+    client_options = dict(zip(clients["client_name"], clients["client_id"]))
     client_name = st.selectbox("选择客户", list(client_options.keys()))
     client_id = client_options[client_name]
-    raw_client_tables = _client_tables(client_id)
+    raw_client_tables = _client_tables(repo, client_id)
     export_version = st.radio("交付包版本", ["客户版（脱敏字段白名单）", "内部版（客户范围完整）"], horizontal=True)
     customer_mode = export_version.startswith("客户版")
     client_tables = _client_public_tables(raw_client_tables) if customer_mode else raw_client_tables
@@ -396,7 +415,7 @@ def export_page() -> None:
     st.download_button(
         "下载该客户 Excel 交付包",
         data=_excel_bytes(client_tables),
-        file_name=f"{client_id}_{suffix}_delivery_pack_v4_10_2.xlsx",
+        file_name=f"{client_id}_{suffix}_delivery_pack_v4_11_1.xlsx",
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         use_container_width=True,
     )
@@ -405,13 +424,13 @@ def export_page() -> None:
     st.download_button(
         "下载该客户周报 Markdown",
         data=client_report.encode("utf-8"),
-        file_name=f"{client_id}_{suffix}_weekly_report_v4_10_2.md",
+        file_name=f"{client_id}_{suffix}_weekly_report_v4_11_1.md",
         mime="text/markdown",
         use_container_width=True,
     )
 
     st.markdown("<div class='section'>全量企业周报 Markdown（内部版）</div>", unsafe_allow_html=True)
-    report_markdown = _report_text()
+    report_markdown = _report_text(repo)
     st.text_area("全量周报内容预览", value=report_markdown, height=360)
     st.download_button(
         "下载全量企业交付周报 Markdown（内部版）",
