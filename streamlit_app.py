@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import streamlit as st
 
+from frontend.operation_state import init_operation_state
 from frontend.pages import (
     consult_page,
     founder_dashboard,
@@ -19,6 +20,7 @@ st.set_page_config(page_title="AI Skill Growth OS", page_icon="🚀", layout="wi
 
 apply_styles()
 init_state()
+init_operation_state()
 
 if not st.session_state.logged_in:
     render_public_site()
@@ -45,4 +47,4 @@ else:
         else:
             consult_page()
 
-st.caption("AI Skill Growth OS · Assignment Submission Review Records · v4.9.2")
+st.caption("AI Skill Growth OS · Editable Business State Machine · v4.9.3")
