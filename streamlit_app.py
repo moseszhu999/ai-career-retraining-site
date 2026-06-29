@@ -3,13 +3,13 @@ from __future__ import annotations
 import streamlit as st
 
 from frontend.audit_pages import audit_log_page
+from frontend.business_nav import render_business_top
 from frontend.business_pages import (
     assignments_page,
     clients_page,
     cohorts_page,
     leads_page,
     learners_page,
-    render_business_top,
     review_queue_page,
 )
 from frontend.operation_state import init_operation_state
@@ -19,6 +19,7 @@ from frontend.pages import (
     render_public_site,
     tasks_page,
 )
+from frontend.report_pages import delivery_report_page
 from frontend.state import init_state
 from frontend.student_business_pages import (
     student_home_page,
@@ -59,6 +60,8 @@ else:
             portfolio_page()
         elif view == "consult":
             leads_page()
+        elif view == "report":
+            delivery_report_page()
         elif view == "audit":
             audit_log_page()
         else:
@@ -77,4 +80,4 @@ else:
         else:
             student_home_page()
 
-st.caption("AI Skill Growth OS · Operation Audit Log · v4.9.8")
+st.caption("AI Skill Growth OS · Enterprise Delivery Report · v4.9.9")
