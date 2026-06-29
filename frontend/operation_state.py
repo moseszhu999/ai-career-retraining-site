@@ -1,0 +1,249 @@
+from __future__ import annotations
+
+from datetime import datetime
+
+import pandas as pd
+import streamlit as st
+
+from frontend.business_data import CONSULT_LEADS, PROOF_FILES, TASK_INSTANCES
+from frontend.training_records import ASSIGNMENTS, REVIEWS, SUBMISSIONS
+
+
+def init_operation_state() -> None:
+    """Create mutable in-session copies of demo business tables.
+
+    This is the bridge between static test data and a real database. Later,
+    these getters/actions can be replaced by Supabase reads/writes without
+    rewriting page UI.
+    """
+    table_defaults = {
+        "op_task_instances": TASK_INSTANCES.copy(),
+        "op_assignments": ASSIGNMENTS.copy(),
+        "op_submissions": SUBMISSIONS.copy(),
+        "op_reviews": REVIEWS.copy(),
+        "op_proof_files": PROOF_FILES.copy(),
+        "op_consult_leads": CONSULT_LEADS.copy(),
+    }
+    for key, value in table_defaults.items():
+        if key not in st.session_state:
+            st.session_state[key] = value
+
+
+def task_instances() -> pd.DataFrame:
+    return st.session_state.op_task_instances
+
+
+def assignments() -> pd.DataFrame:
+    return st.session_state.op_assignments
+
+
+def submissions() -> pd.DataFrame:
+    return st.session_state.op_submissions
+
+
+def reviews() -> pd.DataFrame:
+    return st.session_state.op_reviews
+
+
+def proof_files() -> pd.DataFrame:
+    return st.session_state.op_proof_files
+
+
+def consult_leads() -> pd.DataFrame:
+    return st.session_state.op_consult_leads
+
+
+def joined_records() -> pd.DataFrame:
+    merged = assignments().merge(
+        submissions()[["assignment_id", "submission_id", "submitted_at", "answer_summary", "status"]].rename(columns={"status": "submission_status"}),
+        on="assignment_id",
+        how="left",
+    )
+    merged = merged.merge(
+        reviews()[["submission_id", "reviewer", "score", "review_comment", "decision", "proof_ready"]],
+        on="submission_id",
+        how="left",
+    )
+    return merged
+
+
+def operation_metrics() -> dict[str, int]:
+    return {
+        "assignments": int(len(assignments())),
+        "submissions": int(len(submissions())),
+        "reviews": int(len(reviews())),
+        "proof_ready": int((reviews()["proof_ready"] == "是").sum()),
+        "need_revision": int((reviews()["decision"] == "需修改").sum()),
+        "proof_files": int(len(proof_files())),
+        "leads": int(len(consult_leads())),
+        "lead_value": int(consult_leads()["potential_value"].sum()),
+    }
+
+
+def _next_id(prefix: str, df: pd.DataFrame, column: str) -> str:
+    return f"{prefix}-{len(df) + 1:03d}"
+
+
+def assign_exercise(*, exercise_id: str, learner_id: str, learner_name: str, cohort_id: str, note: str) -> str:
+    df = assignments().copy()
+    assignment_id = _next_id("asn", df, "assignment_id")
+    today = datetime.now().strftime("%Y-%m-%d")
+    new_row = {
+        "assignment_id": assignment_id,
+        "exercise_id": exercise_id,
+        "learner_id": learner_id,
+        "learner_name": learner_name,
+        "cohort_id": cohort_id,
+        "status": "已布置",
+        "assigned_at": today,
+        "due_date": today,
+        "note": note,
+    }
+    st.session_state.op_assignments = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+    return assignment_id
+
+
+def submit_assignment(*, assignment_id: str, exercise_id: str, learner_id: str, learner_name: str, answer_summary: str) -> str:
+    sub_df = submissions().copy()
+    existing = sub_df[sub_df["assignment_id"] == assignment_id]
+    submitted_at = datetime.now().strftime("%Y-%m-%d %H:%M")
+    if existing.empty:
+        submission_id = _next_id("sub", sub_df, "submission_id")
+        new_row = {
+            "submission_id": submission_id,
+            "assignment_id": assignment_id,
+            "exercise_id": exercise_id,
+            "learner_id": learner_id,
+            "learner_name": learner_name,
+            "status": "已提交",
+            "submitted_at": submitted_at,
+            "answer_summary": answer_summary or "已提交练习作答。",
+        }
+        st.session_state.op_submissions = pd.concat([sub_df, pd.DataFrame([new_row])], ignore_index=True)
+    else:
+        submission_id = str(existing.iloc[0]["submission_id"])
+        idx = existing.index[0]
+        sub_df.loc[idx, ["status", "submitted_at", "answer_summary"]] = ["已提交", submitted_at, answer_summary or "已提交练习作答。"]
+        st.session_state.op_submissions = sub_df
+    _set_assignment_status(assignment_id, "已提交")
+    return submission_id
+
+
+def review_submission(*, submission_id: str, reviewer: str, score: int, review_comment: str, decision: str, proof_ready: str) -> str:
+    rev_df = reviews().copy()
+    existing = rev_df[rev_df["submission_id"] == submission_id]
+    if existing.empty:
+        review_id = _next_id("rev", rev_df, "review_id")
+        new_row = {
+            "review_id": review_id,
+            "submission_id": submission_id,
+            "reviewer": reviewer,
+            "score": score,
+            "review_comment": review_comment,
+            "decision": decision,
+            "proof_ready": proof_ready,
+        }
+        st.session_state.op_reviews = pd.concat([rev_df, pd.DataFrame([new_row])], ignore_index=True)
+    else:
+        review_id = str(existing.iloc[0]["review_id"])
+        idx = existing.index[0]
+        rev_df.loc[idx, ["reviewer", "score", "review_comment", "decision", "proof_ready"]] = [reviewer, score, review_comment, decision, proof_ready]
+        st.session_state.op_reviews = rev_df
+    assignment_row = submissions()[submissions()["submission_id"] == submission_id]
+    if not assignment_row.empty:
+        _set_assignment_status(str(assignment_row.iloc[0]["assignment_id"]), "已确认" if proof_ready == "是" else decision)
+    return review_id
+
+
+def mark_assignment_proof_ready(assignment_id: str) -> None:
+    records = joined_records()
+    row_df = records[records["assignment_id"] == assignment_id]
+    if row_df.empty:
+        return
+    row = row_df.iloc[0]
+    submission_id = row.get("submission_id")
+    if pd.notna(submission_id):
+        review_submission(
+            submission_id=str(submission_id),
+            reviewer="Founder",
+            score=int(row["score"]) if pd.notna(row.get("score")) else 85,
+            review_comment="Founder确认进入 Proof Files。",
+            decision="已确认",
+            proof_ready="是",
+        )
+    _set_assignment_status(assignment_id, "已确认")
+    add_proof_file_from_record(assignment_id)
+
+
+def request_resubmission(assignment_id: str) -> None:
+    _set_assignment_status(assignment_id, "需修改")
+    records = joined_records()
+    row_df = records[records["assignment_id"] == assignment_id]
+    if not row_df.empty and pd.notna(row_df.iloc[0].get("submission_id")):
+        review_submission(
+            submission_id=str(row_df.iloc[0]["submission_id"]),
+            reviewer="Founder",
+            score=int(row_df.iloc[0]["score"]) if pd.notna(row_df.iloc[0].get("score")) else 60,
+            review_comment="Founder要求重新提交，补充缺失证据。",
+            decision="需修改",
+            proof_ready="否",
+        )
+
+
+def add_proof_file_from_record(assignment_id: str) -> str | None:
+    records = joined_records()
+    row_df = records[records["assignment_id"] == assignment_id]
+    if row_df.empty:
+        return None
+    row = row_df.iloc[0]
+    proof_df = proof_files().copy()
+    title = f"{row['exercise_id']} 训练证明"
+    duplicate = proof_df[(proof_df["learner_name"] == row["learner_name"]) & (proof_df["title"] == title)]
+    if not duplicate.empty:
+        return str(duplicate.iloc[0]["proof_id"])
+    proof_id = _next_id("proof", proof_df, "proof_id")
+    new_row = {
+        "proof_id": proof_id,
+        "learner_name": row["learner_name"],
+        "title": title,
+        "status": "可展示",
+        "score": int(row["score"]) if pd.notna(row.get("score")) else 85,
+        "evidence": row["answer_summary"] if pd.notna(row.get("answer_summary")) else "练习提交 + Founder确认",
+        "note": "由 Assignment / Submission / Review 状态机生成。",
+    }
+    st.session_state.op_proof_files = pd.concat([proof_df, pd.DataFrame([new_row])], ignore_index=True)
+    return proof_id
+
+
+def add_lead(*, client_name: str, package: str, need: str, potential_value: int, note: str) -> str:
+    df = consult_leads().copy()
+    lead_id = _next_id("lead", df, "lead_id")
+    new_row = {
+        "lead_id": lead_id,
+        "client_name": client_name,
+        "package": package,
+        "need": need,
+        "status": "新线索",
+        "potential_value": potential_value,
+        "note": note,
+    }
+    st.session_state.op_consult_leads = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+    return lead_id
+
+
+def update_lead_status(lead_id: str, status: str) -> None:
+    df = consult_leads().copy()
+    df.loc[df["lead_id"] == lead_id, "status"] = status
+    st.session_state.op_consult_leads = df
+
+
+def reset_operation_state() -> None:
+    for key in ["op_task_instances", "op_assignments", "op_submissions", "op_reviews", "op_proof_files", "op_consult_leads"]:
+        st.session_state.pop(key, None)
+    init_operation_state()
+
+
+def _set_assignment_status(assignment_id: str, status: str) -> None:
+    df = assignments().copy()
+    df.loc[df["assignment_id"] == assignment_id, "status"] = status
+    st.session_state.op_assignments = df
