@@ -26,7 +26,7 @@ def render_business_top() -> None:
     st.markdown(
         f"""
 <div class='top'>
-  <div class='brand'>AI Skill Growth OS<small>v4.9.7 · Role Permission Console</small></div>
+  <div class='brand'>AI Skill Growth OS<small>v4.9.8 · Audit Log Console</small></div>
   <div>{chip(st.session_state.role)}<span class='pill'>{st.session_state.user_name}</span><span class='pill'>最近：{st.session_state.last_event}</span></div>
 </div>
 """,
@@ -43,6 +43,7 @@ def render_business_top() -> None:
             ("queue", "Review Queue"),
             ("portfolio", "Proof Files"),
             ("consult", "Leads"),
+            ("audit", "Audit"),
         ]
     else:
         nav = [
