@@ -22,11 +22,21 @@ from frontend.permissions import (
 from frontend.state import chip, logout, set_view
 
 
+def _cols(df: pd.DataFrame, names: list[str]) -> list[str]:
+    return [c for c in names if c in df.columns]
+
+
+def _accuracy_text(total: int, correct: int) -> str:
+    if total <= 0:
+        return "0%"
+    return f"{correct / total * 100:.1f}%"
+
+
 def render_business_top() -> None:
     st.markdown(
         f"""
 <div class='top'>
-  <div class='brand'>AI Skill Growth OS<small>v4.9.8 · Audit Log Console</small></div>
+  <div class='brand'>AI Skill Growth OS<small>v4.20.0 · MCQ Analytics</small></div>
   <div>{chip(st.session_state.role)}<span class='pill'>{st.session_state.user_name}</span><span class='pill'>最近：{st.session_state.last_event}</span></div>
 </div>
 """,
@@ -108,11 +118,13 @@ def cohorts_page() -> None:
     learners = LEARNERS[LEARNERS["cohort_id"] == cohort["cohort_id"]]
     tasks = ops.task_instances()[ops.task_instances()["cohort_id"] == cohort["cohort_id"]]
     records = ops.joined_records()[ops.joined_records()["cohort_id"] == cohort["cohort_id"]]
+    mcq = records[records["question_type"] == "单选题"] if "question_type" in records.columns else records.iloc[0:0]
+    correct = int(mcq["is_correct"].fillna(False).sum()) if not mcq.empty else 0
     st.markdown(f"""
 <div class='grid4'>
   <div class='card'><span class='mini'>学员</span><div class='metric'>{len(learners)}</div></div>
-  <div class='card'><span class='mini'>任务</span><div class='metric'>{len(tasks)}</div></div>
   <div class='card'><span class='mini'>Assignments</span><div class='metric'>{len(records)}</div></div>
+  <div class='card'><span class='mini'>选择题正确率</span><div class='metric'>{_accuracy_text(len(mcq), correct)}</div></div>
   <div class='card'><span class='mini'>平均进度</span><div class='metric'>{int(learners['progress'].mean()) if not learners.empty else 0}%</div></div>
 </div>
 """, unsafe_allow_html=True)
@@ -120,6 +132,10 @@ def cohorts_page() -> None:
     st.dataframe(learners, use_container_width=True, hide_index=True)
     st.markdown("<div class='section'>班级任务</div>", unsafe_allow_html=True)
     st.dataframe(tasks[["learner_name", "day", "proof_task", "status", "progress", "proof_score"]], use_container_width=True, hide_index=True)
+    module_stats = ops.mcq_module_stats()
+    if not module_stats.empty:
+        st.markdown("<div class='section'>模块正确率 / 薄弱点</div>", unsafe_allow_html=True)
+        st.dataframe(module_stats, use_container_width=True, hide_index=True)
 
 
 def learners_page() -> None:
@@ -140,31 +156,42 @@ def learners_page() -> None:
     records = ops.joined_records()[ops.joined_records()["learner_id"] == learner["learner_id"]]
     proofs = ops.proof_files()[ops.proof_files()["learner_name"] == learner["learner_name"]]
     tasks = ops.task_instances()[ops.task_instances()["learner_id"] == learner["learner_id"]]
+    wrong = ops.wrong_answer_records(str(learner["learner_id"]))
+    mcq = records[records["question_type"] == "单选题"] if "question_type" in records.columns else records.iloc[0:0]
+    correct = int(mcq["is_correct"].fillna(False).sum()) if not mcq.empty else 0
     st.markdown(f"""
 <div class='grid4'>
   <div class='card'><span class='mini'>进度</span><div class='metric'>{learner['progress']}%</div></div>
-  <div class='card'><span class='mini'>任务数</span><div class='metric'>{len(tasks)}</div></div>
-  <div class='card'><span class='mini'>记录数</span><div class='metric'>{len(records)}</div></div>
+  <div class='card'><span class='mini'>选择题正确率</span><div class='metric'>{_accuracy_text(len(mcq), correct)}</div></div>
+  <div class='card'><span class='mini'>错题数</span><div class='metric'>{len(wrong)}</div></div>
   <div class='card'><span class='mini'>Proof Files</span><div class='metric'>{len(proofs)}</div></div>
 </div>
 """, unsafe_allow_html=True)
     st.markdown("<div class='section'>任务</div>", unsafe_allow_html=True)
     st.dataframe(tasks[["day", "proof_task", "business_context", "status", "progress", "proof_score"]], use_container_width=True, hide_index=True)
     st.markdown("<div class='section'>Assignment / Submission / Review</div>", unsafe_allow_html=True)
-    st.dataframe(records, use_container_width=True, hide_index=True)
+    record_cols = _cols(records, ["assignment_id", "exercise_id", "selected_option", "correct_option", "is_correct", "auto_score", "score", "decision", "proof_ready"])
+    st.dataframe(records[record_cols], use_container_width=True, hide_index=True)
+    if not wrong.empty:
+        st.markdown("<div class='section'>错题复习</div>", unsafe_allow_html=True)
+        wrong_cols = _cols(wrong, ["exercise_id", "module", "related_task", "selected_option", "correct_option", "explanation", "hint"])
+        st.dataframe(wrong[wrong_cols], use_container_width=True, hide_index=True)
 
 
 def assignments_page() -> None:
-    st.markdown("<div class='panel'><span class='pill hot'>Assignment 管理</span><h2>布置、提交、Review、Proof Ready 状态表</h2><p>选择记录后会同步当前 Assignment 和当前学员。确认/打回按钮需要 Founder 权限。</p></div>", unsafe_allow_html=True)
-    records = ops.joined_records()
-    a, b, c, d = st.columns(4)
+    st.markdown("<div class='panel'><span class='pill hot'>Assignment 管理</span><h2>布置、提交、Review、Proof Ready 状态表</h2><p>选择题提交现在带结构化字段：选择项、正确项、是否正确、自动分数。</p></div>", unsafe_allow_html=True)
+    records = ops.review_queue_view()
+    metrics = ops.operation_metrics()
+    a, b, c, d, e = st.columns(5)
     a.metric("Assignments", len(ops.assignments()))
     b.metric("Submissions", len(ops.submissions()))
-    c.metric("Reviews", len(ops.reviews()))
-    d.metric("Proof Ready", int((ops.reviews()["proof_ready"] == "是").sum()))
+    c.metric("MCQ 正确", metrics.get("mcq_correct", 0))
+    d.metric("MCQ 正确率", _accuracy_text(metrics.get("mcq_total", 0), metrics.get("mcq_correct", 0)))
+    e.metric("Proof Ready", int((ops.reviews()["proof_ready"] == "是").sum()))
     status_filter = st.selectbox("状态筛选", ["全部"] + sorted(records["status"].dropna().unique().tolist()))
     view = records if status_filter == "全部" else records[records["status"] == status_filter]
-    st.dataframe(view[["assignment_id", "exercise_id", "learner_name", "status", "submitted_at", "score", "decision", "proof_ready"]], use_container_width=True, hide_index=True)
+    cols = _cols(view, ["assignment_id", "exercise_id", "learner_name", "status", "selected_option", "correct_option", "is_correct", "auto_score", "score", "decision", "proof_ready", "review_route"])
+    st.dataframe(view[cols], use_container_width=True, hide_index=True)
     if view.empty:
         return
     labels = [f"{r.assignment_id} · {r.learner_name} · {r.exercise_id}" for r in view.itertuples()]
@@ -172,7 +199,7 @@ def assignments_page() -> None:
     row = view.iloc[labels.index(selected)]
     set_assignment_context(str(row["assignment_id"]))
     set_learner_context(str(row["learner_id"]))
-    st.markdown(f"<div class='queue-card decision'><h3>{row['learner_name']} · {row['exercise_id']}</h3><p><b>提交摘要：</b>{row['answer_summary'] if pd.notna(row.get('answer_summary')) else '暂无'}<br><b>分数：</b>{row['score'] if pd.notna(row.get('score')) else '未评分'}<br><b>决策：</b>{row['decision'] if pd.notna(row.get('decision')) else '未Review'}</p></div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='queue-card decision'><h3>{row['learner_name']} · {row['exercise_id']}</h3><p><b>选择：</b>{row.get('selected_option', '暂无')} / 正确：{row.get('correct_option', '暂无')} / 是否正确：{row.get('is_correct', '暂无')}<br><b>自动分数：</b>{row.get('auto_score', '暂无')} · <b>Review 分数：</b>{row['score'] if pd.notna(row.get('score')) else '未评分'}<br><b>分流：</b>{row.get('review_route', '未分流')}<br><b>提交摘要：</b>{row['answer_summary'] if pd.notna(row.get('answer_summary')) else '暂无'}</p></div>", unsafe_allow_html=True)
     c1, c2, c3 = st.columns(3)
     if c1.button("确认进入 Proof Files", type="primary", use_container_width=True, disabled=not can_confirm_proof()):
         ops.mark_assignment_proof_ready(str(row["assignment_id"]))
@@ -190,17 +217,33 @@ def assignments_page() -> None:
 
 
 def review_queue_page() -> None:
-    records = ops.joined_records()
-    st.markdown("<div class='panel'><span class='pill hot'>Review Queue</span><h2>Founder处理具体提交</h2><p>选择待处理记录后，当前运营视角会显示对应客户、班级、学员和Assignment。确认/打回按钮需要 Founder 权限。</p></div>", unsafe_allow_html=True)
-    st.dataframe(records[["assignment_id", "exercise_id", "learner_name", "status", "submitted_at", "score", "decision", "proof_ready"]], use_container_width=True, hide_index=True)
-    if records.empty:
+    records = ops.review_queue_view()
+    module_stats = ops.mcq_module_stats()
+    metrics = ops.operation_metrics()
+    st.markdown("<div class='panel'><span class='pill hot'>Review Queue</span><h2>Founder处理选择题提交</h2><p>队列按选择题结果自动分流：选错→需复习；选对且分数达标→Proof候选；其他→Founder复核。</p></div>", unsafe_allow_html=True)
+    st.markdown(f"""
+<div class='grid4'>
+  <div class='card'><span class='mini'>MCQ 提交</span><div class='metric'>{metrics.get('mcq_total', 0)}</div></div>
+  <div class='card'><span class='mini'>正确</span><div class='metric'>{metrics.get('mcq_correct', 0)}</div></div>
+  <div class='card'><span class='mini'>正确率</span><div class='metric'>{_accuracy_text(metrics.get('mcq_total', 0), metrics.get('mcq_correct', 0))}</div></div>
+  <div class='card'><span class='mini'>需复习</span><div class='metric'>{len(ops.wrong_answer_records())}</div></div>
+</div>
+""", unsafe_allow_html=True)
+    if not module_stats.empty:
+        st.markdown("<div class='section'>模块正确率 / 优先复习模块</div>", unsafe_allow_html=True)
+        st.dataframe(module_stats, use_container_width=True, hide_index=True)
+    route_filter = st.selectbox("分流筛选", ["全部"] + sorted(records["review_route"].dropna().unique().tolist())) if not records.empty else "全部"
+    view = records if route_filter == "全部" else records[records["review_route"] == route_filter]
+    cols = _cols(view, ["assignment_id", "exercise_id", "module", "learner_name", "selected_option", "correct_option", "is_correct", "auto_score", "score", "decision", "proof_ready", "review_route"])
+    st.dataframe(view[cols], use_container_width=True, hide_index=True)
+    if view.empty:
         return
-    labels = [f"{r.assignment_id} · {r.learner_name} · {r.exercise_id}" for r in records.itertuples()]
+    labels = [f"{r.assignment_id} · {r.learner_name} · {r.exercise_id}" for r in view.itertuples()]
     selected = st.selectbox("选择处理项", labels)
-    rec = records.iloc[labels.index(selected)]
+    rec = view.iloc[labels.index(selected)]
     set_assignment_context(str(rec["assignment_id"]))
     set_learner_context(str(rec["learner_id"]))
-    st.markdown(f"<div class='queue-card decision'><h3>{rec['learner_name']} · {rec['exercise_id']}</h3><p><b>提交摘要：</b>{rec['answer_summary'] if pd.notna(rec.get('answer_summary')) else '暂无'}<br><b>分数：</b>{rec['score'] if pd.notna(rec.get('score')) else '未评分'}<br><b>决策：</b>{rec['decision'] if pd.notna(rec.get('decision')) else '未Review'}<br><b>Proof Ready：</b>{rec['proof_ready'] if pd.notna(rec.get('proof_ready')) else '否'}</p></div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='queue-card decision'><h3>{rec['learner_name']} · {rec['exercise_id']}</h3><p><b>模块：</b>{rec.get('module', '暂无')}<br><b>选择：</b>{rec.get('selected_option', '暂无')} / 正确：{rec.get('correct_option', '暂无')} / 是否正确：{rec.get('is_correct', '暂无')}<br><b>自动分数：</b>{rec.get('auto_score', '暂无')} · <b>Review：</b>{rec['score'] if pd.notna(rec.get('score')) else '未评分'}<br><b>分流：</b>{rec.get('review_route', '未分流')}<br><b>解析：</b>{rec.get('explanation', '暂无')}<br><b>提交摘要：</b>{rec['answer_summary'] if pd.notna(rec.get('answer_summary')) else '暂无'}</p></div>", unsafe_allow_html=True)
     c1, c2, c3 = st.columns(3)
     if c1.button("确认进入Proof Files", type="primary", use_container_width=True, disabled=not can_confirm_proof()):
         ops.mark_assignment_proof_ready(str(rec["assignment_id"]))
