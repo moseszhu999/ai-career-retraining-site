@@ -11,7 +11,7 @@ def render_business_top() -> None:
     st.markdown(
         f"""
 <div class='top'>
-  <div class='brand'>AI Skill Growth OS<small>v4.10.0 · Data Export Delivery Pack</small></div>
+  <div class='brand'>AI Skill Growth OS<small>v4.10.1 · Client Scoped Delivery Pack</small></div>
   <div>{chip(st.session_state.role)}<span class='pill'>{st.session_state.user_name}</span><span class='pill'>最近：{st.session_state.last_event}</span></div>
 </div>
 """,
