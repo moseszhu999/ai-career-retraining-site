@@ -75,10 +75,10 @@ def _action_cards() -> list[dict[str, object]]:
         {
             "step": "02",
             "title": "业务流程设计",
-            "view": "cohorts",
-            "cta": "查看班级 / 流程范围",
-            "count": len(COHORTS),
-            "unit": "流程载体",
+            "view": "workflow",
+            "cta": "打开 Workflow Blueprint",
+            "count": 4,
+            "unit": "标准流程",
             "agent": "Agent 将训练任务映射到流程、角色、输出物和检查点。",
             "human": "Process Owner 确认流程边界、责任归属和例外路径。",
             "decision": "批示：哪些流程可进入 Agent Work。",
@@ -168,7 +168,7 @@ def render_executive_public_site() -> None:
     st.markdown("""
 <div class='executive-hero'>
   <div class='hero-glow'></div>
-  <span class='pill hot'>Value Chain AI Agent Governance OS · v4.23.0</span>
+  <span class='pill hot'>Value Chain AI Agent Governance OS · v4.24.0</span>
   <h1>让 AI Agent 替代价值链中的重复工作，<br><span>同时保留证据、审批和责任链。</span></h1>
   <p>从 BLM 价值链诊断开始，落到业务流程，再进入 Agent 执行、人类批示、Proof Files 和客户安全报告。不是 AI 工具演示，而是企业级自动化治理闭环。</p>
   <div class='hero-actions'><span class='pill green'>价值链自动化诊断</span><span class='pill blue'>Agent / Human 分工</span><span class='pill purple'>Proof Files</span><span class='pill orange'>客户安全交付包</span></div>
@@ -240,7 +240,7 @@ def founder_executive_dashboard() -> None:
 
     st.markdown(f"""
 <div class='executive-hero dashboard-hero'>
-  <span class='pill hot'>Founder Command Center · v4.23.0</span>
+  <span class='pill hot'>Founder Command Center · v4.24.0</span>
   <h1>Agent 工作进入企业流程前，<br><span>先看证据、风险、审批和客户可见性。</span></h1>
   <p>这里不是普通后台首页，而是 Founder 的运营驾驶舱：看价值链自动化进展、选择题质量、Review 分流、Proof 候选、客户交付动作。</p>
 </div>
