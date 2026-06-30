@@ -12,12 +12,11 @@ from frontend.business_pages import (
     learners_page,
     review_queue_page,
 )
+from frontend.executive_pages import founder_executive_dashboard, render_executive_public_site
 from frontend.export_pages import export_page
 from frontend.operation_state import init_operation_state
 from frontend.pages import (
-    founder_dashboard,
     portfolio_page,
-    render_public_site,
     tasks_page,
 )
 from frontend.report_pages import delivery_report_page
@@ -38,13 +37,13 @@ init_state()
 init_operation_state()
 
 if not st.session_state.logged_in:
-    render_public_site()
+    render_executive_public_site()
 else:
     render_business_top()
     view = st.session_state.current_view
     if st.session_state.role == "Founder":
         if view == "dashboard":
-            founder_dashboard()
+            founder_executive_dashboard()
         elif view == "clients":
             clients_page()
         elif view == "cohorts":
@@ -68,7 +67,7 @@ else:
         elif view == "audit":
             audit_log_page()
         else:
-            founder_dashboard()
+            founder_executive_dashboard()
     else:
         if view == "dashboard":
             student_home_page()
@@ -83,4 +82,4 @@ else:
         else:
             student_home_page()
 
-st.caption("AI Agent Governance & Readiness OS · Consulting Architecture Pack · v4.14.0")
+st.caption("AI Agent Governance & Readiness OS · Executive Workflow Pack · v4.22.0")
