@@ -10,8 +10,8 @@ from frontend.state import chip, logout, set_view
 def render_business_top() -> None:
     st.markdown(
         f"""
-<div class='top'>
-  <div class='brand'>AI Skill Growth OS<small>v4.10.1 · Client Scoped Delivery Pack</small></div>
+<div class='top executive-top'>
+  <div class='brand'>AI Agent Governance OS<small>v4.22.0 · Value Chain Automation / Agent-Human Approval</small></div>
   <div>{chip(st.session_state.role)}<span class='pill'>{st.session_state.user_name}</span><span class='pill'>最近：{st.session_state.last_event}</span></div>
 </div>
 """,
@@ -19,7 +19,7 @@ def render_business_top() -> None:
     )
     if st.session_state.role == "Founder":
         nav = [
-            ("dashboard", "运营首页"),
+            ("dashboard", "Dashboard"),
             ("clients", "客户"),
             ("cohorts", "班级"),
             ("learners", "学员"),
@@ -34,7 +34,7 @@ def render_business_top() -> None:
         ]
     else:
         nav = [
-            ("dashboard", "业务首页"),
+            ("dashboard", "Dashboard"),
             ("tasks", "练习题"),
             ("assignments", "我的记录"),
             ("portfolio", "Proof Files"),
