@@ -82,4 +82,4 @@ else:
         else:
             student_home_page()
 
-st.caption("AI Agent Governance & Readiness OS · Executive Workflow Pack · v4.22.0")
+st.caption("AI Agent Governance & Readiness OS · Workflow Action Cards · v4.23.0")
