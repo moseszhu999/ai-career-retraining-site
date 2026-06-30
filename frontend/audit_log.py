@@ -5,6 +5,8 @@ from datetime import datetime
 import pandas as pd
 import streamlit as st
 
+from frontend.persistence import insert_row
+
 AUDIT_COLUMNS = [
     "audit_id",
     "time",
@@ -69,6 +71,7 @@ def add_audit(
         "summary": summary,
     }
     st.session_state.op_audit_logs = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+    insert_row("audit_logs", new_row)
     return audit_id
 
 
