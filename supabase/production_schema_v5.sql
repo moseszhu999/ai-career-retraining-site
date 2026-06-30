@@ -230,14 +230,35 @@ alter table proof_files enable row level security;
 alter table consult_leads enable row level security;
 alter table audit_logs enable row level security;
 
-create policy if not exists service_role_all_clients on clients for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
-create policy if not exists service_role_all_cohorts on cohorts for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
-create policy if not exists service_role_all_learners on learners for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
-create policy if not exists service_role_all_task_instances on task_instances for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
-create policy if not exists service_role_all_exercises on exercises for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
-create policy if not exists service_role_all_assignments on assignments for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
-create policy if not exists service_role_all_submissions on submissions for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
-create policy if not exists service_role_all_reviews on reviews for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
-create policy if not exists service_role_all_proof_files on proof_files for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
-create policy if not exists service_role_all_consult_leads on consult_leads for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
-create policy if not exists service_role_all_audit_logs on audit_logs for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
+drop policy if exists service_role_all_clients on clients;
+create policy service_role_all_clients on clients for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
+
+drop policy if exists service_role_all_cohorts on cohorts;
+create policy service_role_all_cohorts on cohorts for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
+
+drop policy if exists service_role_all_learners on learners;
+create policy service_role_all_learners on learners for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
+
+drop policy if exists service_role_all_task_instances on task_instances;
+create policy service_role_all_task_instances on task_instances for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
+
+drop policy if exists service_role_all_exercises on exercises;
+create policy service_role_all_exercises on exercises for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
+
+drop policy if exists service_role_all_assignments on assignments;
+create policy service_role_all_assignments on assignments for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
+
+drop policy if exists service_role_all_submissions on submissions;
+create policy service_role_all_submissions on submissions for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
+
+drop policy if exists service_role_all_reviews on reviews;
+create policy service_role_all_reviews on reviews for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
+
+drop policy if exists service_role_all_proof_files on proof_files;
+create policy service_role_all_proof_files on proof_files for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
+
+drop policy if exists service_role_all_consult_leads on consult_leads;
+create policy service_role_all_consult_leads on consult_leads for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
+
+drop policy if exists service_role_all_audit_logs on audit_logs;
+create policy service_role_all_audit_logs on audit_logs for all using (auth.role() = 'service_role') with check (auth.role() = 'service_role');
