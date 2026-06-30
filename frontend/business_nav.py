@@ -11,7 +11,7 @@ def render_business_top() -> None:
     st.markdown(
         f"""
 <div class='top executive-top'>
-  <div class='brand'>AI Agent Governance OS<small>v4.22.0 · Value Chain Automation / Agent-Human Approval</small></div>
+  <div class='brand'>AI Agent Governance OS<small>v4.23.0 · Workflow Action Cards / Agent-Human Approval</small></div>
   <div>{chip(st.session_state.role)}<span class='pill'>{st.session_state.user_name}</span><span class='pill'>最近：{st.session_state.last_event}</span></div>
 </div>
 """,
