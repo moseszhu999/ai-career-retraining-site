@@ -29,6 +29,7 @@ from frontend.student_business_pages import (
     student_tasks_page,
 )
 from frontend.styles import apply_styles
+from frontend.workflow_pages import workflow_blueprint_page
 
 st.set_page_config(page_title="AI Agent Governance & Readiness OS", page_icon="🚀", layout="wide")
 
@@ -44,6 +45,8 @@ else:
     if st.session_state.role == "Founder":
         if view == "dashboard":
             founder_executive_dashboard()
+        elif view == "workflow":
+            workflow_blueprint_page()
         elif view == "clients":
             clients_page()
         elif view == "cohorts":
@@ -82,4 +85,4 @@ else:
         else:
             student_home_page()
 
-st.caption("AI Agent Governance & Readiness OS · Workflow Action Cards · v4.23.0")
+st.caption("AI Agent Governance & Readiness OS · Workflow Blueprint Center · v4.24.0")
