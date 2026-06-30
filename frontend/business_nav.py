@@ -4,15 +4,19 @@ import streamlit as st
 
 from frontend.founder_context import founder_context_bar
 from frontend.permissions import permission_summary_html
+from frontend.persistence import data_backend, tenant_code
 from frontend.state import chip, logout, set_view
 
 
 def render_business_top() -> None:
+    backend = data_backend()
+    backend_label = "Supabase Persistent" if backend == "supabase" else "Session Demo"
+    backend_class = "green" if backend == "supabase" else "orange"
     st.markdown(
         f"""
 <div class='top executive-top'>
-  <div class='brand'>AI Agent Governance OS<small>v4.24.0 · Workflow Blueprint / Agent-Human Approval</small></div>
-  <div>{chip(st.session_state.role)}<span class='pill'>{st.session_state.user_name}</span><span class='pill'>最近：{st.session_state.last_event}</span></div>
+  <div class='brand'>AI Agent Governance OS<small>v5.0.0 · Production Backend / Agent-Human Approval</small></div>
+  <div>{chip(st.session_state.role)}<span class='pill'>{st.session_state.user_name}</span><span class='pill {backend_class}'>{backend_label}</span><span class='pill'>Tenant：{tenant_code()}</span><span class='pill'>最近：{st.session_state.last_event}</span></div>
 </div>
 """,
         unsafe_allow_html=True,
