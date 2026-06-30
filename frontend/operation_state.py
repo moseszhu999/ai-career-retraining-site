@@ -8,24 +8,46 @@ import streamlit as st
 from frontend.audit_log import add_audit, init_audit_log, reset_audit_log
 from frontend.business_data import CONSULT_LEADS, PROOF_FILES, TASK_INSTANCES
 from frontend.exercise_bank import EXERCISES
+from frontend.persistence import is_supabase_enabled, supabase_client, tenant_code, update_row, upsert_row
 from frontend.training_records import ASSIGNMENTS, REVIEWS, SUBMISSIONS
 
 
-def init_operation_state() -> None:
-    """Create mutable in-session copies of demo business tables.
+def _load_table_or_seed(table: str, seed_df: pd.DataFrame) -> pd.DataFrame:
+    """Load tenant-scoped production rows when Supabase is enabled.
 
-    This is the bridge between static test data and a real database. Later,
-    these getters/actions can be replaced by Supabase reads/writes without
-    rewriting page UI.
+    Empty production tables stay empty instead of silently using demo seed rows.
+    In session mode, seed rows remain available for local demos.
+    """
+    if not is_supabase_enabled():
+        return seed_df.copy()
+    try:
+        response = supabase_client().table(table).select("*").eq("tenant_code", tenant_code()).execute()
+        df = pd.DataFrame(response.data or [])
+        if df.empty:
+            return seed_df.copy().iloc[0:0]
+        if "tenant_code" in df.columns:
+            df = df.drop(columns=["tenant_code"])
+        return df
+    except Exception as exc:
+        st.error(f"Supabase load failed for {table}: {exc}")
+        return seed_df.copy().iloc[0:0]
+
+
+def init_operation_state() -> None:
+    """Create mutable in-session copies of business tables.
+
+    v5.0 supports two modes:
+    - session: local demo rows for quick exploration.
+    - supabase: tenant-scoped production rows loaded from Supabase.
     """
     init_audit_log()
     table_defaults = {
-        "op_task_instances": TASK_INSTANCES.copy(),
-        "op_assignments": ASSIGNMENTS.copy(),
-        "op_submissions": SUBMISSIONS.copy(),
-        "op_reviews": REVIEWS.copy(),
-        "op_proof_files": PROOF_FILES.copy(),
-        "op_consult_leads": CONSULT_LEADS.copy(),
+        "op_task_instances": _load_table_or_seed("task_instances", TASK_INSTANCES),
+        "op_assignments": _load_table_or_seed("assignments", ASSIGNMENTS),
+        "op_submissions": _load_table_or_seed("submissions", SUBMISSIONS),
+        "op_reviews": _load_table_or_seed("reviews", REVIEWS),
+        "op_proof_files": _load_table_or_seed("proof_files", PROOF_FILES),
+        "op_consult_leads": _load_table_or_seed("consult_leads", CONSULT_LEADS),
     }
     for key, value in table_defaults.items():
         if key not in st.session_state:
@@ -86,16 +108,20 @@ def joined_records() -> pd.DataFrame:
         "answer_note",
         "status",
     ]
-    merged = assignments().merge(
+    assignment_df = assignments().copy()
+    if assignment_df.empty:
+        return assignment_df
+    merged = assignment_df.merge(
         _submission_view()[submission_cols].rename(columns={"status": "submission_status"}),
         on="assignment_id",
         how="left",
     )
-    merged = merged.merge(
-        reviews()[["submission_id", "reviewer", "score", "review_comment", "decision", "proof_ready"]],
-        on="submission_id",
-        how="left",
-    )
+    review_df = reviews().copy()
+    review_cols = ["submission_id", "reviewer", "score", "review_comment", "decision", "proof_ready"]
+    for col in review_cols:
+        if col not in review_df.columns:
+            review_df[col] = pd.NA
+    merged = merged.merge(review_df[review_cols], on="submission_id", how="left")
     return merged
 
 
@@ -165,17 +191,19 @@ def review_queue_view() -> pd.DataFrame:
 
 def operation_metrics() -> dict[str, int]:
     submission_df = _submission_view()
-    correct_series = submission_df["is_correct"].fillna(False)
-    total_mcq = int((submission_df["question_type"] == "单选题").sum())
+    correct_series = submission_df["is_correct"].fillna(False) if "is_correct" in submission_df.columns else pd.Series(dtype=bool)
+    total_mcq = int((submission_df["question_type"] == "单选题").sum()) if "question_type" in submission_df.columns else 0
+    review_df = reviews()
+    lead_df = consult_leads()
     return {
         "assignments": int(len(assignments())),
-        "submissions": int(len(submissions())),
-        "reviews": int(len(reviews())),
-        "proof_ready": int((reviews()["proof_ready"] == "是").sum()),
-        "need_revision": int((reviews()["decision"].isin(["需修改", "需复习"])).sum()),
+        "submissions": int(len(submission_df)),
+        "reviews": int(len(review_df)),
+        "proof_ready": int((review_df["proof_ready"] == "是").sum()) if "proof_ready" in review_df.columns else 0,
+        "need_revision": int((review_df["decision"].isin(["需修改", "需复习"])).sum()) if "decision" in review_df.columns else 0,
         "proof_files": int(len(proof_files())),
-        "leads": int(len(consult_leads())),
-        "lead_value": int(consult_leads()["potential_value"].sum()),
+        "leads": int(len(lead_df)),
+        "lead_value": int(lead_df["potential_value"].sum()) if "potential_value" in lead_df.columns and not lead_df.empty else 0,
         "mcq_total": total_mcq,
         "mcq_correct": int(correct_series.sum()),
     }
@@ -201,6 +229,7 @@ def assign_exercise(*, exercise_id: str, learner_id: str, learner_name: str, coh
         "note": note,
     }
     st.session_state.op_assignments = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+    upsert_row("assignments", new_row, "tenant_code,assignment_id")
     add_audit(
         action="布置练习题",
         object_type="Assignment",
@@ -258,6 +287,15 @@ def submit_assignment(
         for col, value in submitted_values.items():
             sub_df.loc[idx, col] = value
         st.session_state.op_submissions = sub_df
+        new_row = {
+            "submission_id": submission_id,
+            "assignment_id": assignment_id,
+            "exercise_id": exercise_id,
+            "learner_id": learner_id,
+            "learner_name": learner_name,
+            **submitted_values,
+        }
+    upsert_row("submissions", new_row, "tenant_code,submission_id")
     _set_assignment_status(assignment_id, "已提交")
     add_audit(
         action="提交作答",
@@ -274,23 +312,25 @@ def review_submission(*, submission_id: str, reviewer: str, score: int, review_c
     rev_df = reviews().copy()
     existing = rev_df[rev_df["submission_id"] == submission_id]
     before_status = "未Review" if existing.empty else str(existing.iloc[0]["decision"])
+    review_values = {
+        "submission_id": submission_id,
+        "reviewer": reviewer,
+        "score": score,
+        "review_comment": review_comment,
+        "decision": decision,
+        "proof_ready": proof_ready,
+    }
     if existing.empty:
         review_id = _next_id("rev", rev_df, "review_id")
-        new_row = {
-            "review_id": review_id,
-            "submission_id": submission_id,
-            "reviewer": reviewer,
-            "score": score,
-            "review_comment": review_comment,
-            "decision": decision,
-            "proof_ready": proof_ready,
-        }
+        new_row = {"review_id": review_id, **review_values}
         st.session_state.op_reviews = pd.concat([rev_df, pd.DataFrame([new_row])], ignore_index=True)
     else:
         review_id = str(existing.iloc[0]["review_id"])
         idx = existing.index[0]
         rev_df.loc[idx, ["reviewer", "score", "review_comment", "decision", "proof_ready"]] = [reviewer, score, review_comment, decision, proof_ready]
         st.session_state.op_reviews = rev_df
+        new_row = {"review_id": review_id, **review_values}
+    upsert_row("reviews", new_row, "tenant_code,review_id")
     assignment_row = submissions()[submissions()["submission_id"] == submission_id]
     if not assignment_row.empty:
         _set_assignment_status(str(assignment_row.iloc[0]["assignment_id"]), "已确认" if proof_ready == "是" else decision)
@@ -382,6 +422,7 @@ def add_proof_file_from_record(assignment_id: str) -> str | None:
         "note": "由 Assignment / Submission / Review 状态机生成。",
     }
     st.session_state.op_proof_files = pd.concat([proof_df, pd.DataFrame([new_row])], ignore_index=True)
+    upsert_row("proof_files", new_row, "tenant_code,proof_id")
     add_audit(
         action="新增Proof File",
         object_type="ProofFile",
@@ -406,6 +447,7 @@ def add_lead(*, client_name: str, package: str, need: str, potential_value: int,
         "note": note,
     }
     st.session_state.op_consult_leads = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+    upsert_row("consult_leads", new_row, "tenant_code,lead_id")
     add_audit(
         action="新增Lead",
         object_type="Lead",
@@ -423,6 +465,7 @@ def update_lead_status(lead_id: str, status: str) -> None:
     before_status = str(target.iloc[0]["status"]) if not target.empty else ""
     df.loc[df["lead_id"] == lead_id, "status"] = status
     st.session_state.op_consult_leads = df
+    update_row("consult_leads", "lead_id", lead_id, {"status": status})
     add_audit(
         action="更新Lead状态",
         object_type="Lead",
@@ -444,11 +487,14 @@ def reset_operation_state() -> None:
         object_id="operation_state",
         before_status="已加载",
         after_status="已重置",
-        summary="恢复默认业务测试数据。",
+        summary="恢复默认业务测试数据。Supabase 模式下不会删除生产数据库记录。",
     )
 
 
 def _set_assignment_status(assignment_id: str, status: str) -> None:
     df = assignments().copy()
+    if "assignment_id" not in df.columns:
+        return
     df.loc[df["assignment_id"] == assignment_id, "status"] = status
     st.session_state.op_assignments = df
+    update_row("assignments", "assignment_id", assignment_id, {"status": status})
