@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
+import pandas as pd
 import streamlit as st
 from supabase import Client, create_client
 
@@ -33,8 +34,28 @@ def is_supabase_enabled() -> bool:
     return data_backend() == "supabase"
 
 
+def clean_value(value: Any) -> Any:
+    if value is pd.NA:
+        return None
+    try:
+        if pd.isna(value):
+            return None
+    except Exception:
+        pass
+    if hasattr(value, "item"):
+        try:
+            return value.item()
+        except Exception:
+            return value
+    return value
+
+
+def clean_row(row: dict[str, Any]) -> dict[str, Any]:
+    return {key: clean_value(value) for key, value in row.items()}
+
+
 def with_tenant(row: dict[str, Any]) -> dict[str, Any]:
-    return {"tenant_code": tenant_code(), **row}
+    return clean_row({"tenant_code": tenant_code(), **row})
 
 
 def upsert_row(table: str, row: dict[str, Any], conflict_columns: str) -> None:
@@ -61,7 +82,7 @@ def update_row(table: str, key_column: str, key_value: str, values: dict[str, An
     if not is_supabase_enabled():
         return
     try:
-        supabase_client().table(table).update(values).eq("tenant_code", tenant_code()).eq(key_column, key_value).execute()
+        supabase_client().table(table).update(clean_row(values)).eq("tenant_code", tenant_code()).eq(key_column, key_value).execute()
     except Exception as exc:
         st.error(f"Supabase update failed: {table}.{key_column}={key_value}. {exc}")
         raise
