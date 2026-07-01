@@ -22,6 +22,7 @@ Run these SQL files in order:
 ```text
 docs/supabase_schema_v5_1.sql
 docs/supabase_schema_v5_2_flow.sql
+docs/supabase_schema_v5_3_portal_hardening.sql
 ```
 
 ## Founder acceptance path
@@ -42,6 +43,7 @@ Open Proof Files
 Open Reports / Exports
 Open Executable Flow
 Move a flow through the status chain
+Refresh and confirm the flow state remains when the backend is persistent
 ```
 
 ## Learner acceptance path
@@ -50,7 +52,7 @@ Move a flow through the status chain
 Founder creates learner and assigns exercise
 Open pages/Learner_Portal.py
 Enter the learner name exactly as stored in Admin data
-View assigned tasks
+View assigned tasks only
 Submit answer and request Agent Review
 Check learner records
 ```
@@ -68,8 +70,8 @@ View client report and customer-visible Proof Files
 
 ```text
 Founder CRUD is production-ready with the configured backend
-Assignment / submission / review / proof use the existing write-through helpers
-Executable Flow is session-first; schema is ready for persistence
+Assignment / submission / review / proof use write-through helpers
+Executable Flow reads and writes flow_runs when the backend is persistent
 Learner Portal is assigned-task preview
 Customer Portal is read-only preview
 ```
@@ -78,8 +80,8 @@ Customer Portal is read-only preview
 
 ```text
 Replace demo login with real auth
-Add RLS policies for Founder / customer / learner
-Persist flow runtime fully
+Add strict RLS policies for Founder / customer / learner
+Fill client_id / cohort_id / learner_id on proof_files at generation time
 Bind customer portal to login identity
 Remove demo shortcuts before paid pilot
 ```
