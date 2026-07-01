@@ -19,6 +19,12 @@ LEARNER_ACTIONS = [
     "查看自己的 Proof Files",
 ]
 
+CUSTOMER_ACTIONS = [
+    "查看客户报告",
+    "查看客户可见 Proof Files",
+    "下载交付包",
+]
+
 
 def role() -> str:
     return str(st.session_state.get("role", "访客"))
@@ -30,6 +36,10 @@ def is_founder() -> bool:
 
 def is_learner() -> bool:
     return role() == "学员"
+
+
+def is_customer() -> bool:
+    return role() == "客户"
 
 
 def can_manage_operations() -> bool:
@@ -52,6 +62,10 @@ def can_update_leads() -> bool:
     return is_founder()
 
 
+def can_view_customer_report() -> bool:
+    return is_founder() or is_customer()
+
+
 def can_submit_own_work(learner_id: str) -> bool:
     if is_founder():
         return True
@@ -69,6 +83,9 @@ def permission_summary_html() -> str:
     if is_learner():
         items = " / ".join(LEARNER_ACTIONS)
         return f"<div class='ok'><b>当前权限：学员本人权限</b><br>{items}</div>"
+    if is_customer():
+        items = " / ".join(CUSTOMER_ACTIONS)
+        return f"<div class='ok'><b>当前权限：客户只读权限</b><br>{items}</div>"
     return "<div class='warn'><b>当前权限：访客</b><br>只能查看公开介绍，不能操作业务数据。</div>"
 
 
