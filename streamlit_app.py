@@ -20,7 +20,7 @@ from frontend.pages import portfolio_page
 from frontend.production_state import init_production_admin_state
 from frontend.production_task_pages import tasks_page
 from frontend.report_pages import delivery_report_page
-from frontend.runtime_binding import bind_production_master_data
+from frontend.runtime_binding_v2 import bind_production_master_data
 from frontend.state import init_state
 from frontend.student_business_pages import (
     student_home_page,
@@ -90,4 +90,4 @@ else:
         else:
             student_home_page()
 
-st.caption("AI Agent Governance & Readiness OS · Production Admin Console · v5.1.2")
+st.caption("AI Agent Governance & Readiness OS · Production Admin Console · v5.1.3")
