@@ -16,11 +16,9 @@ from frontend.business_pages import (
 from frontend.executive_pages import founder_executive_dashboard, render_executive_public_site
 from frontend.export_pages import export_page
 from frontend.operation_state import init_operation_state
-from frontend.pages import (
-    portfolio_page,
-    tasks_page,
-)
+from frontend.pages import portfolio_page
 from frontend.production_state import init_production_admin_state
+from frontend.production_task_pages import tasks_page
 from frontend.report_pages import delivery_report_page
 from frontend.runtime_binding import bind_production_master_data
 from frontend.state import init_state
@@ -92,4 +90,4 @@ else:
         else:
             student_home_page()
 
-st.caption("AI Agent Governance & Readiness OS · Production Admin Console · v5.1.1")
+st.caption("AI Agent Governance & Readiness OS · Production Admin Console · v5.1.2")
