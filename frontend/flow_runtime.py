@@ -5,6 +5,8 @@ from datetime import datetime
 import pandas as pd
 import streamlit as st
 
+from frontend import flow_store
+
 STEPS = ["draft", "configured", "assigned", "submitted", "agent_reviewed", "human_reviewing", "approved", "proof_ready", "exported"]
 NEXT_STEP = dict(zip(STEPS[:-1], STEPS[1:]))
 COLUMNS = ["flow_id", "client_id", "cohort_id", "title", "status", "owner", "next_step", "updated_at"]
@@ -12,7 +14,8 @@ COLUMNS = ["flow_id", "client_id", "cohort_id", "title", "status", "owner", "nex
 
 def init() -> None:
     if "flow_runs" not in st.session_state:
-        st.session_state.flow_runs = pd.DataFrame(columns=COLUMNS)
+        stored = flow_store.load_rows()
+        st.session_state.flow_runs = stored if not stored.empty else pd.DataFrame(columns=COLUMNS)
 
 
 def rows() -> pd.DataFrame:
@@ -34,6 +37,7 @@ def create(client_id: str, cohort_id: str, title: str) -> str:
         "updated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
     }
     st.session_state.flow_runs = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
+    flow_store.save_row(row)
     return flow_id
 
 
@@ -47,11 +51,15 @@ def advance(flow_id: str) -> str | None:
     nxt = NEXT_STEP.get(current)
     if not nxt:
         return None
+    owner = "Agent" if nxt == "submitted" else "Human" if nxt in ["agent_reviewed", "human_reviewing"] else "Founder"
+    next_step = NEXT_STEP.get(nxt, "done")
+    updated_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     df.loc[idx, "status"] = nxt
-    df.loc[idx, "owner"] = "Agent" if nxt == "submitted" else "Human" if nxt in ["agent_reviewed", "human_reviewing"] else "Founder"
-    df.loc[idx, "next_step"] = NEXT_STEP.get(nxt, "done")
-    df.loc[idx, "updated_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    df.loc[idx, "owner"] = owner
+    df.loc[idx, "next_step"] = next_step
+    df.loc[idx, "updated_at"] = updated_at
     st.session_state.flow_runs = df
+    flow_store.save_status(flow_id, nxt, owner, next_step, updated_at)
     return nxt
 
 
