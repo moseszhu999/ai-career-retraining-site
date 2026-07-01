@@ -146,7 +146,14 @@ def add_client(*, client_id: str, client_name: str, contact: str, service_packag
         "status": status,
     }
     _append_and_upsert("clients", row, "tenant_code,client_id")
-    add_audit("新增客户", "Client", new_id, "无", status, f"{client_name} · {service_package} · ¥{int(contract_value):,}")
+    add_audit(
+        action="新增客户",
+        object_type="Client",
+        object_id=new_id,
+        before_status="无",
+        after_status=status,
+        summary=f"{client_name} · {service_package} · ¥{int(contract_value):,}",
+    )
     return new_id
 
 
@@ -164,7 +171,14 @@ def add_cohort(*, cohort_id: str, client_id: str, cohort_name: str, start_date: 
         "status": status,
     }
     _append_and_upsert("cohorts", row, "tenant_code,cohort_id")
-    add_audit("新增班级", "Cohort", new_id, "无", status, f"{cohort_name} · client={client_id}")
+    add_audit(
+        action="新增班级",
+        object_type="Cohort",
+        object_id=new_id,
+        before_status="无",
+        after_status=status,
+        summary=f"{cohort_name} · client={client_id}",
+    )
     return new_id
 
 
@@ -184,7 +198,14 @@ def add_learner(*, learner_id: str, learner_name: str, cohort_id: str, learner_g
     }
     _append_and_upsert("learners", row, "tenant_code,learner_id")
     _sync_cohort_learner_count(cohort_id)
-    add_audit("新增学员", "Learner", new_id, "无", status, f"{learner_name} · cohort={cohort_id}")
+    add_audit(
+        action="新增学员",
+        object_type="Learner",
+        object_id=new_id,
+        before_status="无",
+        after_status=status,
+        summary=f"{learner_name} · cohort={cohort_id}",
+    )
     return new_id
 
 
@@ -225,7 +246,14 @@ def add_exercise(
         "rubric": rubric.strip(),
     }
     _append_and_upsert("exercises", row, "tenant_code,exercise_id")
-    add_audit("新增选择题", "Exercise", new_id, "无", "可分配", f"{module} · {related_task}")
+    add_audit(
+        action="新增选择题",
+        object_type="Exercise",
+        object_id=new_id,
+        before_status="无",
+        after_status="可分配",
+        summary=f"{module} · {related_task}",
+    )
     return new_id
 
 
