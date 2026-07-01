@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import streamlit as st
 
+from frontend.admin_pages import production_admin_page
 from frontend.audit_pages import audit_log_page
 from frontend.business_nav import render_business_top
 from frontend.business_pages import (
@@ -19,6 +20,7 @@ from frontend.pages import (
     portfolio_page,
     tasks_page,
 )
+from frontend.production_state import init_production_admin_state
 from frontend.report_pages import delivery_report_page
 from frontend.state import init_state
 from frontend.student_business_pages import (
@@ -35,6 +37,7 @@ st.set_page_config(page_title="AI Agent Governance & Readiness OS", page_icon="�
 
 apply_styles()
 init_state()
+init_production_admin_state()
 init_operation_state()
 
 if not st.session_state.logged_in:
@@ -45,6 +48,8 @@ else:
     if st.session_state.role == "Founder":
         if view == "dashboard":
             founder_executive_dashboard()
+        elif view == "admin":
+            production_admin_page()
         elif view == "workflow":
             workflow_blueprint_page()
         elif view == "clients":
@@ -85,4 +90,4 @@ else:
         else:
             student_home_page()
 
-st.caption("AI Agent Governance & Readiness OS · Workflow Blueprint Center · v4.24.0")
+st.caption("AI Agent Governance & Readiness OS · Production Admin Console · v5.1.0")
