@@ -3,9 +3,15 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-from frontend.business_data import LEARNERS
+from frontend import production_state as prod
+from frontend.business_data import LEARNERS as SEED_LEARNERS
 
 DEFAULT_LEARNER_ID = "jhc-s01"
+
+
+def _learners() -> pd.DataFrame:
+    df = prod.learners()
+    return df if not df.empty else SEED_LEARNERS
 
 
 def is_founder() -> bool:
@@ -13,13 +19,6 @@ def is_founder() -> bool:
 
 
 def resolve_logged_in_learner_id() -> str:
-    """Return the learner_id bound to the logged-in learner.
-
-    Founder users may switch selected learners elsewhere. Student users should
-    never be asked to select a learner after login; this function binds them to
-    their own learner row. In demo mode, unknown student names fall back to the
-    default JHC learner.
-    """
     if is_founder():
         st.session_state.setdefault("selected_learner_id", DEFAULT_LEARNER_ID)
         return str(st.session_state.selected_learner_id)
@@ -27,19 +26,26 @@ def resolve_logged_in_learner_id() -> str:
     if st.session_state.get("learner_id"):
         return str(st.session_state.learner_id)
 
+    learners = _learners()
     user_name = str(st.session_state.get("user_name", ""))
-    matched = LEARNERS[LEARNERS["learner_name"] == user_name]
-    learner_id = str(matched.iloc[0]["learner_id"]) if not matched.empty else DEFAULT_LEARNER_ID
+    matched = learners[learners["learner_name"] == user_name] if "learner_name" in learners.columns else learners.iloc[0:0]
+    if not matched.empty:
+        learner_id = str(matched.iloc[0]["learner_id"])
+    elif not learners.empty:
+        learner_id = str(learners.iloc[0]["learner_id"])
+    else:
+        learner_id = DEFAULT_LEARNER_ID
     st.session_state.learner_id = learner_id
     st.session_state.selected_learner_id = learner_id
     return learner_id
 
 
 def current_learner() -> pd.Series:
+    learners = _learners()
     learner_id = resolve_logged_in_learner_id()
-    rows = LEARNERS[LEARNERS["learner_id"] == learner_id]
-    if rows.empty:
-        rows = LEARNERS[LEARNERS["learner_id"] == DEFAULT_LEARNER_ID]
+    rows = learners[learners["learner_id"] == learner_id] if "learner_id" in learners.columns else learners.iloc[0:0]
+    if rows.empty and not learners.empty:
+        rows = learners.iloc[[0]]
     return rows.iloc[0]
 
 
@@ -51,10 +57,12 @@ def current_cohort_id() -> str:
 
 
 def bind_demo_learner(learner_id: str = DEFAULT_LEARNER_ID) -> None:
-    rows = LEARNERS[LEARNERS["learner_id"] == learner_id]
-    if rows.empty:
-        learner_id = DEFAULT_LEARNER_ID
-        rows = LEARNERS[LEARNERS["learner_id"] == learner_id]
+    learners = _learners()
+    rows = learners[learners["learner_id"] == learner_id] if "learner_id" in learners.columns else learners.iloc[0:0]
+    if rows.empty and not learners.empty:
+        rows = learners.iloc[[0]]
+        learner_id = str(rows.iloc[0]["learner_id"])
     st.session_state.learner_id = learner_id
     st.session_state.selected_learner_id = learner_id
-    st.session_state.user_name = str(rows.iloc[0]["learner_name"])
+    if not rows.empty:
+        st.session_state.user_name = str(rows.iloc[0]["learner_name"])
