@@ -15,7 +15,7 @@ def render_business_top() -> None:
     st.markdown(
         f"""
 <div class='top executive-top'>
-  <div class='brand'>AI Agent Governance OS<small>v5.1.0 · Production Admin Console</small></div>
+  <div class='brand'>AI Agent Governance OS<small>v5.2.0 · Executable Flow + Production Admin</small></div>
   <div>{chip(st.session_state.role)}<span class='pill'>{st.session_state.user_name}</span><span class='pill {backend_class}'>{backend_label}</span><span class='pill'>Tenant：{tenant_code()}</span><span class='pill'>最近：{st.session_state.last_event}</span></div>
 </div>
 """,
@@ -25,7 +25,7 @@ def render_business_top() -> None:
         nav = [
             ("dashboard", "Dashboard"),
             ("admin", "Admin/Health"),
-            ("workflow", "Workflow"),
+            ("workflow", "Executable Flow"),
             ("clients", "客户"),
             ("cohorts", "班级"),
             ("learners", "学员"),
