@@ -22,6 +22,7 @@ from frontend.pages import (
 )
 from frontend.production_state import init_production_admin_state
 from frontend.report_pages import delivery_report_page
+from frontend.runtime_binding import bind_production_master_data
 from frontend.state import init_state
 from frontend.student_business_pages import (
     student_home_page,
@@ -39,6 +40,7 @@ apply_styles()
 init_state()
 init_production_admin_state()
 init_operation_state()
+bind_production_master_data()
 
 if not st.session_state.logged_in:
     render_executive_public_site()
@@ -90,4 +92,4 @@ else:
         else:
             student_home_page()
 
-st.caption("AI Agent Governance & Readiness OS · Production Admin Console · v5.1.0")
+st.caption("AI Agent Governance & Readiness OS · Production Admin Console · v5.1.1")
