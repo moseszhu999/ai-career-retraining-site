@@ -70,9 +70,8 @@ def _normalize_columns(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
 
 def _load_table_or_seed(table: str) -> pd.DataFrame:
     columns = _TABLE_TO_COLUMNS[table]
-    seed_df = _normalize_columns(_TABLE_TO_SEED[table], columns)
     if not is_supabase_enabled():
-        return seed_df.copy()
+        return _normalize_columns(_TABLE_TO_SEED[table], columns).copy()
     try:
         response = supabase_client().table(table).select("*").eq("tenant_code", tenant_code()).execute()
         df = pd.DataFrame(response.data or [])
@@ -87,7 +86,6 @@ def _load_table_or_seed(table: str) -> pd.DataFrame:
 
 
 def init_production_admin_state() -> None:
-    """Load editable master data for v5.1 Production Admin Console."""
     for table, state_key in _TABLE_TO_STATE.items():
         if state_key not in st.session_state:
             st.session_state[state_key] = _load_table_or_seed(table)
@@ -136,124 +134,37 @@ def _append_and_upsert(table: str, row: dict[str, Any], conflict_columns: str) -
 def add_client(*, client_id: str, client_name: str, contact: str, service_package: str, contract_value: int, currency: str, status: str) -> str:
     df = clients().copy()
     new_id = client_id.strip() or _next_id("client", df, "client_id")
-    row = {
-        "client_id": new_id,
-        "client_name": client_name.strip(),
-        "contact": contact.strip(),
-        "service_package": service_package.strip(),
-        "contract_value": int(contract_value),
-        "currency": currency.strip() or "CNY",
-        "status": status,
-    }
+    row = {"client_id": new_id, "client_name": client_name.strip(), "contact": contact.strip(), "service_package": service_package.strip(), "contract_value": int(contract_value), "currency": currency.strip() or "CNY", "status": status}
     _append_and_upsert("clients", row, "tenant_code,client_id")
-    add_audit(
-        action="新增客户",
-        object_type="Client",
-        object_id=new_id,
-        before_status="无",
-        after_status=status,
-        summary=f"{client_name} · {service_package} · ¥{int(contract_value):,}",
-    )
+    add_audit(action="新增客户", object_type="Client", object_id=new_id, before_status="无", after_status=status, summary=f"{client_name} · {service_package} · ¥{int(contract_value):,}")
     return new_id
 
 
 def add_cohort(*, cohort_id: str, client_id: str, cohort_name: str, start_date: str, end_date: str, trainer: str, status: str) -> str:
     df = cohorts().copy()
     new_id = cohort_id.strip() or _next_id("cohort", df, "cohort_id")
-    row = {
-        "cohort_id": new_id,
-        "client_id": client_id,
-        "cohort_name": cohort_name.strip(),
-        "learner_count": 0,
-        "start_date": start_date,
-        "end_date": end_date,
-        "trainer": trainer.strip(),
-        "status": status,
-    }
+    row = {"cohort_id": new_id, "client_id": client_id, "cohort_name": cohort_name.strip(), "learner_count": 0, "start_date": start_date, "end_date": end_date, "trainer": trainer.strip(), "status": status}
     _append_and_upsert("cohorts", row, "tenant_code,cohort_id")
-    add_audit(
-        action="新增班级",
-        object_type="Cohort",
-        object_id=new_id,
-        before_status="无",
-        after_status=status,
-        summary=f"{cohort_name} · client={client_id}",
-    )
+    add_audit(action="新增班级", object_type="Cohort", object_id=new_id, before_status="无", after_status=status, summary=f"{cohort_name} · client={client_id}")
     return new_id
 
 
 def add_learner(*, learner_id: str, learner_name: str, cohort_id: str, learner_group: str, role: str, status: str) -> str:
     df = learners().copy()
     new_id = learner_id.strip() or _next_id("learner", df, "learner_id")
-    row = {
-        "learner_id": new_id,
-        "learner_name": learner_name.strip(),
-        "cohort_id": cohort_id,
-        "role": role or "学员",
-        "group": learner_group.strip() or "默认组",
-        "status": status,
-        "progress": 0,
-        "tasks_done": 0,
-        "proof_files": 0,
-    }
+    row = {"learner_id": new_id, "learner_name": learner_name.strip(), "cohort_id": cohort_id, "role": role or "学员", "group": learner_group.strip() or "默认组", "status": status, "progress": 0, "tasks_done": 0, "proof_files": 0}
     _append_and_upsert("learners", row, "tenant_code,learner_id")
     _sync_cohort_learner_count(cohort_id)
-    add_audit(
-        action="新增学员",
-        object_type="Learner",
-        object_id=new_id,
-        before_status="无",
-        after_status=status,
-        summary=f"{learner_name} · cohort={cohort_id}",
-    )
+    add_audit(action="新增学员", object_type="Learner", object_id=new_id, before_status="无", after_status=status, summary=f"{learner_name} · cohort={cohort_id}")
     return new_id
 
 
-def add_exercise(
-    *,
-    exercise_id: str,
-    module: str,
-    difficulty: str,
-    cohort_id: str,
-    related_task: str,
-    scenario: str,
-    question: str,
-    options: list[str],
-    correct_option: str,
-    explanation: str,
-    required_output: str,
-    hint: str,
-    golden_solution: str,
-    rubric: str,
-) -> str:
+def add_exercise(*, exercise_id: str, module: str, difficulty: str, cohort_id: str, related_task: str, scenario: str, question: str, options: list[str], correct_option: str, explanation: str, required_output: str, hint: str, golden_solution: str, rubric: str) -> str:
     df = exercises().copy()
     new_id = exercise_id.strip() or _next_id("ex", df, "exercise_id")
-    row = {
-        "exercise_id": new_id,
-        "module": module.strip(),
-        "difficulty": difficulty,
-        "cohort_id": cohort_id,
-        "related_task": related_task.strip(),
-        "scenario": scenario.strip(),
-        "question_type": "单选题",
-        "question": question.strip(),
-        "options": options,
-        "correct_option": correct_option,
-        "explanation": explanation.strip(),
-        "required_output": required_output.strip(),
-        "hint": hint.strip(),
-        "golden_solution": golden_solution.strip(),
-        "rubric": rubric.strip(),
-    }
+    row = {"exercise_id": new_id, "module": module.strip(), "difficulty": difficulty, "cohort_id": cohort_id, "related_task": related_task.strip(), "scenario": scenario.strip(), "question_type": "单选题", "question": question.strip(), "options": options, "correct_option": correct_option, "explanation": explanation.strip(), "required_output": required_output.strip(), "hint": hint.strip(), "golden_solution": golden_solution.strip(), "rubric": rubric.strip()}
     _append_and_upsert("exercises", row, "tenant_code,exercise_id")
-    add_audit(
-        action="新增选择题",
-        object_type="Exercise",
-        object_id=new_id,
-        before_status="无",
-        after_status="可分配",
-        summary=f"{module} · {related_task}",
-    )
+    add_audit(action="新增选择题", object_type="Exercise", object_id=new_id, before_status="无", after_status="可分配", summary=f"{module} · {related_task}")
     return new_id
 
 
@@ -272,7 +183,8 @@ def _sync_cohort_learner_count(cohort_id: str) -> None:
 def health_check() -> pd.DataFrame:
     rows: list[dict[str, Any]] = []
     backend = data_backend()
-    for table in ["clients", "cohorts", "learners", "exercises", "assignments", "submissions", "reviews", "proof_files", "consult_leads"]:
+    tables = ["clients", "cohorts", "learners", "exercises", "assignments", "submissions", "reviews", "proof_files", "consult_leads", "flow_runs"]
+    for table in tables:
         if not is_supabase_enabled():
             local_key = _TABLE_TO_STATE.get(table)
             local_count = len(st.session_state.get(local_key, [])) if local_key else None
@@ -288,8 +200,4 @@ def health_check() -> pd.DataFrame:
 
 def production_mode_status() -> dict[str, str]:
     backend = data_backend()
-    return {
-        "backend": backend,
-        "backend_label": "Supabase Persistent" if backend == "supabase" else "Session Demo",
-        "tenant_code": tenant_code(),
-    }
+    return {"backend": backend, "backend_label": "Supabase Persistent" if backend == "supabase" else "Session Demo", "tenant_code": tenant_code()}
