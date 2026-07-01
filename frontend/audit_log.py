@@ -22,7 +22,7 @@ AUDIT_COLUMNS = [
 
 SEED_AUDITS = [
     {
-        "audit_id": "aud-001",
+        "audit_id": "aud-seed-001",
         "time": "2026-06-29 09:00",
         "actor": "System",
         "role": "系统",
@@ -46,6 +46,11 @@ def audit_logs() -> pd.DataFrame:
     return st.session_state.op_audit_logs
 
 
+def _new_audit_id(df: pd.DataFrame) -> str:
+    stamp = datetime.now().strftime("%Y%m%d%H%M%S%f")
+    return f"aud-{stamp}-{len(df) + 1:03d}"
+
+
 def add_audit(
     *,
     action: str,
@@ -57,7 +62,7 @@ def add_audit(
 ) -> str:
     init_audit_log()
     df = audit_logs().copy()
-    audit_id = f"aud-{len(df) + 1:03d}"
+    audit_id = _new_audit_id(df)
     new_row = {
         "audit_id": audit_id,
         "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
