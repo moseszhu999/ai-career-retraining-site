@@ -1,0 +1,40 @@
+:root {
+  --ps-bg: #f8fafc;
+  --ps-code-bg: #0f172a;
+}
+
+body {
+  background: var(--ps-bg);
+}
+
+.role-nav .list-group-item {
+  border-radius: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.role-nav .list-group-item.active {
+  box-shadow: 0 0.5rem 1.25rem rgba(13, 110, 253, 0.14);
+}
+
+.code-block {
+  background: var(--ps-code-bg);
+  color: #dbeafe;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  overflow: auto;
+  font-size: 0.875rem;
+}
+
+.activity-log {
+  max-height: 18rem;
+  overflow: auto;
+}
+
+.activity-log-item {
+  border-bottom: 1px dashed #dee2e6;
+  padding: 0.5rem 0;
+}
+
+.stat-card .display-6 {
+  font-weight: 800;
+}
