@@ -30,34 +30,65 @@ The launcher points to:
 docs/prototypes/v8-app/index.html
 ```
 
+## v8.4 platform content expansion
+
+v8.4 turns the prototype from a thin role skeleton into a more realistic platform UI.
+
+Added:
+
+```text
+mock-data.js
+credential path catalog
+project task checklist
+Evidence Builder
+score breakdown
+issuer review queue
+hash match checklist
+rubric summary
+evaluator scoring table
+risk flags
+verifier checklist
+credential detail
+verification receipt preview
+admin issuer registry
+schema/rubric versions
+contract configuration
+```
+
+The UI is still Bootstrap-first and frontend-only.
+
 ## Manual demo flow
 
 ### Level 2 issuer-attested flow
 
 ```text
 1. Open Learner role.
-2. Click Generate Evidence Bundle.
-3. Click Compute Hashes.
-4. Click Request Issuer Attestation.
-5. Switch to Issuer role.
-6. Click Approve Evidence.
-7. Click Issue IssuerAttested Proof.
-8. Switch to Verifier role.
-9. Click Read Contract.
-10. Confirm status = active and trust level = IssuerAttested.
+2. Review Credential Path Catalog.
+3. Review Project Task and Evidence Builder.
+4. Click Generate Evidence Bundle.
+5. Click Compute Hashes.
+6. Click Request Issuer Attestation.
+7. Switch to Issuer role.
+8. Review Evidence Review Detail and Hash Match Checklist.
+9. Click Approve Evidence.
+10. Click Issue IssuerAttested Proof.
+11. Switch to Verifier role.
+12. Click Read Contract.
+13. Confirm status = active and trust level = IssuerAttested.
 ```
 
 ### Level 3 evaluator-signed flow
 
 ```text
 1. Switch to Evaluator role.
-2. Click Assign Review.
-3. Click Sign Evaluation.
-4. Switch to Issuer role.
-5. Click Issue EvaluatorSigned Proof.
-6. Switch to Verifier role.
-7. Click Read Contract.
-8. Confirm status = active and trust level = EvaluatorSigned.
+2. Review assignment, risk flags, and rubric scoring table.
+3. Click Assign Review.
+4. Click Sign Evaluation.
+5. Switch to Issuer role.
+6. Click Issue EvaluatorSigned Proof.
+7. Switch to Verifier role.
+8. Click Read Contract.
+9. Confirm status = active and trust level = EvaluatorSigned.
 ```
 
 ## v8.3 online polish
@@ -154,10 +185,10 @@ No real agent scoring.
 
 ## Next recommended step
 
-After the online workflow is stable, move toward:
+After v8.4 is reviewed online, move toward:
 
 ```text
-v8.4 task data extraction
+v8.5 route-level productization
 ```
 
-That means moving hardcoded task/rubric/evidence demo content into static JSON files while keeping the app frontend-only.
+That means making role-specific URLs, clearer role landing states, and a proper demo script for investor/customer walkthroughs.
