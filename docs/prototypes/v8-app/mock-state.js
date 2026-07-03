@@ -5,6 +5,8 @@ window.ProofSkillState = (() => {
     currentRole: 'learner',
     learnerTab: 'learning',
     demoStep: 0,
+    activeRouteId: null,
+    activeRouteStep: 0,
     evidence: 'not_generated',
     hashesComputed: false,
     learningProgress: 25,
