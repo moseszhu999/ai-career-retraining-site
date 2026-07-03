@@ -8,6 +8,32 @@ window.ProofSkillRoles.overview = {
     const smoke = window.ProofSkillSmokeTest?.renderTable();
     const smokeResult = smoke?.result || { passed: 0, failed: 0, total: 0 };
     const smokeTable = smoke?.html || '<div class="text-secondary">Smoke test utility not loaded.</div>';
+    const routes = window.ProofSkillDemoRoutes || [];
+    const routeCards = routes.map((route) => `
+      <div class="col-xl-4">
+        <div class="card h-100">
+          <div class="card-header bg-white d-flex justify-content-between align-items-center gap-2">
+            <strong>${route.title}</strong>
+            <span class="badge text-bg-primary">${route.duration}</span>
+          </div>
+          <div class="card-body">
+            <div class="small text-uppercase text-secondary fw-bold mb-1">Audience</div>
+            <p class="mb-2">${route.audience}</p>
+            <div class="small text-uppercase text-secondary fw-bold mb-1">Promise</div>
+            <p class="text-secondary small">${route.promise}</p>
+            <div class="list-group list-group-flush border rounded-3">
+              ${route.steps.map((step, index) => `
+                <button class="list-group-item list-group-item-action small" data-route-step-role="${step.target.role}" data-route-step-tab="${step.target.learnerTab || ''}" data-route-step-anchor="${step.target.anchor || ''}">
+                  <div class="fw-semibold">${index + 1}. ${step.label}</div>
+                  <div class="text-secondary">${step.talk}</div>
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
     return `
       <div class="p-4 p-lg-5 bg-white rounded-4 shadow-sm border mb-4">
         <div class="row g-4 align-items-center">
@@ -45,6 +71,11 @@ window.ProofSkillRoles.overview = {
       </div>
 
       <div class="card mb-4">
+        <div class="card-header bg-white fw-bold">Demo Route Selector</div>
+        <div class="card-body"><div class="row g-3">${routeCards}</div></div>
+      </div>
+
+      <div class="card mb-4">
         <div class="card-header bg-white fw-bold">End-to-end flow</div>
         <div class="card-body">
           <div class="row g-3">
@@ -65,5 +96,12 @@ window.ProofSkillRoles.overview = {
   },
   bind() {
     document.getElementById('rerunSmokeTest')?.addEventListener('click', () => window.ProofSkillApp.render());
+    document.querySelectorAll('[data-route-step-role]').forEach((button) => {
+      button.addEventListener('click', () => window.ProofSkillApp.setMenuTarget({
+        role: button.dataset.routeStepRole,
+        learnerTab: button.dataset.routeStepTab || null,
+        anchor: button.dataset.routeStepAnchor || null
+      }));
+    });
   }
 };
