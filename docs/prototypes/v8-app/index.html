@@ -19,20 +19,20 @@
     <div class="row min-vh-100">
       <aside class="col-12 col-lg-3 col-xl-2 bg-white border-end p-3">
         <div class="d-lg-none mb-3">
-          <label class="form-label small text-uppercase text-secondary fw-bold">Role</label>
+          <label class="form-label small text-uppercase text-secondary fw-bold">Workspace</label>
           <select id="mobileRoleSelect" class="form-select">
             <option value="overview">Overview</option>
             <option value="learner">Learner / Candidate</option>
             <option value="issuer">Issuer / Training Partner</option>
             <option value="evaluator">Evaluator / Reviewer</option>
-            <option value="verifier">Verifier / Employer</option>
+            <option value="verifier">Verifier / Organization</option>
             <option value="admin">Admin / Contract Owner</option>
           </select>
         </div>
 
         <div class="d-none d-lg-block">
-          <div class="small text-uppercase text-secondary fw-bold mb-2">Workspace</div>
-          <div id="roleNav" class="list-group role-nav"></div>
+          <div class="small text-uppercase text-secondary fw-bold mb-2">Menu</div>
+          <div id="roleNav" class="role-nav"></div>
         </div>
 
         <hr>
@@ -72,6 +72,7 @@
   <script src="/docs/prototypes/v8-app/contract-abi.js"></script>
   <script src="/docs/prototypes/v8-app/mock-data.js"></script>
   <script src="/docs/prototypes/v8-app/mock-state.js"></script>
+  <script src="/docs/prototypes/v8-app/menu-config.js"></script>
   <script src="/docs/prototypes/v8-app/export-utils.js"></script>
   <script src="/docs/prototypes/v8-app/roles/overview.js"></script>
   <script src="/docs/prototypes/v8-app/roles/learner.js"></script>
