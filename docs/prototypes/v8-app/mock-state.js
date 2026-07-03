@@ -3,6 +3,7 @@ window.ProofSkillState = (() => {
 
   const initialState = {
     currentRole: 'learner',
+    learnerTab: 'learning',
     evidence: 'not_generated',
     hashesComputed: false,
     learningProgress: 25,
