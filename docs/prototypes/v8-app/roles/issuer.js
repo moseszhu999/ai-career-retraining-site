@@ -69,7 +69,7 @@ window.ProofSkillRoles.issuer = {
         <div class="col-md-3"><div class="card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Issuer wallet</div><div class="display-6">OK</div><span class="badge text-bg-success">authorized</span></div></div></div>
       </div>
 
-      <div class="card mb-4 border-primary">
+      <div id="learning-ops" class="card mb-4 border-primary">
         <div class="card-header bg-white fw-bold">Learning Ops · Cohort Monitor</div>
         <div class="card-body table-responsive">
           <table class="table table-hover align-middle mb-0">
@@ -80,31 +80,11 @@ window.ProofSkillRoles.issuer = {
       </div>
 
       <div class="row g-3 mb-4">
-        <div class="col-xl-8">
-          <div class="card h-100">
-            <div class="card-header bg-white fw-bold">Learner Progress and Next Actions</div>
-            <div class="card-body table-responsive">
-              <table class="table table-hover align-middle mb-0">
-                <thead><tr><th>Learner</th><th>Path</th><th>Progress</th><th>Quiz</th><th>Practice</th><th>Evidence</th><th>Next action</th></tr></thead>
-                <tbody>${learnerProgressRows}</tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-4">
-          <div class="card h-100">
-            <div class="card-header bg-white fw-bold">Curriculum Ops</div>
-            <div class="card-body table-responsive">
-              <table class="table table-sm align-middle mb-0">
-                <thead><tr><th>Item</th><th>Status</th><th>Done</th><th>Issue</th></tr></thead>
-                <tbody>${curriculumRows}</tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+        <div class="col-xl-8"><div class="card h-100"><div class="card-header bg-white fw-bold">Learner Progress and Next Actions</div><div class="card-body table-responsive"><table class="table table-hover align-middle mb-0"><thead><tr><th>Learner</th><th>Path</th><th>Progress</th><th>Quiz</th><th>Practice</th><th>Evidence</th><th>Next action</th></tr></thead><tbody>${learnerProgressRows}</tbody></table></div></div></div>
+        <div class="col-xl-4"><div class="card h-100"><div class="card-header bg-white fw-bold">Curriculum Ops</div><div class="card-body table-responsive"><table class="table table-sm align-middle mb-0"><thead><tr><th>Item</th><th>Status</th><th>Done</th><th>Issue</th></tr></thead><tbody>${curriculumRows}</tbody></table></div></div></div>
       </div>
 
-      <div class="card mb-4">
+      <div id="review-queue" class="card mb-4">
         <div class="card-header bg-white fw-bold">Credential Review Queue</div>
         <div class="card-body table-responsive">
           <table class="table table-hover align-middle mb-0">
@@ -115,52 +95,13 @@ window.ProofSkillRoles.issuer = {
       </div>
 
       <div class="row g-3 mb-4">
-        <div class="col-xl-5">
-          <div class="card h-100">
-            <div class="card-header bg-white fw-bold">Evidence Review Detail</div>
-            <div class="card-body">
-              <div class="alert alert-warning"><strong>Issuer decision:</strong> Verify learning completion, practice submission, evidence completeness, score hash, and schema version before signing.</div>
-              <dl class="row small mb-0">
-                <dt class="col-5">Learner</dt><dd class="col-7">Mia Chen</dd>
-                <dt class="col-5">Learning progress</dt><dd class="col-7">100%</dd>
-                <dt class="col-5">Quiz score</dt><dd class="col-7">88 / 100</dd>
-                <dt class="col-5">Practice lab</dt><dd class="col-7">submitted</dd>
-                <dt class="col-5">Overall score</dt><dd class="col-7">86 / 100</dd>
-                <dt class="col-5">Evidence outputs</dt><dd class="col-7">4 files represented by evidenceHash</dd>
-              </dl>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-7">
-          <div class="card h-100">
-            <div class="card-header bg-white fw-bold">Hash Match Checklist</div>
-            <div class="card-body table-responsive">
-              <table class="table table-sm align-middle mb-0">
-                <thead><tr><th>Field</th><th>Value</th><th>Status</th></tr></thead>
-                <tbody>${hashRows}</tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+        <div class="col-xl-5"><div class="card h-100"><div class="card-header bg-white fw-bold">Evidence Review Detail</div><div class="card-body"><div class="alert alert-warning"><strong>Issuer decision:</strong> Verify learning completion, practice submission, evidence completeness, score hash, and schema version before signing.</div><dl class="row small mb-0"><dt class="col-5">Learner</dt><dd class="col-7">Mia Chen</dd><dt class="col-5">Learning progress</dt><dd class="col-7">100%</dd><dt class="col-5">Quiz score</dt><dd class="col-7">88 / 100</dd><dt class="col-5">Practice lab</dt><dd class="col-7">submitted</dd><dt class="col-5">Overall score</dt><dd class="col-7">86 / 100</dd><dt class="col-5">Evidence outputs</dt><dd class="col-7">4 files represented by evidenceHash</dd></dl></div></div></div>
+        <div class="col-xl-7"><div class="card h-100"><div class="card-header bg-white fw-bold">Hash Match Checklist</div><div class="card-body table-responsive"><table class="table table-sm align-middle mb-0"><thead><tr><th>Field</th><th>Value</th><th>Status</th></tr></thead><tbody>${hashRows}</tbody></table></div></div></div>
       </div>
 
-      <div class="row g-3">
-        <div class="col-lg-6">
-          <div class="card h-100">
-            <div class="card-header bg-white fw-bold">Rubric Summary</div>
-            <div class="card-body table-responsive">
-              <table class="table table-sm table-hover align-middle mb-0">
-                <thead><tr><th>Rubric</th><th>Weight</th><th>Score</th><th>Issuer check</th></tr></thead>
-                <tbody>${rubricRows}</tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <div class="card h-100">
-            <div class="card-header bg-white fw-bold">Issuer Contract Actions</div>
-            <div class="card-body">
-              <pre class="code-block">registerIssuerAttestedProof(
+      <div id="contract-actions" class="row g-3">
+        <div class="col-lg-6"><div class="card h-100"><div class="card-header bg-white fw-bold">Rubric Summary</div><div class="card-body table-responsive"><table class="table table-sm table-hover align-middle mb-0"><thead><tr><th>Rubric</th><th>Weight</th><th>Score</th><th>Issuer check</th></tr></thead><tbody>${rubricRows}</tbody></table></div></div></div>
+        <div class="col-lg-6"><div class="card h-100"><div class="card-header bg-white fw-bold">Issuer Contract Actions</div><div class="card-body"><pre class="code-block">registerIssuerAttestedProof(
   credentialId,
   holder,
   credentialType,
@@ -170,43 +111,14 @@ window.ProofSkillRoles.issuer = {
   scoreHash,
   schemaHash,
   expiresAt
-)</pre>
-              <div class="d-flex flex-wrap gap-2">
-                <button id="issuerApproveEvidence" class="btn btn-outline-primary">Approve Evidence</button>
-                <button id="issuerIssueProof" class="btn btn-primary">Issue IssuerAttested Proof</button>
-                <button id="issuerIssueEvaluatorProof" class="btn btn-outline-success">Issue EvaluatorSigned Proof</button>
-                <button id="issuerRevoke" class="btn btn-outline-danger">Revoke Mock Credential</button>
-              </div>
-              <p class="text-secondary small mt-3 mb-0">All actions are frontend mock state changes. No real wallet transaction is sent.</p>
-            </div>
-          </div>
-        </div>
+)</pre><div class="d-flex flex-wrap gap-2"><button id="issuerApproveEvidence" class="btn btn-outline-primary">Approve Evidence</button><button id="issuerIssueProof" class="btn btn-primary">Issue IssuerAttested Proof</button><button id="issuerIssueEvaluatorProof" class="btn btn-outline-success">Issue EvaluatorSigned Proof</button><button id="issuerRevoke" class="btn btn-outline-danger">Revoke Mock Credential</button></div><p class="text-secondary small mt-3 mb-0">All actions are frontend mock state changes. No real wallet transaction is sent.</p></div></div></div>
       </div>
     `;
   },
   bind() {
-    document.getElementById('issuerApproveEvidence')?.addEventListener('click', () => window.ProofSkillApp.mutate((s) => {
-      s.issuerReview = 'approved';
-    }, 'Issuer approved Evidence Bundle'));
-
-    document.getElementById('issuerIssueProof')?.addEventListener('click', () => window.ProofSkillApp.mutate((s) => {
-      s.proofStatus = 'active';
-      s.trustLevel = 'IssuerAttested';
-      s.issuerReview = 'issued';
-      s.issuedCount += 1;
-    }, 'Issuer registered IssuerAttested proof mock'));
-
-    document.getElementById('issuerIssueEvaluatorProof')?.addEventListener('click', () => window.ProofSkillApp.mutate((s) => {
-      s.evaluatorReview = 'evaluator_set_ready';
-      s.evaluatorSetHash = '0xEVALUATOR_SET_HASH_MOCK_001';
-      s.proofStatus = 'active';
-      s.trustLevel = 'EvaluatorSigned';
-      s.issuerReview = 'issued';
-      s.issuedCount += 1;
-    }, 'Issuer registered EvaluatorSigned proof mock'));
-
-    document.getElementById('issuerRevoke')?.addEventListener('click', () => window.ProofSkillApp.mutate((s) => {
-      s.proofStatus = 'revoked';
-    }, 'Issuer revoked credential proof mock'));
+    document.getElementById('issuerApproveEvidence')?.addEventListener('click', () => window.ProofSkillApp.mutate((s) => { s.issuerReview = 'approved'; }, 'Issuer approved Evidence Bundle'));
+    document.getElementById('issuerIssueProof')?.addEventListener('click', () => window.ProofSkillApp.mutate((s) => { s.proofStatus = 'active'; s.trustLevel = 'IssuerAttested'; s.issuerReview = 'issued'; s.issuedCount += 1; }, 'Issuer registered IssuerAttested proof mock'));
+    document.getElementById('issuerIssueEvaluatorProof')?.addEventListener('click', () => window.ProofSkillApp.mutate((s) => { s.evaluatorReview = 'evaluator_set_ready'; s.evaluatorSetHash = '0xEVALUATOR_SET_HASH_MOCK_001'; s.proofStatus = 'active'; s.trustLevel = 'EvaluatorSigned'; s.issuerReview = 'issued'; s.issuedCount += 1; }, 'Issuer registered EvaluatorSigned proof mock'));
+    document.getElementById('issuerRevoke')?.addEventListener('click', () => window.ProofSkillApp.mutate((s) => { s.proofStatus = 'revoked'; }, 'Issuer revoked credential proof mock'));
   }
 };
