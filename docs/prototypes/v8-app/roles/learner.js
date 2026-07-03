@@ -5,6 +5,24 @@ window.ProofSkillRoles.learner = {
   subtitle: 'Learn, practice, build evidence, and request attestation.',
   render(state) {
     const data = window.ProofSkillData;
+    const tab = state.learnerTab || 'learning';
+    const tabs = [
+      ['learning', 'Learning'],
+      ['path', 'My Path'],
+      ['practice', 'Practice Lab'],
+      ['evidence', 'Evidence'],
+      ['certificate', 'Certificate']
+    ].map(([id, label]) => `
+      <button class="nav-link ${tab === id ? 'active' : ''}" data-learner-tab="${id}" type="button">${label}</button>
+    `).join('');
+
+    const evidenceBadge = state.evidence === 'generated'
+      ? '<span class="badge text-bg-success">Generated</span>'
+      : '<span class="badge text-bg-secondary">Not generated</span>';
+    const proofBadge = state.proofStatus === 'active'
+      ? `<span class="badge text-bg-success">${state.trustLevel}</span>`
+      : '<span class="badge text-bg-secondary">Not registered</span>';
+
     const modules = data.learningModules.map((module) => {
       const done = state.completedLessons?.includes(module.id) || (module.id === 'quiz-1' && state.quizStatus === 'passed') || (module.id === 'lab-1' && state.practiceStatus === 'submitted');
       const active = state.activeLesson === module.id;
@@ -68,33 +86,12 @@ window.ProofSkillRoles.learner = {
       </tr>
     `).join('');
 
-    const evidenceBadge = state.evidence === 'generated'
-      ? '<span class="badge text-bg-success">Generated</span>'
-      : '<span class="badge text-bg-secondary">Not generated</span>';
-    const proofBadge = state.proofStatus === 'active'
-      ? `<span class="badge text-bg-success">${state.trustLevel}</span>`
-      : '<span class="badge text-bg-secondary">Not registered</span>';
-
-    return `
-      <div class="alert alert-primary d-flex justify-content-between align-items-center flex-wrap gap-2">
-        <div><strong>Current learner:</strong> Mia Chen · Wallet 0xLearnerMiaMock · Goal: AI Data Analysis Assistant</div>
-        <span class="badge text-bg-light text-primary border">learn → practice → evidence → issuer attestation</span>
-      </div>
-
-      <div class="row g-3 mb-4">
-        <div class="col-md-3"><div class="card stat-card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Learning progress</div><div class="display-6">${state.learningProgress || 0}%</div><div class="progress"><div class="progress-bar" style="width:${state.learningProgress || 0}%"></div></div></div></div></div>
-        <div class="col-md-3"><div class="card stat-card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Quiz</div><div class="h3 mb-2">${state.quizScore ?? '--'}</div><span class="badge text-bg-${state.quizStatus === 'passed' ? 'success' : 'secondary'}">${state.quizStatus || 'not_started'}</span></div></div></div>
-        <div class="col-md-3"><div class="card stat-card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Local evidence</div><div class="h3 mb-2">${state.evidence === 'generated' ? 'Ready' : 'Draft'}</div>${evidenceBadge}</div></div></div>
-        <div class="col-md-3"><div class="card stat-card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Proof status</div><div class="h3 mb-2">${state.proofStatus}</div>${proofBadge}</div></div></div>
-      </div>
-
+    const learningSection = `
       <div class="card mb-4">
         <div class="card-header bg-white fw-bold">Learning Workspace</div>
         <div class="card-body">
           <div class="row g-3">
-            <div class="col-xl-4">
-              <div class="list-group">${modules}</div>
-            </div>
+            <div class="col-xl-4"><div class="list-group">${modules}</div></div>
             <div class="col-xl-8">
               <div class="card border-primary h-100">
                 <div class="card-body">
@@ -127,30 +124,49 @@ window.ProofSkillRoles.learner = {
           </div>
         </div>
       </div>
+    `;
 
+    const pathSection = `
       <div class="card mb-4">
         <div class="card-header bg-white fw-bold">Credential Path Catalog</div>
         <div class="card-body"><div class="row g-3">${paths}</div></div>
       </div>
+    `;
 
+    const practiceSection = `
       <div class="row g-3 mb-4">
         <div class="col-lg-6">
           <div class="card h-100">
-            <div class="card-header bg-white fw-bold">Project Task · ${task.title}</div>
+            <div class="card-header bg-white fw-bold">Practice Lab · ${task.title}</div>
             <div class="card-body">
               <p class="text-secondary">Difficulty: ${task.difficulty} · Estimated time: ${task.estimatedTime}</p>
               <ul class="list-group mb-3">${taskChecklist}</ul>
               <div class="small text-uppercase text-secondary fw-bold mb-2">Expected evidence outputs</div>
               <div class="d-flex flex-wrap gap-2 mb-3">${task.evidenceOutputs.map((item) => `<span class="badge text-bg-light text-secondary border">${item}</span>`).join('')}</div>
-              <div class="d-flex flex-wrap gap-2">
-                <button id="learnerGenerateEvidence" class="btn btn-primary">Generate Evidence Bundle</button>
-                <button id="learnerComputeHashes" class="btn btn-outline-primary">Compute Hashes</button>
-                <button id="learnerRequestIssuer" class="btn btn-outline-success">Request Issuer Attestation</button>
-                <button id="learnerSelfAttest" class="btn btn-outline-warning">Self-attest Low Trust</button>
-              </div>
+              <label class="form-label small text-secondary">Practice answer draft</label>
+              <textarea class="form-control mb-3" rows="4">I cleaned the sales data, defined margin metrics, and found an abnormal discount pattern in the East region.</textarea>
+              <button id="submitPractice" class="btn btn-success">Submit Practice Lab</button>
             </div>
           </div>
         </div>
+        <div class="col-lg-6">
+          <div class="card h-100">
+            <div class="card-header bg-white fw-bold">AI Review Mock</div>
+            <div class="card-body">
+              <div class="alert alert-info">AI review is a learning assistant only. Final certificate evidence still needs issuer review.</div>
+              <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between"><span>Metric definitions clear</span><span class="badge text-bg-success">pass</span></li>
+                <li class="list-group-item d-flex justify-content-between"><span>Discount anomaly explained</span><span class="badge text-bg-success">pass</span></li>
+                <li class="list-group-item d-flex justify-content-between"><span>Manager-facing summary concise</span><span class="badge text-bg-warning">improve</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const evidenceSection = `
+      <div class="row g-3 mb-4">
         <div class="col-lg-6">
           <div class="card h-100">
             <div class="card-header bg-white fw-bold">Evidence Builder</div>
@@ -159,24 +175,91 @@ window.ProofSkillRoles.learner = {
                 <div class="col-md-6"><label class="form-label small text-secondary">Insight summary</label><textarea class="form-control" rows="3">Revenue grew in East region, but discount leakage reduced margin.</textarea></div>
                 <div class="col-md-6"><label class="form-label small text-secondary">Risk note</label><textarea class="form-control" rows="3">Abnormal discount pattern needs manager review before forecast update.</textarea></div>
               </div>
+              <div class="d-flex flex-wrap gap-2 mb-3">
+                <button id="learnerGenerateEvidence" class="btn btn-primary">Generate Evidence Bundle</button>
+                <button id="learnerComputeHashes" class="btn btn-outline-primary">Compute Hashes</button>
+                <button id="learnerRequestIssuer" class="btn btn-outline-success">Request Issuer Attestation</button>
+              </div>
               <pre class="code-block mb-0">${state.evidence === 'generated' ? JSON.stringify(data.evidencePackage, null, 2) : 'No evidence generated yet.'}</pre>
             </div>
           </div>
         </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header bg-white fw-bold">Score Breakdown Preview</div>
-        <div class="card-body table-responsive">
-          <table class="table table-hover align-middle mb-0">
-            <thead><tr><th>Area</th><th>Score</th><th>Reviewer note</th></tr></thead>
-            <tbody>${scoreRows}</tbody>
-          </table>
+        <div class="col-lg-6">
+          <div class="card h-100">
+            <div class="card-header bg-white fw-bold">Score Breakdown Preview</div>
+            <div class="card-body table-responsive">
+              <table class="table table-hover align-middle mb-0">
+                <thead><tr><th>Area</th><th>Score</th><th>Reviewer note</th></tr></thead>
+                <tbody>${scoreRows}</tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     `;
+
+    const certificateSection = `
+      <div class="row g-3 mb-4">
+        <div class="col-lg-6">
+          <div class="card h-100">
+            <div class="card-header bg-white fw-bold">Certificate Readiness</div>
+            <div class="card-body">
+              <ul class="list-group mb-3">
+                <li class="list-group-item d-flex justify-content-between"><span>Learning complete</span><span class="badge text-bg-${state.learningProgress >= 100 ? 'success' : 'secondary'}">${state.learningProgress >= 100 ? 'ready' : 'pending'}</span></li>
+                <li class="list-group-item d-flex justify-content-between"><span>Quiz passed</span><span class="badge text-bg-${state.quizStatus === 'passed' ? 'success' : 'secondary'}">${state.quizStatus}</span></li>
+                <li class="list-group-item d-flex justify-content-between"><span>Practice submitted</span><span class="badge text-bg-${state.practiceStatus === 'submitted' ? 'success' : 'secondary'}">${state.practiceStatus}</span></li>
+                <li class="list-group-item d-flex justify-content-between"><span>Evidence generated</span>${evidenceBadge}</li>
+                <li class="list-group-item d-flex justify-content-between"><span>Proof status</span>${proofBadge}</li>
+              </ul>
+              <div class="d-flex flex-wrap gap-2">
+                <button id="learnerRequestIssuer" class="btn btn-success">Request Issuer Attestation</button>
+                <button id="learnerSelfAttest" class="btn btn-outline-warning">Self-attest Low Trust</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card h-100">
+            <div class="card-header bg-white fw-bold">Credential Preview</div>
+            <div class="card-body">
+              <pre class="code-block mb-0">${JSON.stringify({ learner: 'Mia Chen', credential: 'AI Data Analysis Assistant', learningProgress: state.learningProgress, quizScore: state.quizScore, evidence: state.evidence, proofStatus: state.proofStatus, trustLevel: state.trustLevel }, null, 2)}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const sectionMap = { learning: learningSection, path: pathSection, practice: practiceSection, evidence: evidenceSection, certificate: certificateSection };
+
+    return `
+      <div class="alert alert-primary d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div><strong>Current learner:</strong> Mia Chen · Wallet 0xLearnerMiaMock · Goal: AI Data Analysis Assistant</div>
+        <span class="badge text-bg-light text-primary border">learn → practice → evidence → certificate</span>
+      </div>
+
+      <div class="row g-3 mb-4">
+        <div class="col-md-3"><div class="card stat-card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Learning progress</div><div class="display-6">${state.learningProgress || 0}%</div><div class="progress"><div class="progress-bar" style="width:${state.learningProgress || 0}%"></div></div></div></div></div>
+        <div class="col-md-3"><div class="card stat-card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Quiz</div><div class="h3 mb-2">${state.quizScore ?? '--'}</div><span class="badge text-bg-${state.quizStatus === 'passed' ? 'success' : 'secondary'}">${state.quizStatus || 'not_started'}</span></div></div></div>
+        <div class="col-md-3"><div class="card stat-card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Local evidence</div><div class="h3 mb-2">${state.evidence === 'generated' ? 'Ready' : 'Draft'}</div>${evidenceBadge}</div></div></div>
+        <div class="col-md-3"><div class="card stat-card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Proof status</div><div class="h3 mb-2">${state.proofStatus}</div>${proofBadge}</div></div></div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-body">
+          <ul class="nav nav-pills gap-2">${tabs}</ul>
+        </div>
+      </div>
+
+      ${sectionMap[tab] || learningSection}
+    `;
   },
   bind() {
+    document.querySelectorAll('[data-learner-tab]').forEach((button) => {
+      button.addEventListener('click', () => window.ProofSkillApp.mutate((s) => {
+        s.learnerTab = button.dataset.learnerTab;
+      }, `Opened learner section: ${button.textContent.trim()}`));
+    });
+
     document.querySelectorAll('[data-lesson]').forEach((button) => {
       button.addEventListener('click', () => window.ProofSkillApp.mutate((s) => {
         s.activeLesson = button.dataset.lesson;
@@ -190,6 +273,7 @@ window.ProofSkillRoles.learner = {
     }, 'Lesson marked complete'));
 
     document.getElementById('takeQuiz')?.addEventListener('click', () => window.ProofSkillApp.mutate((s) => {
+      s.learnerTab = 'learning';
       s.activeLesson = 'quiz-1';
       s.quizStatus = 'passed';
       s.quizScore = 88;
@@ -197,6 +281,7 @@ window.ProofSkillRoles.learner = {
     }, 'Quiz completed with score 88'));
 
     document.getElementById('submitPractice')?.addEventListener('click', () => window.ProofSkillApp.mutate((s) => {
+      s.learnerTab = 'practice';
       s.activeLesson = 'lab-1';
       s.practiceStatus = 'submitted';
       s.learningProgress = 100;
