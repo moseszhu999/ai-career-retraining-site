@@ -145,7 +145,10 @@ window.ProofSkillRoles.learner = {
               <div class="d-flex flex-wrap gap-2 mb-3">${task.evidenceOutputs.map((item) => `<span class="badge text-bg-light text-secondary border">${item}</span>`).join('')}</div>
               <label class="form-label small text-secondary">Practice answer draft</label>
               <textarea class="form-control mb-3" rows="4">I cleaned the sales data, defined margin metrics, and found an abnormal discount pattern in the East region.</textarea>
-              <button id="submitPractice" class="btn btn-success">Submit Practice Lab</button>
+              <div class="d-flex flex-wrap gap-2">
+                <button id="submitPractice" class="btn btn-success">Submit Practice Lab</button>
+                <button id="downloadPracticePdf" class="btn btn-outline-primary">Download worksheet PDF</button>
+              </div>
             </div>
           </div>
         </div>
@@ -213,8 +216,10 @@ window.ProofSkillRoles.learner = {
               </ul>
               <div class="d-flex flex-wrap gap-2">
                 <button id="learnerRequestIssuer" class="btn btn-success">Request Issuer Attestation</button>
+                <button id="downloadCertificatePdf" class="btn btn-primary">Download sealed certificate PDF</button>
                 <button id="learnerSelfAttest" class="btn btn-outline-warning">Self-attest Low Trust</button>
               </div>
+              <p class="small text-secondary mt-3 mb-0">The seal shown here is a visual prototype. Real certificate validity should bind issuer wallet signature and proof registry status.</p>
             </div>
           </div>
         </div>
@@ -222,7 +227,19 @@ window.ProofSkillRoles.learner = {
           <div class="card h-100">
             <div class="card-header bg-white fw-bold">Credential Preview</div>
             <div class="card-body">
-              <pre class="code-block mb-0">${JSON.stringify({ learner: 'Mia Chen', credential: 'AI Data Analysis Assistant', learningProgress: state.learningProgress, quizScore: state.quizScore, evidence: state.evidence, proofStatus: state.proofStatus, trustLevel: state.trustLevel }, null, 2)}</pre>
+              <div class="border rounded-4 p-4 bg-light position-relative overflow-hidden">
+                <div class="small text-uppercase text-secondary fw-bold">Certificate of Verified Skill</div>
+                <h4 class="mt-2">AI Data Analysis Assistant</h4>
+                <p class="text-secondary mb-3">Issued to Mia Chen · ${state.trustLevel === 'none' ? 'IssuerAttested' : state.trustLevel}</p>
+                <dl class="row small mb-0">
+                  <dt class="col-5">Learning progress</dt><dd class="col-7">${state.learningProgress}%</dd>
+                  <dt class="col-5">Quiz score</dt><dd class="col-7">${state.quizScore ?? '--'}</dd>
+                  <dt class="col-5">Evidence</dt><dd class="col-7">${state.evidence}</dd>
+                  <dt class="col-5">Proof</dt><dd class="col-7">${state.proofStatus}</dd>
+                </dl>
+                <div style="position:absolute;right:18px;bottom:18px;width:116px;height:116px;border:4px solid #b91c1c;border-radius:999px;color:#b91c1c;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:800;line-height:1.15;transform:rotate(-12deg);opacity:.9;">PROOFSKILL<br>ISSUER<br>SEAL</div>
+              </div>
+              <pre class="code-block mt-3 mb-0">${JSON.stringify({ learner: 'Mia Chen', credential: 'AI Data Analysis Assistant', learningProgress: state.learningProgress, quizScore: state.quizScore, evidence: state.evidence, proofStatus: state.proofStatus, trustLevel: state.trustLevel }, null, 2)}</pre>
             </div>
           </div>
         </div>
@@ -286,6 +303,9 @@ window.ProofSkillRoles.learner = {
       s.practiceStatus = 'submitted';
       s.learningProgress = 100;
     }, 'Practice lab submitted'));
+
+    document.getElementById('downloadPracticePdf')?.addEventListener('click', () => window.ProofSkillExport?.exportPracticePdf());
+    document.getElementById('downloadCertificatePdf')?.addEventListener('click', () => window.ProofSkillExport?.exportCertificatePdf());
 
     document.getElementById('learnerGenerateEvidence')?.addEventListener('click', () => window.ProofSkillApp.mutate((s) => {
       s.evidence = 'generated';
