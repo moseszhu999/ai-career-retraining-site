@@ -2,9 +2,42 @@ window.ProofSkillRoles = window.ProofSkillRoles || {};
 
 window.ProofSkillRoles.issuer = {
   title: 'Issuer / Training Partner Dashboard',
-  subtitle: 'Review evidence packages, check hashes, and issue credential proofs with issuer wallet.',
+  subtitle: 'Monitor learning cohorts, review evidence packages, and issue credential proofs.',
   render(state) {
     const data = window.ProofSkillData;
+    const cohortRows = data.cohorts.map((cohort) => `
+      <tr>
+        <td><strong>${cohort.name}</strong><br><small class="text-secondary">${cohort.path}</small></td>
+        <td>${cohort.learners}</td>
+        <td style="width: 22%"><div class="progress"><div class="progress-bar" style="width:${cohort.avgProgress}%">${cohort.avgProgress}%</div></div></td>
+        <td>${cohort.quizPassRate}</td>
+        <td>${cohort.practiceSubmitted}</td>
+        <td>${cohort.evidenceReady}</td>
+        <td><span class="badge text-bg-${cohort.status === 'active' ? 'success' : 'warning'}">${cohort.status}</span></td>
+      </tr>
+    `).join('');
+
+    const learnerProgressRows = data.learnerProgress.map((learner) => `
+      <tr>
+        <td><strong>${learner.name}</strong><br><small class="text-secondary">${learner.wallet}</small></td>
+        <td>${learner.path}</td>
+        <td style="width: 18%"><div class="progress"><div class="progress-bar" style="width:${learner.progress}%">${learner.progress}%</div></div></td>
+        <td>${learner.quiz ?? '--'}</td>
+        <td><span class="badge text-bg-${learner.practice === 'submitted' ? 'success' : learner.practice === 'in progress' ? 'warning' : 'secondary'}">${learner.practice}</span></td>
+        <td><span class="badge text-bg-${learner.evidence === 'ready' ? 'success' : 'secondary'}">${learner.evidence}</span></td>
+        <td>${learner.nextAction}</td>
+      </tr>
+    `).join('');
+
+    const curriculumRows = data.curriculumOps.map((item) => `
+      <tr>
+        <td>${item.item}</td>
+        <td><span class="badge text-bg-${item.status === 'published' ? 'success' : 'primary'}">${item.status}</span></td>
+        <td>${item.completions}</td>
+        <td><span class="badge text-bg-${item.issue === 'none' ? 'success' : 'warning'}">${item.issue}</span></td>
+      </tr>
+    `).join('');
+
     const learners = data.learners.map((learner) => `
       <tr>
         <td><strong>${learner.name}</strong><br><small class="text-secondary">${learner.wallet}</small></td>
@@ -30,14 +63,49 @@ window.ProofSkillRoles.issuer = {
 
     return `
       <div class="row g-3 mb-4">
-        <div class="col-md-3"><div class="card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Review queue</div><div class="display-6">${state.issuerReview === 'not_requested' ? 2 : 3}</div></div></div></div>
-        <div class="col-md-3"><div class="card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Issuer wallet</div><div class="display-6">OK</div><span class="badge text-bg-success">authorized</span></div></div></div>
+        <div class="col-md-3"><div class="card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Active cohorts</div><div class="display-6">${data.cohorts.length}</div></div></div></div>
+        <div class="col-md-3"><div class="card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Learning evidence ready</div><div class="display-6">${data.cohorts.reduce((sum, c) => sum + c.evidenceReady, 0)}</div></div></div></div>
         <div class="col-md-3"><div class="card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Issued</div><div class="display-6">${state.issuedCount}</div></div></div></div>
-        <div class="col-md-3"><div class="card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Can issue</div><div class="display-6">${state.issuerReview === 'approved' || state.evaluatorReview === 'evaluator_set_ready' ? 'Yes' : 'Review'}</div></div></div></div>
+        <div class="col-md-3"><div class="card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Issuer wallet</div><div class="display-6">OK</div><span class="badge text-bg-success">authorized</span></div></div></div>
+      </div>
+
+      <div class="card mb-4 border-primary">
+        <div class="card-header bg-white fw-bold">Learning Ops · Cohort Monitor</div>
+        <div class="card-body table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead><tr><th>Cohort</th><th>Learners</th><th>Avg progress</th><th>Quiz pass</th><th>Practice</th><th>Evidence ready</th><th>Status</th></tr></thead>
+            <tbody>${cohortRows}</tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-4">
+        <div class="col-xl-8">
+          <div class="card h-100">
+            <div class="card-header bg-white fw-bold">Learner Progress and Next Actions</div>
+            <div class="card-body table-responsive">
+              <table class="table table-hover align-middle mb-0">
+                <thead><tr><th>Learner</th><th>Path</th><th>Progress</th><th>Quiz</th><th>Practice</th><th>Evidence</th><th>Next action</th></tr></thead>
+                <tbody>${learnerProgressRows}</tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4">
+          <div class="card h-100">
+            <div class="card-header bg-white fw-bold">Curriculum Ops</div>
+            <div class="card-body table-responsive">
+              <table class="table table-sm align-middle mb-0">
+                <thead><tr><th>Item</th><th>Status</th><th>Done</th><th>Issue</th></tr></thead>
+                <tbody>${curriculumRows}</tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="card mb-4">
-        <div class="card-header bg-white fw-bold">Review Queue</div>
+        <div class="card-header bg-white fw-bold">Credential Review Queue</div>
         <div class="card-body table-responsive">
           <table class="table table-hover align-middle mb-0">
             <thead><tr><th>Learner</th><th>Credential</th><th>Status</th><th>Score</th><th>Action</th></tr></thead>
@@ -51,12 +119,13 @@ window.ProofSkillRoles.issuer = {
           <div class="card h-100">
             <div class="card-header bg-white fw-bold">Evidence Review Detail</div>
             <div class="card-body">
-              <div class="alert alert-warning"><strong>Issuer decision:</strong> Verify evidence completeness, score hash, and schema version before signing.</div>
+              <div class="alert alert-warning"><strong>Issuer decision:</strong> Verify learning completion, practice submission, evidence completeness, score hash, and schema version before signing.</div>
               <dl class="row small mb-0">
                 <dt class="col-5">Learner</dt><dd class="col-7">Mia Chen</dd>
-                <dt class="col-5">Credential</dt><dd class="col-7">AI Data Analysis Assistant</dd>
+                <dt class="col-5">Learning progress</dt><dd class="col-7">100%</dd>
+                <dt class="col-5">Quiz score</dt><dd class="col-7">88 / 100</dd>
+                <dt class="col-5">Practice lab</dt><dd class="col-7">submitted</dd>
                 <dt class="col-5">Overall score</dt><dd class="col-7">86 / 100</dd>
-                <dt class="col-5">Privacy</dt><dd class="col-7">Raw files hidden by default</dd>
                 <dt class="col-5">Evidence outputs</dt><dd class="col-7">4 files represented by evidenceHash</dd>
               </dl>
             </div>
