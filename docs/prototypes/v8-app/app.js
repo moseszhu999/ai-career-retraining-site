@@ -16,6 +16,48 @@ window.ProofSkillApp = (() => {
   const resetStateBtn = document.getElementById('resetStateBtn');
   const toastContainer = document.getElementById('toastContainer');
 
+  const demoGuide = {
+    learner: {
+      badge: 'Step 1',
+      title: 'Learner creates evidence',
+      body: 'Review the credential path, inspect the task checklist, generate evidence, compute hashes, then request issuer attestation.',
+      next: 'Next role: Issuer'
+    },
+    issuer: {
+      badge: 'Step 2',
+      title: 'Issuer reviews and signs',
+      body: 'Open the review queue, inspect evidence details, check hash matches and rubric summary, then issue an attested proof.',
+      next: 'Next role: Verifier'
+    },
+    evaluator: {
+      badge: 'Optional Step',
+      title: 'Evaluator signs higher-trust review',
+      body: 'Use this path when the credential needs human reviewer scoring before the issuer creates an EvaluatorSigned proof.',
+      next: 'Next role: Issuer'
+    },
+    verifier: {
+      badge: 'Step 3',
+      title: 'Verifier checks contract proof',
+      body: 'Read the credential proof, check status, trust level, issuer authorization, hash match, expiration, and revocation state.',
+      next: 'Demo complete'
+    },
+    admin: {
+      badge: 'Governance',
+      title: 'Admin manages contract registry',
+      body: 'Inspect issuer registry, schema versions, contract configuration, and event log. Admin does not manage learner private files.',
+      next: 'Supports issuer governance'
+    }
+  };
+
+  function validRole(roleId) {
+    return roles.some((role) => role.id === roleId);
+  }
+
+  function roleFromHash() {
+    const hash = window.location.hash.replace('#', '').trim();
+    return validRole(hash) ? hash : null;
+  }
+
   function badge(value) {
     if (['active', 'generated', 'approved', 'issued', 'evaluator_set_ready'].includes(value)) {
       return `<span class="badge text-bg-success">${value}</span>`;
@@ -77,13 +119,30 @@ window.ProofSkillApp = (() => {
     mobileRoleSelect.value = state.currentRole;
   }
 
+  function renderDemoGuide(roleId) {
+    const guide = demoGuide[roleId] || demoGuide.learner;
+    return `
+      <div class="alert alert-primary d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+        <div>
+          <span class="badge text-bg-light text-primary border me-2">${guide.badge}</span>
+          <strong>${guide.title}</strong>
+          <div class="small mt-1">${guide.body}</div>
+        </div>
+        <div class="text-lg-end">
+          <span class="badge text-bg-primary">${guide.next}</span>
+          <div class="small mt-1"><code>#${roleId}</code> shareable role URL</div>
+        </div>
+      </div>
+    `;
+  }
+
   function renderWorkspace() {
     const state = window.ProofSkillState.state;
     const roleModule = window.ProofSkillRoles[state.currentRole];
 
     workspaceTitle.textContent = roleModule.title;
     workspaceSubtitle.textContent = roleModule.subtitle;
-    workspace.innerHTML = roleModule.render(state);
+    workspace.innerHTML = renderDemoGuide(state.currentRole) + roleModule.render(state);
     roleModule.bind(state);
   }
 
@@ -93,13 +152,17 @@ window.ProofSkillApp = (() => {
     renderWorkspace();
   }
 
-  function setRole(roleId) {
+  function setRole(roleId, options = {}) {
+    if (!validRole(roleId)) return;
     window.ProofSkillState.mutate((state) => {
       state.currentRole = roleId;
     });
+    if (!options.fromHash && window.location.hash !== `#${roleId}`) {
+      history.replaceState(null, '', `#${roleId}`);
+    }
     render();
     const role = roles.find((item) => item.id === roleId);
-    if (role) showToast(`Switched to ${role.label}`, 'primary');
+    if (role && !options.silent) showToast(`Switched to ${role.label}`, 'primary');
   }
 
   function mutate(mutator, eventMessage) {
@@ -110,11 +173,30 @@ window.ProofSkillApp = (() => {
 
   mobileRoleSelect.addEventListener('change', (event) => setRole(event.target.value));
 
+  window.addEventListener('hashchange', () => {
+    const roleId = roleFromHash();
+    if (roleId) setRole(roleId, { fromHash: true, silent: true });
+  });
+
   resetStateBtn.addEventListener('click', () => {
     window.ProofSkillState.reset();
+    const roleId = roleFromHash() || 'learner';
+    window.ProofSkillState.mutate((state) => {
+      state.currentRole = roleId;
+    });
     render();
     showToast('Mock state reset', 'secondary');
   });
+
+  const initialRole = roleFromHash();
+  if (initialRole) {
+    window.ProofSkillState.mutate((state) => {
+      state.currentRole = initialRole;
+    });
+  } else {
+    const stateRole = window.ProofSkillState.state.currentRole || 'learner';
+    history.replaceState(null, '', `#${stateRole}`);
+  }
 
   render();
 
