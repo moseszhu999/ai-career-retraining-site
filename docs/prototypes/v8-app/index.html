@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ProofSkill AI — Role Platform</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="./app.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+    <div class="container-fluid px-4">
+      <a class="navbar-brand fw-bold" href="#">ProofSkill AI</a>
+      <span class="badge text-bg-success">Frontend + Smart Contract</span>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row min-vh-100">
+      <aside class="col-12 col-lg-3 col-xl-2 bg-white border-end p-3">
+        <div class="d-lg-none mb-3">
+          <label class="form-label small text-uppercase text-secondary fw-bold">Role</label>
+          <select id="mobileRoleSelect" class="form-select">
+            <option value="learner">Learner / Candidate</option>
+            <option value="issuer">Issuer / Training Partner</option>
+            <option value="evaluator">Evaluator / Reviewer</option>
+            <option value="verifier">Verifier / Employer</option>
+            <option value="admin">Admin / Contract Owner</option>
+          </select>
+        </div>
+
+        <div class="d-none d-lg-block">
+          <div class="small text-uppercase text-secondary fw-bold mb-2">Role login mock</div>
+          <div id="roleNav" class="list-group role-nav"></div>
+        </div>
+
+        <hr>
+        <div class="small text-uppercase text-secondary fw-bold mb-2">Global state</div>
+        <div id="globalState" class="small"></div>
+        <button id="resetStateBtn" class="btn btn-sm btn-outline-secondary mt-3 w-100">Reset mock state</button>
+      </aside>
+
+      <main class="col-12 col-lg-9 col-xl-10 p-4">
+        <div class="card shadow-sm border-0 mb-4">
+          <div class="card-body d-flex flex-column flex-md-row justify-content-between gap-3 align-items-md-center">
+            <div>
+              <div class="small text-uppercase text-secondary fw-bold">Workspace</div>
+              <h1 id="workspaceTitle" class="h3 mb-1">Learner Dashboard</h1>
+              <p id="workspaceSubtitle" class="text-secondary mb-0">Generate local evidence and request attestation.</p>
+            </div>
+            <div class="text-md-end">
+              <span class="badge text-bg-primary">Backend DB: 0</span>
+              <span class="badge text-bg-primary">Backend API: 0</span>
+              <span class="badge text-bg-success">Contract: mock</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="workspace"></div>
+
+        <div class="alert alert-secondary mt-4 mb-0">
+          <strong>Static prototype boundary:</strong> No backend database, no backend server, no real wallet connection, no real chain transaction, no real deployed contract interaction, no real exam, and no real agent scoring.
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="./contract-abi.js"></script>
+  <script src="./mock-state.js"></script>
+  <script src="./roles/learner.js"></script>
+  <script src="./roles/issuer.js"></script>
+  <script src="./roles/evaluator.js"></script>
+  <script src="./roles/verifier.js"></script>
+  <script src="./roles/admin.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
