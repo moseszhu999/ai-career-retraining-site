@@ -2,35 +2,95 @@ window.ProofSkillRoles = window.ProofSkillRoles || {};
 
 window.ProofSkillRoles.issuer = {
   title: 'Issuer / Training Partner Dashboard',
-  subtitle: 'Review evidence bundles and issue or revoke credential proofs with issuer wallet.',
+  subtitle: 'Review evidence packages, check hashes, and issue credential proofs with issuer wallet.',
   render(state) {
-    const queueRows = state.issuerReview === 'not_requested'
-      ? '<tr><td colspan="5" class="text-secondary">No pending issuer request.</td></tr>'
-      : `<tr><td>Mia Chen</td><td>AI Data Analysis</td><td><span class="badge text-bg-warning">${state.issuerReview}</span></td><td>86</td><td><button class="btn btn-sm btn-outline-primary">Open</button></td></tr>`;
+    const data = window.ProofSkillData;
+    const learners = data.learners.map((learner) => `
+      <tr>
+        <td><strong>${learner.name}</strong><br><small class="text-secondary">${learner.wallet}</small></td>
+        <td>${learner.credential}</td>
+        <td><span class="badge text-bg-${learner.status.includes('evaluator') ? 'success' : 'warning'}">${learner.status}</span></td>
+        <td>${learner.score}</td>
+        <td><button class="btn btn-sm btn-outline-primary">Open Review</button></td>
+      </tr>
+    `).join('');
+
+    const hashRows = ['certificateHash', 'evidenceHash', 'scoreHash', 'schemaHash'].map((key) => `
+      <tr><td>${key}</td><td><code>${data.evidencePackage[key]}</code></td><td><span class="badge text-bg-success">match</span></td></tr>
+    `).join('');
+
+    const rubricRows = data.rubrics.map((item) => `
+      <tr>
+        <td>${item.item}</td>
+        <td>${item.weight}</td>
+        <td>${item.evaluatorScore}</td>
+        <td><span class="badge text-bg-${item.issuerCheck === 'pass' ? 'success' : 'warning'}">${item.issuerCheck}</span></td>
+      </tr>
+    `).join('');
 
     return `
       <div class="row g-3 mb-4">
-        <div class="col-md-3"><div class="card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Review queue</div><div class="display-6">${state.issuerReview === 'review_pending' ? 1 : 0}</div></div></div></div>
-        <div class="col-md-3"><div class="card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Issuer wallet</div><div class="display-6">OK</div></div></div></div>
+        <div class="col-md-3"><div class="card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Review queue</div><div class="display-6">${state.issuerReview === 'not_requested' ? 2 : 3}</div></div></div></div>
+        <div class="col-md-3"><div class="card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Issuer wallet</div><div class="display-6">OK</div><span class="badge text-bg-success">authorized</span></div></div></div>
         <div class="col-md-3"><div class="card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Issued</div><div class="display-6">${state.issuedCount}</div></div></div></div>
-        <div class="col-md-3"><div class="card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Can issue</div><div class="display-6">${state.issuerReview === 'approved' || state.evaluatorReview === 'evaluator_set_ready' ? 'Yes' : 'No'}</div></div></div></div>
+        <div class="col-md-3"><div class="card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Can issue</div><div class="display-6">${state.issuerReview === 'approved' || state.evaluatorReview === 'evaluator_set_ready' ? 'Yes' : 'Review'}</div></div></div></div>
       </div>
 
-      <div class="card mb-3">
-        <div class="card-header bg-white fw-bold">Pending Evidence Bundles</div>
+      <div class="card mb-4">
+        <div class="card-header bg-white fw-bold">Review Queue</div>
         <div class="card-body table-responsive">
           <table class="table table-hover align-middle mb-0">
             <thead><tr><th>Learner</th><th>Credential</th><th>Status</th><th>Score</th><th>Action</th></tr></thead>
-            <tbody>${queueRows}</tbody>
+            <tbody>${learners}</tbody>
           </table>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-header bg-white fw-bold">Issuer contract actions</div>
-        <div class="card-body">
-          <div class="row g-3">
-            <div class="col-lg-6">
+      <div class="row g-3 mb-4">
+        <div class="col-xl-5">
+          <div class="card h-100">
+            <div class="card-header bg-white fw-bold">Evidence Review Detail</div>
+            <div class="card-body">
+              <div class="alert alert-warning"><strong>Issuer decision:</strong> Verify evidence completeness, score hash, and schema version before signing.</div>
+              <dl class="row small mb-0">
+                <dt class="col-5">Learner</dt><dd class="col-7">Mia Chen</dd>
+                <dt class="col-5">Credential</dt><dd class="col-7">AI Data Analysis Assistant</dd>
+                <dt class="col-5">Overall score</dt><dd class="col-7">86 / 100</dd>
+                <dt class="col-5">Privacy</dt><dd class="col-7">Raw files hidden by default</dd>
+                <dt class="col-5">Evidence outputs</dt><dd class="col-7">4 files represented by evidenceHash</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-7">
+          <div class="card h-100">
+            <div class="card-header bg-white fw-bold">Hash Match Checklist</div>
+            <div class="card-body table-responsive">
+              <table class="table table-sm align-middle mb-0">
+                <thead><tr><th>Field</th><th>Value</th><th>Status</th></tr></thead>
+                <tbody>${hashRows}</tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-lg-6">
+          <div class="card h-100">
+            <div class="card-header bg-white fw-bold">Rubric Summary</div>
+            <div class="card-body table-responsive">
+              <table class="table table-sm table-hover align-middle mb-0">
+                <thead><tr><th>Rubric</th><th>Weight</th><th>Score</th><th>Issuer check</th></tr></thead>
+                <tbody>${rubricRows}</tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card h-100">
+            <div class="card-header bg-white fw-bold">Issuer Contract Actions</div>
+            <div class="card-body">
               <pre class="code-block">registerIssuerAttestedProof(
   credentialId,
   holder,
@@ -42,8 +102,6 @@ window.ProofSkillRoles.issuer = {
   schemaHash,
   expiresAt
 )</pre>
-            </div>
-            <div class="col-lg-6">
               <div class="d-flex flex-wrap gap-2">
                 <button id="issuerApproveEvidence" class="btn btn-outline-primary">Approve Evidence</button>
                 <button id="issuerIssueProof" class="btn btn-primary">Issue IssuerAttested Proof</button>
