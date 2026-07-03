@@ -24,6 +24,37 @@ Target sequence:
 
 The goal is to make every screen, data object, and technical component traceable to a business pain and a customer-safe delivery artifact.
 
+## 0.1 Pre-prototype implementation freeze
+
+Before the prototype design phase is approved, this branch only produces analysis and architecture documents.
+
+Allowed now:
+
+```text
+战略分析
+痛点把握
+TOGAF 分层功能架构
+数据架构
+原型需求说明
+页面清单
+技术架构规划
+验收标准
+```
+
+Not allowed yet:
+
+```text
+Streamlit 页面实现
+路由接入
+前端组件实现
+后端服务实现
+数据访问实现
+数据库迁移
+运行配置改动
+```
+
+Implementation starts only after the prototype design gate is explicitly passed.
+
 ---
 
 ## 1. Strategic analysis
@@ -182,7 +213,26 @@ All critical actions -> AuditEvent
 
 ## 4. Prototype design
 
-### 4.1 Prototype navigation
+### 4.1 Prototype design gate
+
+Prototype design is a documentation phase, not implementation.
+
+It must define:
+
+```text
+user roles
+navigation model
+screen inventory
+screen purpose
+input/output per screen
+primary user action
+approval point
+visible data fields
+customer-safe fields
+nonfunctional constraints
+```
+
+### 4.2 Prototype navigation requirement
 
 Founder navigation should prioritize method and delivery:
 
@@ -204,10 +254,10 @@ Exports
 Audit
 ```
 
-### 4.2 New screen added in v6.0
+### 4.3 Proposed future screen
 
 ```text
-frontend/waterfall_pages.py
+Waterfall Architecture
 ```
 
 Purpose:
@@ -217,7 +267,9 @@ Show the complete waterfall method inside the live product.
 Make the founder demo explain strategy, pain, TOGAF, data, prototype, and technical architecture from one page.
 ```
 
-### 4.3 Demo routes
+No implementation file is added in this phase.
+
+### 4.4 Demo routes
 
 3-minute sales route:
 
@@ -243,17 +295,18 @@ Waterfall -> Clients -> Tasks -> Assignments -> Review Queue -> Proof Files -> E
 
 ### 5.1 Current implementation decision
 
-Use Streamlit as an executable prototype because it is fast, demo-friendly, and already integrated with the current state, admin, task, report, and export pages.
+Use Streamlit as an executable prototype only after the prototype design gate is approved.
 
-### 5.2 MVP implementation order
+### 5.2 MVP implementation order after the prototype gate
 
 1. Add Waterfall architecture page.
 2. Add Founder navigation entry.
-3. Update README to make v6.0 method explicit.
-4. Create architecture delivery document.
-5. Later: convert pain points, capabilities, entities, and prototype routes into editable persistent records.
+3. Convert pain points into editable persistent records.
+4. Convert capabilities into configurable architecture records.
+5. Fix Proof File and Report data lineage.
+6. Later: migrate from Streamlit prototype to formal web architecture.
 
-### 5.3 Next development tasks
+### 5.3 Next development tasks after the prototype gate
 
 | Priority | Task | Result |
 | --- | --- | --- |
@@ -275,6 +328,7 @@ The rebuild is acceptable when:
 痛点清楚：buyer, manager, operator, learner, customer/compliance pains are separated.
 TOGAF 清楚：business, application, data, technology layers are traceable.
 数据清楚：Proof File and report can trace back to evidence and review decisions.
-原型清楚：Founder can demo the method from the Waterfall page.
+原型清楚：screen purpose, input, output, action, approval and data visibility are defined.
 技术清楚：Streamlit MVP and future production architecture are separated.
+实现门禁清楚：prototype design approval before implementation changes.
 ```
