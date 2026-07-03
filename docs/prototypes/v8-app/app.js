@@ -14,6 +14,7 @@ window.ProofSkillApp = (() => {
   const workspaceSubtitle = document.getElementById('workspaceSubtitle');
   const globalState = document.getElementById('globalState');
   const resetStateBtn = document.getElementById('resetStateBtn');
+  const toastContainer = document.getElementById('toastContainer');
 
   function badge(value) {
     if (['active', 'generated', 'approved', 'issued', 'evaluator_set_ready'].includes(value)) {
@@ -23,6 +24,30 @@ window.ProofSkillApp = (() => {
       return `<span class="badge text-bg-warning">${value}</span>`;
     }
     return `<span class="badge text-bg-secondary">${value}</span>`;
+  }
+
+  function showToast(message, tone = 'success') {
+    if (!toastContainer || !window.bootstrap) return;
+
+    const toast = document.createElement('div');
+    toast.className = 'toast align-items-center border-0 shadow-sm';
+    toast.setAttribute('role', 'status');
+    toast.setAttribute('aria-live', 'polite');
+    toast.setAttribute('aria-atomic', 'true');
+    toast.innerHTML = `
+      <div class="toast-header">
+        <span class="badge text-bg-${tone} me-2">ProofSkill</span>
+        <strong class="me-auto">Action completed</strong>
+        <small>now</small>
+        <button type="button" class="btn-close ms-2 mb-1" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">${message}</div>
+    `;
+
+    toastContainer.appendChild(toast);
+    const instance = new bootstrap.Toast(toast, { delay: 2600 });
+    toast.addEventListener('hidden.bs.toast', () => toast.remove());
+    instance.show();
   }
 
   function renderGlobalState() {
@@ -73,11 +98,14 @@ window.ProofSkillApp = (() => {
       state.currentRole = roleId;
     });
     render();
+    const role = roles.find((item) => item.id === roleId);
+    if (role) showToast(`Switched to ${role.label}`, 'primary');
   }
 
   function mutate(mutator, eventMessage) {
     window.ProofSkillState.mutate(mutator, eventMessage);
     render();
+    if (eventMessage) showToast(eventMessage, 'success');
   }
 
   mobileRoleSelect.addEventListener('change', (event) => setRole(event.target.value));
@@ -85,6 +113,7 @@ window.ProofSkillApp = (() => {
   resetStateBtn.addEventListener('click', () => {
     window.ProofSkillState.reset();
     render();
+    showToast('Mock state reset', 'secondary');
   });
 
   render();
@@ -92,6 +121,7 @@ window.ProofSkillApp = (() => {
   return {
     render,
     setRole,
-    mutate
+    mutate,
+    showToast
   };
 })();
