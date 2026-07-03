@@ -21,6 +21,45 @@ window.ProofSkillData = {
       targetRoles: ['Trade Documentation Assistant', 'Supply Chain Ops', 'Receivable Review Assistant']
     }
   ],
+  employerRoles: [
+    {
+      id: 'ops-data-assistant',
+      title: 'Operations Data Assistant',
+      companyType: 'SMB operations team',
+      requiredSignals: ['Spreadsheet hygiene', 'Metric reasoning', 'Risk note writing', 'AI output validation'],
+      preferredCredential: 'AI Data Analysis Assistant',
+      minimumTrust: 'IssuerAttested'
+    },
+    {
+      id: 'trade-doc-assistant',
+      title: 'Trade Documentation Assistant',
+      companyType: 'Export / import operations team',
+      requiredSignals: ['Document matching', 'Exception detection', 'Human escalation', 'Evidence packaging'],
+      preferredCredential: 'AI Trade Documentation Assistant',
+      minimumTrust: 'EvaluatorSigned'
+    }
+  ],
+  candidateSkillProfile: {
+    name: 'Mia Chen',
+    wallet: '0xLearnerMiaMock',
+    credential: 'AI Data Analysis Assistant',
+    overallFit: 84,
+    trustLevel: 'IssuerAttested',
+    strengths: ['Clean evidence trail', 'Strong spreadsheet hygiene', 'Good business summary', 'Understands raw data privacy boundary'],
+    limits: ['Needs more practice on complex forecasting', 'Should still be supervised on high-stakes finance decisions'],
+    recommendedRole: 'Operations Data Assistant'
+  },
+  jobFitMatrix: [
+    { signal: 'Spreadsheet hygiene', required: 'high', candidate: 90, evidence: 'cleaning-notes.md' },
+    { signal: 'Metric reasoning', required: 'medium-high', candidate: 86, evidence: 'metrics-table.csv' },
+    { signal: 'Risk note writing', required: 'medium', candidate: 82, evidence: 'executive-summary.md' },
+    { signal: 'AI output validation', required: 'medium', candidate: 88, evidence: 'review-comments.md' }
+  ],
+  hiringRiskNotes: [
+    { risk: 'Credential is not a degree', mitigation: 'Use as job-skill signal, not academic claim.' },
+    { risk: 'Raw project files are private by default', mitigation: 'Request candidate-controlled disclosure if needed.' },
+    { risk: 'IssuerAttested is lower than EvaluatorSigned', mitigation: 'For higher-risk roles, require evaluator-signed proof.' }
+  ],
   cohorts: [
     {
       id: 'cohort-ai-data-2026-07',
