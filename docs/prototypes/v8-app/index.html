@@ -10,7 +10,7 @@
 <body>
   <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
     <div class="container-fluid px-4">
-      <a class="navbar-brand fw-bold" href="#">ProofSkill AI</a>
+      <a class="navbar-brand fw-bold" href="#overview">ProofSkill AI</a>
       <span class="badge text-bg-success">Frontend + Smart Contract</span>
     </div>
   </nav>
@@ -21,6 +21,7 @@
         <div class="d-lg-none mb-3">
           <label class="form-label small text-uppercase text-secondary fw-bold">Role</label>
           <select id="mobileRoleSelect" class="form-select">
+            <option value="overview">Overview</option>
             <option value="learner">Learner / Candidate</option>
             <option value="issuer">Issuer / Training Partner</option>
             <option value="evaluator">Evaluator / Reviewer</option>
@@ -30,7 +31,7 @@
         </div>
 
         <div class="d-none d-lg-block">
-          <div class="small text-uppercase text-secondary fw-bold mb-2">Role login mock</div>
+          <div class="small text-uppercase text-secondary fw-bold mb-2">Workspace</div>
           <div id="roleNav" class="list-group role-nav"></div>
         </div>
 
@@ -45,8 +46,8 @@
           <div class="card-body d-flex flex-column flex-md-row justify-content-between gap-3 align-items-md-center">
             <div>
               <div class="small text-uppercase text-secondary fw-bold">Workspace</div>
-              <h1 id="workspaceTitle" class="h3 mb-1">Learner Dashboard</h1>
-              <p id="workspaceSubtitle" class="text-secondary mb-0">Generate local evidence and request attestation.</p>
+              <h1 id="workspaceTitle" class="h3 mb-1">Platform Overview</h1>
+              <p id="workspaceSubtitle" class="text-secondary mb-0">Learning, evidence, attestation, and verification.</p>
             </div>
             <div class="text-md-end">
               <span class="badge text-bg-primary">Backend DB: 0</span>
@@ -71,6 +72,7 @@
   <script src="/docs/prototypes/v8-app/contract-abi.js"></script>
   <script src="/docs/prototypes/v8-app/mock-data.js"></script>
   <script src="/docs/prototypes/v8-app/mock-state.js"></script>
+  <script src="/docs/prototypes/v8-app/roles/overview.js"></script>
   <script src="/docs/prototypes/v8-app/roles/learner.js"></script>
   <script src="/docs/prototypes/v8-app/roles/issuer.js"></script>
   <script src="/docs/prototypes/v8-app/roles/evaluator.js"></script>
