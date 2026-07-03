@@ -1,22 +1,22 @@
-# v6.0 Waterfall Delivery Plan
+# v6.0 瀑布式交付方案
 
-Repository:
+仓库：
 
 ```text
 moseszhu999/ai-career-retraining-site
 ```
 
-Branch:
+分支：
 
 ```text
 waterfall-togaf-rebuild
 ```
 
-## 0. Rebuild intent
+## 0. 重构目标
 
-The project is rebuilt from a page-driven prototype into a consulting-company waterfall delivery system.
+本项目从“页面驱动的原型堆叠”，重构为“咨询公司式瀑布交付体系”。
 
-Correct waterfall sequence:
+正确交付顺序：
 
 ```text
 战略分析
@@ -28,20 +28,22 @@ Correct waterfall sequence:
 -> 技术架构
 ```
 
-Important correction:
+关键纠偏：
 
 ```text
 痛点不是功能。
 痛点只是输入信号。
-功能必须来自这个领域的 TO-BE 目标能力。
+功能必须来自该领域的 TO-BE 目标能力。
 数据必须来自 TO-BE 能力、流程、证据、指标和治理要求。
 ```
 
-## 0.1 Pre-prototype implementation freeze
+本方案的目标是让未来每一个页面、数据对象、审批动作、报表字段，都能追溯到明确的业务痛点、AS-IS 现状、TO-BE 目标和可交付成果。
 
-Before the prototype design phase is approved, this branch only produces analysis and architecture documents.
+## 0.1 原型设计前的实现冻结
 
-Allowed now:
+在“原型设计”阶段正式确认之前，本分支只允许产出分析和架构文档，不允许改运行代码。
+
+当前允许：
 
 ```text
 战略分析
@@ -55,7 +57,7 @@ TOGAF 分层功能架构
 验收标准
 ```
 
-Not allowed yet:
+当前不允许：
 
 ```text
 Streamlit 页面实现
@@ -67,325 +69,362 @@ Streamlit 页面实现
 运行配置改动
 ```
 
-Implementation starts only after the prototype design gate is explicitly passed.
+只有原型设计门禁通过后，才能进入代码实现。
 
 ---
 
-## 1. Strategic analysis
+## 1. 战略分析
 
-### 1.1 Strategic positioning
+### 1.1 战略定位
 
 ```text
 企业 AI Agent 治理与能力证明系统
 ```
 
-The customer does not buy a course. The customer buys a governed way to introduce AI Agents into repeatable value-chain work while keeping evidence, approval, accountability, and reporting.
+客户购买的不是一门课，也不是一个 AI 工具演示，而是一套可治理、可审计、可证明、可交付的 AI Agent 工作体系。
 
-### 1.2 Target customers
-
-| Segment | Need | Entry product |
-| --- | --- | --- |
-| Small and mid-sized enterprises | Need AI adoption but cannot govern AI output | Value Chain AI Automation Diagnosis |
-| Training / delivery teams | Need proof that employees can use AI responsibly | Task + Evidence + Proof File delivery |
-| Consulting / implementation teams | Need repeatable method and reports | Waterfall architecture package |
-| Department managers | Need visibility into readiness and risk | Manager readiness dashboard |
-
-### 1.3 Commercial boundary
-
-Do not promise official certification, guaranteed employment, guaranteed salary, or regulated professional qualification outcomes.
-
-Sell diagnosis, implementation design, governance workflow, evidence records, and customer-safe reporting.
-
----
-
-## 2. Pain-point grasp
-
-Pain-point grasp is not a function list. It is the discovery input used to understand why the domain must change.
-
-### 2.1 Pain matrix
-
-| User | Pain signal | What it indicates |
-| --- | --- | --- |
-| Founder / business owner | Cannot tell which AI ideas are commercially valuable | The domain lacks value-chain automation diagnosis |
-| Manager | Cannot measure AI readiness or delivery risk | The domain lacks readiness metrics and governance evidence |
-| Operator / instructor | Cannot turn training into proof | The domain lacks task-to-evidence-to-proof conversion |
-| Learner / employee | Cannot show credible AI work ability | The domain lacks approved proof files and work records |
-| Customer / compliance | Cannot trust AI output without evidence | The domain lacks approval, visibility rules and audit trail |
-
-### 2.2 Pain-to-architecture rule
-
-Pain must be converted through a bridge before it becomes architecture.
+系统要帮助企业回答：
 
 ```text
-Pain signal
--> root cause
--> current-state AS-IS
--> target-state TO-BE
--> capability gap
--> target function
--> target data
--> prototype requirement
+哪些价值链环节可以由 AI Agent 自动化？
+哪些环节必须由人类审批？
+哪些结果可以作为证据和能力证明？
+哪些内容可以安全地交付给客户或管理层？
+```
+
+### 1.2 目标客户
+
+| 客户类型 | 真实需求 | 入口产品 |
+| --- | --- | --- |
+| 中小企业 / 小 B 公司 | 想导入 AI，但不知道哪些业务可自动化，也缺少治理机制 | 价值链 AI 自动化诊断 |
+| 培训 / 交付团队 | 员工学了 AI，但能力不可证明，交付结果不可验收 | 任务 + 证据 + Proof File 交付包 |
+| 咨询 / 实施团队 | 需要一套可复制的诊断、架构和报告方法 | 瀑布式架构交付包 |
+| 部门经理 / 管理层 | 需要看到员工能力、风险、结果和下一步建议 | 管理层 Readiness 报告 |
+
+### 1.3 商业边界
+
+不能承诺：
+
+```text
+官方证书
+保证就业
+保证薪资
+保证接单收入
+受监管职业资格
+```
+
+可以销售：
+
+```text
+诊断服务
+试点设计
+AI Agent 治理流程
+证据链管理
+能力证明文件
+客户安全报告
+管理层决策报告
 ```
 
 ---
 
-## 3. Domain diagnosis bridge: AS-IS / TO-BE / Gap
+## 2. 痛点把握
 
-This is the missing bridge between pain and architecture.
+痛点把握不是功能清单。痛点只是发现问题的输入，用来判断这个领域为什么必须变化。
 
-### 3.1 Bridge model
+### 2.1 痛点矩阵
 
-| Step | Question | Output |
+| 用户对象 | 痛点信号 | 说明该领域缺少什么 |
 | --- | --- | --- |
-| Pain signal | What hurts? | pain statement |
-| Root cause | Why does it hurt? | domain weakness |
-| AS-IS | How does the domain work today? | current business/process/data/system state |
-| TO-BE | How should the domain work after redesign? | target operating model |
-| Gap | What is missing between AS-IS and TO-BE? | capability, data, governance and system gaps |
-| Architecture | What must be built or configured? | function architecture and data architecture |
+| Founder / 企业负责人 | 不知道哪些 AI 想法能变成商业价值 | 缺少价值链自动化诊断能力 |
+| 经理 / 部门负责人 | 无法衡量 AI 能力成熟度和交付风险 | 缺少 Readiness 指标和治理证据 |
+| 运营 / 讲师 / 交付人员 | 培训结果很难变成可证明成果 | 缺少任务到证据再到 Proof 的转换机制 |
+| 学员 / 员工 | 会用 AI，但很难形成可信作品证明 | 缺少被审批过的 Proof File 和工作记录 |
+| 客户 / 合规 / 采购 | 不敢相信 AI 输出，因为责任和证据不清 | 缺少审批、可见性规则和审计链 |
 
-### 3.2 Domain AS-IS / TO-BE overview
+### 2.2 痛点到架构的转换规则
 
-| Domain aspect | AS-IS current state | TO-BE target state | Gap to close |
-| --- | --- | --- | --- |
-| Business model | Selling training, demo or manual service is easy to understand but hard to scale | Selling AI Agent governance diagnosis, pilot and proof-based delivery package | productized service model and reusable delivery method |
-| Customer entry | Customer pain is captured through conversation and founder judgment | Customer pain is converted into value-chain stage, scenario, expected outcome and pilot scope | structured intake and scenario classification |
-| Work process | AI use is scattered across tools, people and tasks | AI work is organized as governed work steps with input, output, automation level and human checkpoint | work-step model and governance rules |
-| Role and authority | Responsibility between AI, operator, reviewer and founder is implicit | Agent, operator, reviewer, founder and customer viewer have clear authority boundary | role and approval model |
-| Evidence | Training output and task output are not consistently linked to evidence | Every important output can trace to evidence, review decision, proof candidate and approved proof file | evidence chain and version control |
-| Data | Data exists as scattered customer, learner, task, score and report records | Data is layered by domain, subject and entity, and supports traceability from strategy to report | three-level data architecture |
-| Reporting | Reports depend on manual selection and founder explanation | Internal and customer-safe reports are generated from approved evidence and visibility rules | metric model and report dataset |
-| Compliance and trust | AI output may be useful but hard to explain and defend | Customer-visible output is controlled by approval, audit and visibility policy | audit and customer-safe field rules |
-
-### 3.3 Scenario-level AS-IS / TO-BE examples
-
-| Scenario | AS-IS | TO-BE | Required target capability |
-| --- | --- | --- | --- |
-| Lead-to-Proposal | Sales material and proposal drafting rely on founder experience | AI drafts customer profile, need summary and proposal outline; human approves commercial boundary | value-chain diagnosis, proposal evidence, claim boundary |
-| Requirement-to-Delivery | Requirements, task output and acceptance evidence are fragmented | Requirements map to tasks, evidence, review and customer-safe delivery summary | scenario-to-task mapping and evidence trail |
-| Training-to-Readiness | Training completion does not prove job readiness | Tasks, scores, review decisions and proof files produce readiness evidence | readiness evaluation and proof management |
-| Support-to-Knowledge | Support answers are repeated and not converted into reusable knowledge | Issues become verified knowledge drafts with approval and audit | knowledge evidence and approval workflow |
-
----
-
-## 4. TOGAF layered target functional architecture
-
-The functional architecture below is not a pain list. It is the target capability structure required by the TO-BE domain.
-
-### 4.1 Three-level target function architecture
-
-#### 4.1.1 Level-1 target functions
-
-| 一级功能 | TO-BE purpose | Derived from gap |
-| --- | --- | --- |
-| F1 Domain Diagnosis and Transformation Planning | Convert customer context into value-chain AI transformation plan | structured diagnosis gap |
-| F2 Scenario and Process Architecture | Define target business scenario, process, role, input, output and exception path | process architecture gap |
-| F3 Agent Work Design and Governance | Define AI Agent work step, automation level, authority and risk policy | AI work governance gap |
-| F4 Task Execution and Evidence Capture | Convert work execution into structured task records and evidence | evidence capture gap |
-| F5 Human Review, Approval and Escalation | Make human decision explicit and auditable | authority and accountability gap |
-| F6 Proof, Readiness and Reporting | Convert evidence and review into proof files, readiness metrics and reports | proof and reporting gap |
-| F7 Platform Operation and Audit | Manage clients, users, tasks, assignments, health and audit | scalable operation gap |
-
-#### 4.1.2 Level-2 target functions
-
-| 一级功能 | 二级功能 | TO-BE description |
-| --- | --- | --- |
-| F1 Domain Diagnosis and Transformation Planning | F1.1 Customer Context Modeling | define customer, industry, department, buyer and service context |
-| F1 Domain Diagnosis and Transformation Planning | F1.2 Value-chain Opportunity Analysis | identify where AI Agent can create business value |
-| F1 Domain Diagnosis and Transformation Planning | F1.3 Transformation Roadmap | define diagnosis, pilot, delivery and renewal path |
-| F1 Domain Diagnosis and Transformation Planning | F1.4 Commercial Boundary Control | define claims, non-claims and customer-safe promise boundary |
-| F2 Scenario and Process Architecture | F2.1 Scenario Definition | define target business scenario and expected outcome |
-| F2 Scenario and Process Architecture | F2.2 Process Decomposition | decompose process into steps, roles, inputs and outputs |
-| F2 Scenario and Process Architecture | F2.3 Exception Path Design | define abnormal cases, risk events and escalation path |
-| F2 Scenario and Process Architecture | F2.4 KPI Design | define measurable business and readiness metrics |
-| F3 Agent Work Design and Governance | F3.1 Agent Work-step Design | define AI Agent work unit and required context |
-| F3 Agent Work Design and Governance | F3.2 Automation Level Assessment | assign R0 to R4 level and rationale |
-| F3 Agent Work Design and Governance | F3.3 Authority Model | define reviewer, approver and final responsible role |
-| F3 Agent Work Design and Governance | F3.4 Governance Policy | define risk class, evidence requirement and visibility rule |
-| F4 Task Execution and Evidence Capture | F4.1 Task Template Design | define task, question, rubric and expected output |
-| F4 Task Execution and Evidence Capture | F4.2 Assignment Execution | assign task to learner, employee or operator |
-| F4 Task Execution and Evidence Capture | F4.3 Evidence Capture | capture answer, file, score, comment and source |
-| F4 Task Execution and Evidence Capture | F4.4 Evidence Versioning | preserve version, timestamp and source record |
-| F5 Human Review, Approval and Escalation | F5.1 Review Queue | route evidence to reviewer or founder |
-| F5 Human Review, Approval and Escalation | F5.2 Review Decision | approve, revise, reject or escalate |
-| F5 Human Review, Approval and Escalation | F5.3 Exception Management | identify weak point, high risk or missing evidence |
-| F5 Human Review, Approval and Escalation | F5.4 Approval Audit | record reviewer, reason, timestamp and action |
-| F6 Proof, Readiness and Reporting | F6.1 Proof Candidate Generation | identify evidence that may become proof |
-| F6 Proof, Readiness and Reporting | F6.2 Proof File Approval | approve and package customer-visible proof |
-| F6 Proof, Readiness and Reporting | F6.3 Readiness Metric Calculation | calculate completion, accuracy, exception and proof-ready rate |
-| F6 Proof, Readiness and Reporting | F6.4 Report and Export | generate internal report, customer-safe report and export snapshot |
-| F7 Platform Operation and Audit | F7.1 Client and Tenant Management | manage client, tenant, department, cohort and package |
-| F7 Platform Operation and Audit | F7.2 User and Role Management | manage founder, operator, reviewer, learner and customer viewer |
-| F7 Platform Operation and Audit | F7.3 Task Bank Management | manage task, MCQ, rubric and template library |
-| F7 Platform Operation and Audit | F7.4 System Health and Audit | monitor health, permission and audit events |
-
-#### 4.1.3 Level-3 target functions
-
-Level-3 functions are future operation candidates. They are defined for prototype design, not implemented now.
-
-| 二级功能 | 三级功能 examples |
-| --- | --- |
-| F1.1 Customer Context Modeling | create customer profile; tag industry; tag buyer role; define target department |
-| F1.2 Value-chain Opportunity Analysis | select value-chain stage; record opportunity; estimate business value |
-| F1.3 Transformation Roadmap | define diagnosis pack; define pilot pack; define delivery pack |
-| F1.4 Commercial Boundary Control | mark allowed claim; mark prohibited claim; mark customer-safe statement |
-| F2.1 Scenario Definition | create scenario; define outcome; define owner; define scope |
-| F2.2 Process Decomposition | define step; define role; define input; define output |
-| F2.3 Exception Path Design | define risk event; define exception path; define escalation trigger |
-| F2.4 KPI Design | define metric; define formula; define owner; define report period |
-| F3.1 Agent Work-step Design | create work step; define context; define expected AI output |
-| F3.2 Automation Level Assessment | assign R0/R1/R2/R3/R4; record rationale; set upgrade condition |
-| F3.3 Authority Model | set reviewer; set approver; set final authority; set customer visibility owner |
-| F3.4 Governance Policy | classify risk; require evidence; define approval rule; define visibility rule |
-| F4.1 Task Template Design | create task; create MCQ; create rubric; create answer key |
-| F4.2 Assignment Execution | assign task; start task; submit task; mark completion |
-| F4.3 Evidence Capture | store answer; store file metadata; store score; store comment |
-| F4.4 Evidence Versioning | create evidence version; link source; lock approved version |
-| F5.1 Review Queue | route to reviewer; filter pending; show missing evidence |
-| F5.2 Review Decision | approve; revise; reject; escalate; record reason |
-| F5.3 Exception Management | flag weak module; flag risk; request resubmission |
-| F5.4 Approval Audit | record decision event; record before/after state; record actor |
-| F6.1 Proof Candidate Generation | mark proof candidate; link evidence; set readiness reason |
-| F6.2 Proof File Approval | approve proof; define public summary; define visible fields |
-| F6.3 Readiness Metric Calculation | calculate completion rate; calculate accuracy; calculate proof-ready rate |
-| F6.4 Report and Export | generate report snapshot; export dataset; mask customer-hidden fields |
-| F7.1 Client and Tenant Management | create client; create cohort; set service package; set tenant scope |
-| F7.2 User and Role Management | create user; assign role; assign permission scope; deactivate user |
-| F7.3 Task Bank Management | create task template; edit rubric; classify difficulty; publish task |
-| F7.4 System Health and Audit | view health; view audit log; check permission boundary |
-
-### 4.2 Three-level target data architecture
-
-The data architecture is not simply a list of tables. It is the TO-BE data foundation required to support target functions, evidence traceability, reporting and customer-safe delivery.
-
-#### 4.2.1 Level-1 data domains
-
-| 一级数据域 | Supports target function | Meaning |
-| --- | --- | --- |
-| D1 Customer and Commercial Context Data | F1 | customer, industry, buyer, package, commercial boundary |
-| D2 Scenario and Process Data | F2 | scenario, process, step, role, input, output, exception |
-| D3 Governance and Authority Data | F3 | work-step, automation level, authority, risk and policy |
-| D4 Task and Execution Data | F4 | task template, assignment, answer, score and version |
-| D5 Evidence and Review Data | F5 | evidence, review decision, exception and approval audit |
-| D6 Proof, Readiness and Report Data | F6 | proof file, metric, report, export and customer-safe snapshot |
-| D7 Platform Operation and Audit Data | F7 | tenant, client, user, role, task bank, health and audit event |
-
-#### 4.2.2 Level-2 data subjects
-
-| 一级数据域 | 二级数据主题 | Main contents |
-| --- | --- | --- |
-| D1 Customer and Commercial Context Data | D1.1 Customer Profile Data | customer, industry, department, buyer, target role |
-| D1 Customer and Commercial Context Data | D1.2 Commercial Package Data | diagnosis pack, pilot pack, delivery pack, renewal input |
-| D1 Customer and Commercial Context Data | D1.3 Boundary Data | allowed claim, prohibited claim, customer-safe statement |
-| D2 Scenario and Process Data | D2.1 Business Scenario Data | scenario, objective, owner, value-chain stage |
-| D2 Scenario and Process Data | D2.2 Process Step Data | step, role, input, output, dependency |
-| D2 Scenario and Process Data | D2.3 Exception Path Data | risk event, escalation trigger, exception owner |
-| D2 Scenario and Process Data | D2.4 KPI Definition Data | metric, formula, owner, period |
-| D3 Governance and Authority Data | D3.1 Agent Work-step Data | AI work unit, context, expected output |
-| D3 Governance and Authority Data | D3.2 Automation Level Data | R0-R4 level, rationale, upgrade condition |
-| D3 Governance and Authority Data | D3.3 Authority Rule Data | reviewer, approver, final owner, permission scope |
-| D3 Governance and Authority Data | D3.4 Governance Policy Data | risk class, evidence requirement, approval rule, visibility rule |
-| D4 Task and Execution Data | D4.1 Task Template Data | task, question, rubric, answer key, difficulty |
-| D4 Task and Execution Data | D4.2 Assignment Data | assignee, due date, status, completion |
-| D4 Task and Execution Data | D4.3 Submission Data | answer, file metadata, score, comment |
-| D4 Task and Execution Data | D4.4 Version Data | source, version, locked state, timestamp |
-| D5 Evidence and Review Data | D5.1 Evidence Record Data | evidence, source, linked task, linked submission |
-| D5 Evidence and Review Data | D5.2 Review Decision Data | decision, reason, reviewer, next action |
-| D5 Evidence and Review Data | D5.3 Exception Data | missing evidence, weak module, high risk, resubmission |
-| D5 Evidence and Review Data | D5.4 Approval Audit Data | actor, action, before/after state, timestamp |
-| D6 Proof, Readiness and Report Data | D6.1 Proof Candidate Data | candidate, linked evidence, readiness reason |
-| D6 Proof, Readiness and Report Data | D6.2 Proof File Data | approved proof, public summary, visible fields |
-| D6 Proof, Readiness and Report Data | D6.3 Readiness Metric Data | completion, accuracy, exception rate, proof-ready rate |
-| D6 Proof, Readiness and Report Data | D6.4 Report Snapshot Data | internal report, customer-safe report, export snapshot |
-| D7 Platform Operation and Audit Data | D7.1 Tenant and Client Data | tenant, client, cohort, service package |
-| D7 Platform Operation and Audit Data | D7.2 User and Role Data | founder, operator, reviewer, learner, customer viewer |
-| D7 Platform Operation and Audit Data | D7.3 Task Bank Data | template library, module, difficulty, publication state |
-| D7 Platform Operation and Audit Data | D7.4 System Audit Data | health check, permission event, audit event |
-
-#### 4.2.3 Level-3 data entities and fields
-
-| 二级数据主题 | 三级数据实体 | Representative fields |
-| --- | --- | --- |
-| D1.1 Customer Profile Data | EnterpriseClient | client_id, tenant_id, name, industry, department, buyer_role |
-| D1.2 Commercial Package Data | ServicePackage | package_id, package_type, scope, deliverable, renewal_path |
-| D1.3 Boundary Data | CommercialBoundary | boundary_id, claim_type, allowed_flag, customer_visible_flag |
-| D2.1 Business Scenario Data | BusinessScenario | scenario_id, client_id, objective, value_chain_stage, owner |
-| D2.2 Process Step Data | ProcessStep | step_id, scenario_id, role, input_data, output_data, dependency |
-| D2.3 Exception Path Data | ExceptionPath | exception_id, trigger, risk_event, escalation_owner |
-| D2.4 KPI Definition Data | KpiDefinition | kpi_id, name, formula_text, owner, report_period |
-| D3.1 Agent Work-step Data | AgentWorkStep | work_step_id, scenario_id, context, expected_output |
-| D3.2 Automation Level Data | AutomationAssessment | assessment_id, work_step_id, automation_level, rationale |
-| D3.3 Authority Rule Data | AuthorityRule | rule_id, role, permission_scope, approval_action |
-| D3.4 Governance Policy Data | GovernancePolicy | policy_id, risk_class, required_evidence, visibility_rule |
-| D4.1 Task Template Data | TaskTemplate | task_id, module, prompt, rubric, answer_key, difficulty |
-| D4.2 Assignment Data | Assignment | assignment_id, task_id, assignee_id, due_date, status |
-| D4.3 Submission Data | Submission | submission_id, assignment_id, answer, score, comment |
-| D4.4 Version Data | EvidenceVersion | version_id, source_id, version_no, locked_flag, timestamp |
-| D5.1 Evidence Record Data | EvidenceRecord | evidence_id, submission_id, source, version_id, evidence_type |
-| D5.2 Review Decision Data | ReviewDecision | decision_id, evidence_id, reviewer_id, decision, reason |
-| D5.3 Exception Data | ReviewException | exception_id, evidence_id, exception_type, next_action |
-| D5.4 Approval Audit Data | ApprovalAudit | audit_id, actor_id, action, before_state, after_state |
-| D6.1 Proof Candidate Data | ProofCandidate | candidate_id, evidence_id, readiness_status, reason |
-| D6.2 Proof File Data | ProofFile | proof_id, candidate_id, approved_by, public_summary, visible_fields |
-| D6.3 Readiness Metric Data | ReadinessMetric | metric_id, cohort_id, metric_name, numerator, denominator, value |
-| D6.4 Report Snapshot Data | ReportSnapshot | report_id, client_id, report_type, generated_at, masked_fields |
-| D7.1 Tenant and Client Data | TenantContext | tenant_id, client_id, cohort_id, service_package, status |
-| D7.2 User and Role Data | UserRoleProfile | user_id, role, cohort_id, permission_scope, status |
-| D7.3 Task Bank Data | TaskBankItem | item_id, task_id, category, difficulty, publication_state |
-| D7.4 System Audit Data | AuditEvent | event_id, actor_id, action, object_type, object_id, timestamp |
-
-### 4.3 Function-data traceability matrix
-
-Every future screen and implementation task must pass this traceability test.
-
-| Trace level | Required mapping |
-| --- | --- |
-| Pain | pain only maps to root cause and AS-IS / TO-BE analysis; it does not directly become a feature |
-| AS-IS / TO-BE | every target function must be justified by an AS-IS weakness and a TO-BE target state |
-| Level 1 | 一级功能 maps to one 一级数据域 |
-| Level 2 | 二级功能 maps to one or more 二级数据主题 |
-| Level 3 | 三级功能 maps to concrete 三级数据实体 and fields |
-| Evidence | any report field must trace back to EvidenceRecord, ReviewDecision or approved ProofFile |
-| Customer-safe output | any customer-visible field must have a visibility rule |
-| Audit | any approval, export or proof action must produce an AuditEvent |
-
-### 4.4 TOGAF architecture layer summary
-
-| TOGAF layer | What it contains in this project |
-| --- | --- |
-| Business architecture | AS-IS / TO-BE model, target operating model, three-level target functions |
-| Application architecture | future modules and screens derived from TO-BE functions, not from raw pain points |
-| Data architecture | three-level target data domains, subjects, entities, evidence chain and report measures |
-| Technology architecture | runtime, persistence, permission, export, deployment and observability plan |
-
----
-
-## 5. Prototype design
-
-### 5.1 Prototype design gate
-
-Prototype design is a documentation phase, not implementation.
-
-It must define:
+痛点不能直接变成页面或功能，必须经过中间桥接层。
 
 ```text
-user roles
-navigation model
-screen inventory
-screen purpose
-input/output per screen
-primary user action
-approval point
-visible data fields
-customer-safe fields
-nonfunctional constraints
+痛点信号
+-> 根因分析
+-> AS-IS 现状
+-> TO-BE 目标
+-> 差距 Gap
+-> 目标功能
+-> 目标数据
+-> 原型需求
 ```
 
-Prototype design must also show which AS-IS / TO-BE gap, Level-1 / Level-2 / Level-3 function and data level each screen belongs to.
+---
 
-### 5.2 Prototype navigation requirement
+## 3. 领域诊断桥：AS-IS / TO-BE / Gap
 
-Founder navigation should prioritize method and delivery:
+这是痛点和架构之间的桥。没有这一层，系统会变成“痛点页面集合”，而不是一个真正可扩展的平台。
+
+### 3.1 桥接模型
+
+| 步骤 | 要回答的问题 | 输出物 |
+| --- | --- | --- |
+| 痛点信号 | 现在痛在哪里？ | 痛点描述 |
+| 根因分析 | 为什么会痛？ | 领域弱点 |
+| AS-IS | 当前领域如何运作？ | 当前业务 / 流程 / 数据 / 系统现状 |
+| TO-BE | 重构后应该如何运作？ | 目标运营模式 |
+| Gap | AS-IS 到 TO-BE 中间缺什么？ | 能力差距、数据差距、治理差距、系统差距 |
+| 架构设计 | 要建设或配置什么？ | 功能架构和数据架构 |
+
+### 3.2 领域级 AS-IS / TO-BE 总览
+
+| 领域方面 | AS-IS 当前状态 | TO-BE 目标状态 | 需要弥补的 Gap |
+| --- | --- | --- | --- |
+| 商业模式 | 卖培训、卖演示、卖人力服务容易理解，但难规模化 | 卖 AI Agent 治理诊断、试点和基于证据的交付包 | 产品化服务模型和可复用交付方法 |
+| 客户入口 | 客户痛点主要靠沟通和 Founder 经验判断 | 客户痛点被转化为价值链阶段、场景、目标成果和试点范围 | 结构化访谈和场景分类能力 |
+| 工作流程 | AI 使用分散在工具、人和任务之间 | AI 工作被组织为有输入、输出、自动化等级和人类检查点的工作步骤 | Agent 工作步骤模型和治理规则 |
+| 角色责任 | AI、Operator、Reviewer、Founder 之间责任隐含 | Agent、Operator、Reviewer、Founder、客户查看者的权责边界清晰 | 角色、权限和审批模型 |
+| 证据链 | 培训产出和任务产出没有稳定连接到证据 | 重要输出都能追溯到 Evidence、ReviewDecision、ProofCandidate、ProofFile | 证据链和版本控制 |
+| 数据体系 | 客户、学员、任务、分数、报告数据分散 | 数据按领域、主题、实体三层组织，并支持从战略到报表的追溯 | 三层数据架构 |
+| 报告体系 | 报告依赖人工整理和 Founder 解释 | 内部报告和客户安全报告从已审批证据和可见性规则生成 | 指标模型和报表数据集 |
+| 合规信任 | AI 输出可能有用，但难解释、难证明、难交付 | 客户可见输出由审批、审计和可见性策略控制 | 审计规则和客户可见字段规则 |
+
+### 3.3 场景级 AS-IS / TO-BE 示例
+
+| 场景 | AS-IS | TO-BE | 需要的目标能力 |
+| --- | --- | --- | --- |
+| Lead-to-Proposal | 销售材料和方案草稿依赖 Founder 经验 | AI 生成客户画像、需求摘要和方案大纲，人类审批商业边界 | 价值链诊断、方案证据、承诺边界 |
+| Requirement-to-Delivery | 需求、任务输出、验收证据分散 | 需求映射到任务、证据、评审和客户安全交付摘要 | 场景到任务映射、证据链 |
+| Training-to-Readiness | 完成培训不等于岗位就绪 | 任务、分数、评审决定和 Proof File 形成能力证据 | Readiness 评估、Proof 管理 |
+| Support-to-Knowledge | 支持问题重复出现，但未沉淀为知识 | 支持问题转成经过验证的知识草稿，并保留审批和审计 | 知识证据、审批流程 |
+
+---
+
+## 4. TOGAF 分层目标功能架构
+
+下面的功能架构不是痛点列表，而是由 TO-BE 目标状态推导出来的目标能力结构。
+
+### 4.1 三层目标功能架构
+
+#### 4.1.1 一级功能
+
+一级功能是稳定的产品能力域。后续页面、模块、接口可以变化，但一级能力域不应频繁变化。
+
+| 一级功能 | TO-BE 目标 | 来源 Gap |
+| --- | --- | --- |
+| F1 领域诊断与转型规划 | 将客户背景转化为价值链 AI 转型计划 | 结构化诊断差距 |
+| F2 场景与流程架构 | 定义目标业务场景、流程、角色、输入、输出和异常路径 | 流程架构差距 |
+| F3 Agent 工作设计与治理 | 定义 AI Agent 工作步骤、自动化等级、权限和风险策略 | AI 工作治理差距 |
+| F4 任务执行与证据采集 | 将工作执行转化为结构化任务记录和证据 | 证据采集差距 |
+| F5 人工评审、审批与升级 | 将人类决策显性化、可审计化 | 权责和问责差距 |
+| F6 Proof、Readiness 与报告 | 将证据和评审转化为 Proof File、Readiness 指标和报告 | 证明与报告差距 |
+| F7 平台运营与审计 | 管理客户、用户、任务、分配、健康状态和审计 | 规模化运营差距 |
+
+#### 4.1.2 二级功能
+
+二级功能是每个一级能力域下的子能力，用于指导后续模块和页面设计。
+
+| 一级功能 | 二级功能 | TO-BE 说明 |
+| --- | --- | --- |
+| F1 领域诊断与转型规划 | F1.1 客户背景建模 | 定义客户、行业、部门、买方和服务上下文 |
+| F1 领域诊断与转型规划 | F1.2 价值链机会分析 | 判断 AI Agent 在哪里能创造业务价值 |
+| F1 领域诊断与转型规划 | F1.3 转型路线图 | 定义诊断、试点、交付和续约路径 |
+| F1 领域诊断与转型规划 | F1.4 商业边界控制 | 定义可承诺、不可承诺和客户安全表达 |
+| F2 场景与流程架构 | F2.1 场景定义 | 定义目标业务场景和预期结果 |
+| F2 场景与流程架构 | F2.2 流程拆解 | 拆分流程步骤、角色、输入和输出 |
+| F2 场景与流程架构 | F2.3 异常路径设计 | 定义异常情况、风险事件和升级路径 |
+| F2 场景与流程架构 | F2.4 KPI 设计 | 定义业务指标和能力成熟度指标 |
+| F3 Agent 工作设计与治理 | F3.1 Agent 工作步骤设计 | 定义 AI Agent 工作单元和所需上下文 |
+| F3 Agent 工作设计与治理 | F3.2 自动化等级评估 | 分配 R0 到 R4 等级并记录理由 |
+| F3 Agent 工作设计与治理 | F3.3 权限模型 | 定义 Reviewer、Approver 和最终责任角色 |
+| F3 Agent 工作设计与治理 | F3.4 治理策略 | 定义风险分类、证据要求和可见性规则 |
+| F4 任务执行与证据采集 | F4.1 任务模板设计 | 定义任务、题目、评分规则和预期输出 |
+| F4 任务执行与证据采集 | F4.2 任务分配执行 | 将任务分配给学员、员工或 Operator |
+| F4 任务执行与证据采集 | F4.3 证据采集 | 采集答案、文件、分数、评论和来源 |
+| F4 任务执行与证据采集 | F4.4 证据版本管理 | 保存版本、时间戳和来源记录 |
+| F5 人工评审、审批与升级 | F5.1 评审队列 | 将证据路由给 Reviewer 或 Founder |
+| F5 人工评审、审批与升级 | F5.2 评审决定 | 批准、修改、拒绝或升级 |
+| F5 人工评审、审批与升级 | F5.3 异常管理 | 识别薄弱点、高风险或缺失证据 |
+| F5 人工评审、审批与升级 | F5.4 审批审计 | 记录评审人、理由、时间和动作 |
+| F6 Proof、Readiness 与报告 | F6.1 Proof 候选生成 | 识别哪些证据可以成为 Proof 候选 |
+| F6 Proof、Readiness 与报告 | F6.2 Proof File 审批 | 审批并打包客户可见 Proof |
+| F6 Proof、Readiness 与报告 | F6.3 Readiness 指标计算 | 计算完成率、正确率、异常率和 Proof-ready rate |
+| F6 Proof、Readiness 与报告 | F6.4 报告与导出 | 生成内部报告、客户安全报告和导出快照 |
+| F7 平台运营与审计 | F7.1 客户与租户管理 | 管理客户、租户、部门、班级和服务包 |
+| F7 平台运营与审计 | F7.2 用户与角色管理 | 管理 Founder、Operator、Reviewer、Learner 和客户查看者 |
+| F7 平台运营与审计 | F7.3 任务库管理 | 管理任务、选择题、评分规则和模板库 |
+| F7 平台运营与审计 | F7.4 系统健康与审计 | 监控健康状态、权限边界和审计事件 |
+
+#### 4.1.3 三级功能
+
+三级功能是未来的操作候选，会在原型设计阶段转化为页面、表单、按钮、流程节点或报表动作。当前阶段只定义，不实现。
+
+| 二级功能 | 三级功能示例 |
+| --- | --- |
+| F1.1 客户背景建模 | 创建客户画像；标记行业；标记买方角色；定义目标部门 |
+| F1.2 价值链机会分析 | 选择价值链阶段；记录自动化机会；估算业务价值 |
+| F1.3 转型路线图 | 定义诊断包；定义试点包；定义交付包 |
+| F1.4 商业边界控制 | 标记允许承诺；标记禁止承诺；定义客户安全表达 |
+| F2.1 场景定义 | 创建场景；定义结果；定义负责人；定义范围 |
+| F2.2 流程拆解 | 定义步骤；定义角色；定义输入；定义输出 |
+| F2.3 异常路径设计 | 定义风险事件；定义异常路径；定义升级触发条件 |
+| F2.4 KPI 设计 | 定义指标；定义公式；定义负责人；定义报告周期 |
+| F3.1 Agent 工作步骤设计 | 创建工作步骤；定义上下文；定义 AI 预期输出 |
+| F3.2 自动化等级评估 | 分配 R0/R1/R2/R3/R4；记录理由；设置升级条件 |
+| F3.3 权限模型 | 设置 Reviewer；设置 Approver；设置最终责任人；设置客户可见负责人 |
+| F3.4 治理策略 | 分类风险；要求证据；定义审批规则；定义可见性规则 |
+| F4.1 任务模板设计 | 创建任务；创建选择题；创建评分规则；创建答案 |
+| F4.2 任务分配执行 | 分配任务；开始任务；提交任务；标记完成 |
+| F4.3 证据采集 | 保存答案；保存文件元数据；保存分数；保存评论 |
+| F4.4 证据版本管理 | 创建证据版本；链接来源；锁定已审批版本 |
+| F5.1 评审队列 | 路由到 Reviewer；筛选待处理；显示缺失证据 |
+| F5.2 评审决定 | 批准；修改；拒绝；升级；记录理由 |
+| F5.3 异常管理 | 标记薄弱模块；标记风险；要求重新提交 |
+| F5.4 审批审计 | 记录决策事件；记录前后状态；记录操作者 |
+| F6.1 Proof 候选生成 | 标记 Proof 候选；链接证据；设置 Readiness 理由 |
+| F6.2 Proof File 审批 | 审批 Proof；定义公开摘要；定义可见字段 |
+| F6.3 Readiness 指标计算 | 计算完成率；计算正确率；计算 Proof-ready rate |
+| F6.4 报告与导出 | 生成报告快照；导出数据集；隐藏客户不可见字段 |
+| F7.1 客户与租户管理 | 创建客户；创建班级；设置服务包；设置租户范围 |
+| F7.2 用户与角色管理 | 创建用户；分配角色；设置权限范围；停用用户 |
+| F7.3 任务库管理 | 创建任务模板；编辑评分规则；分类难度；发布任务 |
+| F7.4 系统健康与审计 | 查看健康状态；查看审计日志；检查权限边界 |
+
+---
+
+## 5. 三层目标数据架构
+
+数据架构不是数据库表清单，而是支撑 TO-BE 目标功能、证据追溯、报表生成和客户安全交付的数据基础。
+
+### 5.1 一级数据域
+
+| 一级数据域 | 支撑目标功能 | 含义 |
+| --- | --- | --- |
+| D1 客户与商业上下文数据 | F1 | 客户、行业、买方、服务包、商业边界 |
+| D2 场景与流程数据 | F2 | 场景、流程、步骤、角色、输入、输出、异常 |
+| D3 治理与权限数据 | F3 | 工作步骤、自动化等级、权限、风险和策略 |
+| D4 任务与执行数据 | F4 | 任务模板、分配、答案、分数和版本 |
+| D5 证据与评审数据 | F5 | 证据、评审决定、异常和审批审计 |
+| D6 Proof、Readiness 与报告数据 | F6 | Proof File、指标、报告、导出和客户安全快照 |
+| D7 平台运营与审计数据 | F7 | 租户、客户、用户、角色、任务库、健康状态和审计事件 |
+
+### 5.2 二级数据主题
+
+| 一级数据域 | 二级数据主题 | 主要内容 |
+| --- | --- | --- |
+| D1 客户与商业上下文数据 | D1.1 客户画像数据 | 客户、行业、部门、买方、目标角色 |
+| D1 客户与商业上下文数据 | D1.2 商业服务包数据 | 诊断包、试点包、交付包、续约输入 |
+| D1 客户与商业上下文数据 | D1.3 商业边界数据 | 允许承诺、禁止承诺、客户安全表达 |
+| D2 场景与流程数据 | D2.1 业务场景数据 | 场景、目标、负责人、价值链阶段 |
+| D2 场景与流程数据 | D2.2 流程步骤数据 | 步骤、角色、输入、输出、依赖 |
+| D2 场景与流程数据 | D2.3 异常路径数据 | 风险事件、升级触发条件、异常负责人 |
+| D2 场景与流程数据 | D2.4 KPI 定义数据 | 指标、公式、负责人、周期 |
+| D3 治理与权限数据 | D3.1 Agent 工作步骤数据 | AI 工作单元、上下文、预期输出 |
+| D3 治理与权限数据 | D3.2 自动化等级数据 | R0-R4 等级、理由、升级条件 |
+| D3 治理与权限数据 | D3.3 权限规则数据 | Reviewer、Approver、最终责任人、权限范围 |
+| D3 治理与权限数据 | D3.4 治理策略数据 | 风险类别、证据要求、审批规则、可见性规则 |
+| D4 任务与执行数据 | D4.1 任务模板数据 | 任务、题目、评分规则、答案、难度 |
+| D4 任务与执行数据 | D4.2 任务分配数据 | 被分配人、截止日期、状态、完成情况 |
+| D4 任务与执行数据 | D4.3 提交数据 | 答案、文件元数据、分数、评论 |
+| D4 任务与执行数据 | D4.4 版本数据 | 来源、版本、锁定状态、时间戳 |
+| D5 证据与评审数据 | D5.1 证据记录数据 | 证据、来源、关联任务、关联提交 |
+| D5 证据与评审数据 | D5.2 评审决定数据 | 决定、理由、评审人、下一步动作 |
+| D5 证据与评审数据 | D5.3 异常数据 | 缺失证据、薄弱模块、高风险、重新提交 |
+| D5 证据与评审数据 | D5.4 审批审计数据 | 操作者、动作、前后状态、时间戳 |
+| D6 Proof、Readiness 与报告数据 | D6.1 Proof 候选数据 | 候选项、关联证据、Readiness 理由 |
+| D6 Proof、Readiness 与报告数据 | D6.2 Proof File 数据 | 已审批 Proof、公开摘要、可见字段 |
+| D6 Proof、Readiness 与报告数据 | D6.3 Readiness 指标数据 | 完成率、正确率、异常率、Proof-ready rate |
+| D6 Proof、Readiness 与报告数据 | D6.4 报告快照数据 | 内部报告、客户安全报告、导出快照 |
+| D7 平台运营与审计数据 | D7.1 租户与客户数据 | 租户、客户、班级、服务包 |
+| D7 平台运营与审计数据 | D7.2 用户与角色数据 | Founder、Operator、Reviewer、Learner、客户查看者 |
+| D7 平台运营与审计数据 | D7.3 任务库数据 | 模板库、模块、难度、发布状态 |
+| D7 平台运营与审计数据 | D7.4 系统审计数据 | 健康检查、权限事件、审计事件 |
+
+### 5.3 三级数据实体与字段
+
+| 二级数据主题 | 三级数据实体 | 代表字段 |
+| --- | --- | --- |
+| D1.1 客户画像数据 | EnterpriseClient | client_id, tenant_id, name, industry, department, buyer_role |
+| D1.2 商业服务包数据 | ServicePackage | package_id, package_type, scope, deliverable, renewal_path |
+| D1.3 商业边界数据 | CommercialBoundary | boundary_id, claim_type, allowed_flag, customer_visible_flag |
+| D2.1 业务场景数据 | BusinessScenario | scenario_id, client_id, objective, value_chain_stage, owner |
+| D2.2 流程步骤数据 | ProcessStep | step_id, scenario_id, role, input_data, output_data, dependency |
+| D2.3 异常路径数据 | ExceptionPath | exception_id, trigger, risk_event, escalation_owner |
+| D2.4 KPI 定义数据 | KpiDefinition | kpi_id, name, formula_text, owner, report_period |
+| D3.1 Agent 工作步骤数据 | AgentWorkStep | work_step_id, scenario_id, context, expected_output |
+| D3.2 自动化等级数据 | AutomationAssessment | assessment_id, work_step_id, automation_level, rationale |
+| D3.3 权限规则数据 | AuthorityRule | rule_id, role, permission_scope, approval_action |
+| D3.4 治理策略数据 | GovernancePolicy | policy_id, risk_class, required_evidence, visibility_rule |
+| D4.1 任务模板数据 | TaskTemplate | task_id, module, prompt, rubric, answer_key, difficulty |
+| D4.2 任务分配数据 | Assignment | assignment_id, task_id, assignee_id, due_date, status |
+| D4.3 提交数据 | Submission | submission_id, assignment_id, answer, score, comment |
+| D4.4 版本数据 | EvidenceVersion | version_id, source_id, version_no, locked_flag, timestamp |
+| D5.1 证据记录数据 | EvidenceRecord | evidence_id, submission_id, source, version_id, evidence_type |
+| D5.2 评审决定数据 | ReviewDecision | decision_id, evidence_id, reviewer_id, decision, reason |
+| D5.3 异常数据 | ReviewException | exception_id, evidence_id, exception_type, next_action |
+| D5.4 审批审计数据 | ApprovalAudit | audit_id, actor_id, action, before_state, after_state |
+| D6.1 Proof 候选数据 | ProofCandidate | candidate_id, evidence_id, readiness_status, reason |
+| D6.2 Proof File 数据 | ProofFile | proof_id, candidate_id, approved_by, public_summary, visible_fields |
+| D6.3 Readiness 指标数据 | ReadinessMetric | metric_id, cohort_id, metric_name, numerator, denominator, value |
+| D6.4 报告快照数据 | ReportSnapshot | report_id, client_id, report_type, generated_at, masked_fields |
+| D7.1 租户与客户数据 | TenantContext | tenant_id, client_id, cohort_id, service_package, status |
+| D7.2 用户与角色数据 | UserRoleProfile | user_id, role, cohort_id, permission_scope, status |
+| D7.3 任务库数据 | TaskBankItem | item_id, task_id, category, difficulty, publication_state |
+| D7.4 系统审计数据 | AuditEvent | event_id, actor_id, action, object_type, object_id, timestamp |
+
+---
+
+## 6. 功能与数据追溯矩阵
+
+未来每个页面、报表、接口和实现任务，都必须通过以下追溯检查。
+
+| 追溯层级 | 必须满足的映射关系 |
+| --- | --- |
+| 痛点 | 痛点只能映射到根因和 AS-IS / TO-BE 分析，不能直接变成功能 |
+| AS-IS / TO-BE | 每个目标功能都必须能说明来自哪个 AS-IS 弱点和哪个 TO-BE 目标 |
+| 一级 | 一级功能必须映射到一个一级数据域 |
+| 二级 | 二级功能必须映射到一个或多个二级数据主题 |
+| 三级 | 三级功能必须映射到具体三级数据实体和字段 |
+| 证据 | 任意报告字段必须能追溯到 EvidenceRecord、ReviewDecision 或已审批 ProofFile |
+| 客户安全输出 | 任意客户可见字段必须有 visibility rule |
+| 审计 | 任意审批、导出、Proof 动作必须产生 AuditEvent |
+
+---
+
+## 7. TOGAF 架构层总结
+
+| TOGAF 层 | 本项目中的内容 |
+| --- | --- |
+| 业务架构 | AS-IS / TO-BE 模型、目标运营模式、三层目标功能 |
+| 应用架构 | 从 TO-BE 功能推导未来模块和页面，而不是从原始痛点直接生成页面 |
+| 数据架构 | 三层目标数据域、数据主题、数据实体、证据链和报表指标 |
+| 技术架构 | 运行时、持久化、权限、导出、部署和可观测性规划 |
+
+---
+
+## 8. 原型设计
+
+### 8.1 原型设计门禁
+
+原型设计仍然是文档阶段，不是实现阶段。
+
+原型设计必须定义：
+
+```text
+用户角色
+导航模型
+页面清单
+页面目的
+每个页面的输入和输出
+主要用户动作
+审批点
+可见数据字段
+客户安全字段
+非功能约束
+```
+
+原型设计还必须说明每个页面对应哪个 AS-IS / TO-BE Gap、一级/二级/三级功能，以及一级/二级/三级数据。
+
+### 8.2 原型导航要求
+
+Founder 导航应优先体现方法论和交付闭环：
 
 ```text
 Dashboard
@@ -405,69 +444,69 @@ Exports
 Audit
 ```
 
-### 5.3 Proposed future screen
+### 8.3 未来拟新增页面
 
 ```text
 Waterfall Architecture
 ```
 
-Purpose:
+页面目的：
 
 ```text
-Show the complete waterfall method inside the live product.
-Make the founder demo explain strategy, pain, AS-IS, TO-BE, gap, TOGAF, data, prototype, and technical architecture from one page.
+在产品内展示完整瀑布方法。
+让 Founder 能从一个页面讲清战略、痛点、AS-IS、TO-BE、Gap、TOGAF、数据、原型和技术架构。
 ```
 
-No implementation file is added in this phase.
+本阶段不新增实现文件。
 
 ---
 
-## 6. Technical architecture and implementation plan
+## 9. 技术架构与后续实现计划
 
-### 6.1 Current implementation decision
+### 9.1 当前实现原则
 
-Use Streamlit as an executable prototype only after the prototype design gate is approved.
+只有原型设计门禁通过后，才允许把 Streamlit 作为可执行原型实现。
 
-### 6.2 MVP implementation order after the prototype gate
+### 9.2 原型门禁后的 MVP 实现顺序
 
-1. Convert AS-IS / TO-BE / Gap analysis into prototype navigation and screen inventory.
-2. Convert Level-1 / Level-2 / Level-3 target function architecture into feature dictionary.
-3. Convert Level-1 / Level-2 / Level-3 target data architecture into data dictionary and persistence plan.
-4. Add Waterfall architecture page.
-5. Add Founder navigation entry.
-6. Convert scenario, governance, evidence and report objects into editable persistent records.
-7. Fix Proof File and Report data lineage.
-8. Later: migrate from Streamlit prototype to formal web architecture.
+1. 将 AS-IS / TO-BE / Gap 分析转化为原型导航和页面清单。
+2. 将一级/二级/三级目标功能架构转化为功能字典。
+3. 将一级/二级/三级目标数据架构转化为数据字典和持久化计划。
+4. 新增 Waterfall Architecture 页面。
+5. 新增 Founder 导航入口。
+6. 将场景、治理、证据和报告对象转化为可编辑、可持久化记录。
+7. 固定 Proof File 和 Report 的数据血缘。
+8. 后续从 Streamlit 原型迁移到正式 Web 架构。
 
-### 6.3 Next development tasks after the prototype gate
+### 9.3 原型门禁后的开发任务
 
-| Priority | Task | Result |
+| 优先级 | 任务 | 结果 |
 | --- | --- | --- |
-| P0 | AS-IS / TO-BE dictionary | every future feature is justified by current-state weakness and target-state need |
-| P0 | Three-level target function dictionary | every feature has L1/L2/L3 code and owner |
-| P0 | Three-level target data dictionary | every data object has domain, subject and entity level |
-| P1 | Scenario-to-task mapping | every task traces to a business scenario |
-| P1 | Governance and authority schema | automation level, risk, approval and visibility become configurable |
-| P1 | Evidence and approval schema | proof/report source becomes auditable |
-| P2 | Customer report portal | customer-safe output separated from internal data |
-| P2 | Formal API and frontend | move beyond Streamlit demo |
+| P0 | AS-IS / TO-BE 字典 | 每个未来功能都能说明来自哪个现状弱点和目标状态 |
+| P0 | 三层目标功能字典 | 每个功能都有一级、二级、三级编码和负责人 |
+| P0 | 三层目标数据字典 | 每个数据对象都有数据域、数据主题和实体层级 |
+| P1 | 场景到任务映射 | 每个任务都能追溯到业务场景 |
+| P1 | 治理与权限模型 | 自动化等级、风险、审批和可见性可配置 |
+| P1 | 证据与审批模型 | Proof / Report 的来源可审计 |
+| P2 | 客户报告门户 | 客户安全输出和内部数据分离 |
+| P2 | 正式 API 与前端 | 从 Streamlit 原型走向正式产品 |
 
 ---
 
-## 7. Acceptance checklist
+## 10. 验收清单
 
-The rebuild is acceptable when:
+本次瀑布式重构文档可验收的标准：
 
 ```text
-战略口径清楚：not course, not AI tool demo, but Agent governance and proof OS.
-痛点边界清楚：pain is input, not function.
-桥接层清楚：pain -> root cause -> AS-IS -> TO-BE -> gap -> architecture.
-AS-IS / TO-BE 清楚：current state and target state are listed by domain aspect.
-功能分层清楚：一级功能、二级功能、三级功能 are target capabilities derived from TO-BE.
-数据分层清楚：一级数据域、二级数据主题、三级数据实体 support target capabilities and reports.
-TOGAF 清楚：business, application, data, technology layers are traceable.
-数据链路清楚：Proof File and report can trace back to evidence and review decisions.
-原型清楚：screen purpose, input, output, action, approval and data visibility are defined.
-技术清楚：Streamlit MVP and future production architecture are separated.
-实现门禁清楚：prototype design approval before implementation changes.
+战略口径清楚：不是课程，不是 AI 工具演示，而是 Agent 治理与能力证明系统。
+痛点边界清楚：痛点是输入，不是功能。
+桥接层清楚：痛点 -> 根因 -> AS-IS -> TO-BE -> Gap -> 架构。
+AS-IS / TO-BE 清楚：按领域方面列出现状和目标状态。
+功能分层清楚：一级功能、二级功能、三级功能来自 TO-BE 目标能力。
+数据分层清楚：一级数据域、二级数据主题、三级数据实体支撑目标能力和报告。
+TOGAF 清楚：业务、应用、数据、技术层可追溯。
+数据链路清楚：Proof File 和 Report 能追溯到证据和评审决定。
+原型边界清楚：原型设计先定义页面目的、输入、输出、动作、审批和可见字段。
+技术边界清楚：Streamlit MVP 和未来正式生产架构分离。
+实现门禁清楚：原型设计通过前不改运行代码。
 ```
