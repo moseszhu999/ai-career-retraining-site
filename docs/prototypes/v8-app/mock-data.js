@@ -21,6 +21,65 @@ window.ProofSkillData = {
       targetRoles: ['Trade Documentation Assistant', 'Supply Chain Ops', 'Receivable Review Assistant']
     }
   ],
+  learningModules: [
+    {
+      id: 'lesson-1',
+      title: 'Lesson 1 · Spreadsheet Data Hygiene',
+      type: 'lesson',
+      duration: '18 min',
+      status: 'available',
+      objective: 'Learn how to inspect missing values, duplicate rows, inconsistent date formats, and suspicious outliers before using AI assistance.',
+      keyPoints: ['Check schema before asking AI', 'Separate raw data from cleaned data', 'Document every assumption', 'Never hide anomalies just to make charts look clean'],
+      output: 'Short cleaning note with before/after field list'
+    },
+    {
+      id: 'lesson-2',
+      title: 'Lesson 2 · Metrics and Business Questions',
+      type: 'lesson',
+      duration: '22 min',
+      status: 'locked after lesson 1',
+      objective: 'Translate business questions into metrics such as revenue, margin, discount leakage, region growth, and customer risk.',
+      keyPoints: ['Metric = formula + business meaning', 'Do not mix revenue and margin', 'Segment before conclusion', 'Explain uncertainty'],
+      output: 'Metric definition table'
+    },
+    {
+      id: 'quiz-1',
+      title: 'Quiz · Data Quality Judgment',
+      type: 'quiz',
+      duration: '8 questions',
+      status: 'available',
+      objective: 'Check whether the learner can recognize when AI output is unsafe because the source data is inconsistent.',
+      keyPoints: ['Missing value handling', 'Duplicate detection', 'Wrong aggregation', 'Overconfident AI summary'],
+      output: 'Quiz score stored locally before evidence generation'
+    },
+    {
+      id: 'lab-1',
+      title: 'Practice Lab · Mini BI Report',
+      type: 'practice',
+      duration: '45 min',
+      status: 'available',
+      objective: 'Build a mini BI report from cleaned sample data and write a manager-facing summary.',
+      keyPoints: ['Clean sample data', 'Calculate region margin', 'Find discount anomaly', 'Write evidence-backed conclusion'],
+      output: 'Mini BI report evidence bundle'
+    }
+  ],
+  quizQuestions: [
+    {
+      question: 'A CSV has duplicate order IDs with different revenue values. What should the learner do first?',
+      choices: ['Average the revenue automatically', 'Delete the smaller value', 'Flag the conflict and inspect source rows', 'Ask AI to guess the correct row'],
+      answer: 'Flag the conflict and inspect source rows'
+    },
+    {
+      question: 'AI says East region is best because revenue is highest. What metric may still change the conclusion?',
+      choices: ['Font size', 'Gross margin', 'File name', 'Row order'],
+      answer: 'Gross margin'
+    },
+    {
+      question: 'Which item belongs in the evidence bundle?',
+      choices: ['Only final chart', 'Cleaning assumptions and metric definitions', 'Private password', 'Unverified customer gossip'],
+      answer: 'Cleaning assumptions and metric definitions'
+    }
+  ],
   projectTasks: [
     {
       id: 'task-data-bi',
