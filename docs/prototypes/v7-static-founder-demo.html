@@ -3,55 +3,28 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ProofSkill AI — Static Founder Demo</title>
+  <title>ProofSkill AI — Frontend + Smart Contract Demo</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    :root {
-      --ink: #0f172a;
-      --muted: #64748b;
-      --panel: #ffffff;
-      --soft: #f8fafc;
-      --line: #e2e8f0;
-      --brand: #2563eb;
-      --brand-soft: #dbeafe;
-      --accent: #14b8a6;
-      --warn: #f59e0b;
-      --danger: #ef4444;
-    }
-    body { background: var(--soft); color: var(--ink); }
-    .navbar { backdrop-filter: blur(12px); background: rgba(255,255,255,.92); border-bottom: 1px solid var(--line); }
-    .hero { padding: 96px 0 56px; background: radial-gradient(circle at top left, #dbeafe 0, rgba(219,234,254,.55) 28%, transparent 52%), linear-gradient(180deg, #fff 0, #f8fafc 100%); }
-    .eyebrow { color: var(--brand); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-size: .78rem; }
-    .hero-title { font-size: clamp(2.4rem, 6vw, 5.2rem); line-height: .95; letter-spacing: -.06em; font-weight: 800; }
-    .hero-subtitle { color: var(--muted); font-size: 1.18rem; max-width: 780px; }
-    .card-soft { border: 1px solid var(--line); border-radius: 24px; background: var(--panel); box-shadow: 0 20px 40px rgba(15,23,42,.06); }
-    .metric-card { border: 1px solid var(--line); border-radius: 18px; padding: 18px; background: #fff; }
-    .badge-soft { background: var(--brand-soft); color: var(--brand); border: 1px solid #bfdbfe; }
-    .badge-proof { background: #ccfbf1; color: #0f766e; border: 1px solid #99f6e4; }
-    .badge-warn { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
-    .section { padding: 72px 0; }
-    .section-title { font-weight: 800; letter-spacing: -.035em; }
-    .muted { color: var(--muted); }
-    .flow-step { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-bottom: 1px dashed var(--line); }
-    .flow-step:last-child { border-bottom: 0; }
-    .step-num { width: 34px; height: 34px; border-radius: 50%; display: inline-grid; place-items: center; background: var(--brand); color: white; font-weight: 700; flex: 0 0 34px; }
-    .route-btn.active { background: var(--brand); color: #fff; }
-    .demo-pane { display: none; }
-    .demo-pane.active { display: block; }
-    .mock-window { border-radius: 22px; overflow: hidden; border: 1px solid var(--line); background: #fff; }
-    .mock-window-bar { background: #f1f5f9; border-bottom: 1px solid var(--line); padding: 12px 16px; display: flex; gap: 8px; align-items: center; }
-    .dot { width: 10px; height: 10px; border-radius: 50%; background: #cbd5e1; display: inline-block; }
-    .dot.red { background: #fb7185; } .dot.yellow { background: #fbbf24; } .dot.green { background: #34d399; }
-    .question { border: 1px solid var(--line); border-radius: 16px; padding: 16px; background: #fff; margin-bottom: 14px; }
-    .score-bar { height: 10px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
-    .score-fill { height: 100%; background: linear-gradient(90deg, var(--brand), var(--accent)); }
-    .code-block { background: #0f172a; color: #dbeafe; border-radius: 18px; padding: 18px; font-size: .9rem; overflow: auto; }
-    .registry-row { display: grid; grid-template-columns: 1.4fr 1fr .8fr .8fr; gap: 12px; align-items: center; border-bottom: 1px solid var(--line); padding: 12px 0; }
-    .registry-row:last-child { border-bottom: 0; }
-    .small-label { font-size: .76rem; text-transform: uppercase; color: var(--muted); letter-spacing: .06em; font-weight: 700; }
-    .sticky-subnav { position: sticky; top: 66px; z-index: 10; background: rgba(248,250,252,.94); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
-    .footer-boundary { background: #020617; color: #cbd5e1; }
-    a { text-decoration: none; }
+    :root{--ink:#0f172a;--muted:#64748b;--soft:#f8fafc;--line:#e2e8f0;--brand:#2563eb;--accent:#14b8a6;--dark:#020617;--amber:#f59e0b}
+    body{background:var(--soft);color:var(--ink)}
+    .navbar{backdrop-filter:blur(12px);background:rgba(255,255,255,.94);border-bottom:1px solid var(--line)}
+    .hero{padding:96px 0 56px;background:radial-gradient(circle at top left,#dbeafe 0,rgba(219,234,254,.55) 30%,transparent 56%),linear-gradient(180deg,#fff,#f8fafc)}
+    .eyebrow{color:var(--brand);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:.78rem}
+    .hero-title{font-size:clamp(2.4rem,6vw,5.2rem);line-height:.95;letter-spacing:-.06em;font-weight:850}
+    .hero-subtitle{color:var(--muted);font-size:1.18rem;max-width:800px}
+    .card-soft{border:1px solid var(--line);border-radius:24px;background:#fff;box-shadow:0 20px 40px rgba(15,23,42,.06)}
+    .metric-card{border:1px solid var(--line);border-radius:18px;padding:18px;background:#fff}
+    .badge-soft{background:#dbeafe;color:#1d4ed8;border:1px solid #bfdbfe}.badge-proof{background:#ccfbf1;color:#0f766e;border:1px solid #99f6e4}.badge-warn{background:#fef3c7;color:#92400e;border:1px solid #fde68a}
+    .section{padding:72px 0}.section-title{font-weight:850;letter-spacing:-.04em}.muted{color:var(--muted)}
+    .score-bar{height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden}.score-fill{height:100%;background:linear-gradient(90deg,var(--brand),var(--accent))}
+    .mock-window{border-radius:22px;overflow:hidden;border:1px solid var(--line);background:#fff}.mock-window-bar{background:#f1f5f9;border-bottom:1px solid var(--line);padding:12px 16px;font-weight:800}
+    .small-label{font-size:.76rem;text-transform:uppercase;color:var(--muted);letter-spacing:.06em;font-weight:800}
+    .code-block{background:#0f172a;color:#dbeafe;border-radius:18px;padding:18px;font-size:.9rem;overflow:auto}
+    .route-btn.active{background:var(--brand);color:#fff}.demo-pane{display:none}.demo-pane.active{display:block}
+    .pipeline-step{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px dashed var(--line)}.pipeline-step:last-child{border-bottom:0}.step-num{width:34px;height:34px;border-radius:50%;display:inline-grid;place-items:center;background:var(--brand);color:#fff;font-weight:800;flex:0 0 34px}
+    .registry-row{display:grid;grid-template-columns:1.2fr 1fr 1fr .7fr .8fr;gap:12px;align-items:center;border-bottom:1px solid var(--line);padding:12px 0}.registry-row:last-child{border-bottom:0}
+    .footer-boundary{background:#020617;color:#cbd5e1}a{text-decoration:none}
   </style>
 </head>
 <body>
@@ -62,8 +35,8 @@
       <div class="collapse navbar-collapse" id="navMenu">
         <ul class="navbar-nav ms-auto gap-lg-2">
           <li class="nav-item"><a class="nav-link" href="#certificates">Certificates</a></li>
-          <li class="nav-item"><a class="nav-link" href="#demo">Demo Routes</a></li>
-          <li class="nav-item"><a class="nav-link" href="#proof">Proof Registry</a></li>
+          <li class="nav-item"><a class="nav-link" href="#demo">Demo</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contract">Smart Contract</a></li>
           <li class="nav-item"><a class="nav-link" href="#verifier">Verifier</a></li>
           <li class="nav-item"><a class="btn btn-primary rounded-pill px-4" href="#verifier">Verify Credential</a></li>
         </ul>
@@ -75,33 +48,31 @@
     <div class="container">
       <div class="row align-items-center g-5">
         <div class="col-lg-7">
-          <div class="eyebrow mb-3">Static Founder Demo · Mock Only</div>
-          <h1 class="hero-title mb-4">Prove real work skills, not just course completion.</h1>
-          <p class="hero-subtitle mb-4">Verifiable AI-era skill certificates backed by tasks, evidence packages, agent scoring, and crypto proof.</p>
+          <div class="eyebrow mb-3">Frontend + Smart Contract · No Backend DB</div>
+          <h1 class="hero-title mb-4">Prove real work skills with on-chain proof, not backend records.</h1>
+          <p class="hero-subtitle mb-4">A frontend-only credential prototype: browser computes certificate, evidence, and score hashes; smart contract records the proof; verifier reads the chain.</p>
           <div class="d-flex flex-wrap gap-2">
             <a class="btn btn-primary btn-lg rounded-pill px-4" href="#demo">Start Founder Demo</a>
-            <a class="btn btn-outline-primary btn-lg rounded-pill px-4" href="#certificates">Explore Certificates</a>
+            <a class="btn btn-outline-primary btn-lg rounded-pill px-4" href="#contract">View Smart Contract Proof</a>
           </div>
-          <p class="mt-4 text-secondary small">Static prototype only. No real wallet, chain transaction, database, exam, or agent call.</p>
+          <p class="mt-4 text-secondary small">Static prototype only. No backend database, no backend app server, no real wallet, no real chain transaction, no real exam, no real agent call.</p>
         </div>
         <div class="col-lg-5">
           <div class="card-soft p-4">
             <div class="d-flex justify-content-between align-items-start mb-3">
-              <div>
-                <div class="small-label">Credential status</div>
-                <h4 class="mb-0">AI Data Analysis Assistant</h4>
-              </div>
-              <span class="badge badge-proof rounded-pill px-3 py-2">Proof registered</span>
+              <div><div class="small-label">On-chain score proof</div><h4 class="mb-0">AI Data Analysis Assistant</h4></div>
+              <span class="badge badge-proof rounded-pill px-3 py-2">Contract registered</span>
             </div>
             <div class="metric-card mb-3">
               <div class="d-flex justify-content-between"><strong>Overall score</strong><strong>86 / 100</strong></div>
               <div class="score-bar mt-2"><div class="score-fill" style="width:86%"></div></div>
+              <p class="small text-secondary mt-2 mb-0">Full score breakdown is represented by scoreHash, not raw answers.</p>
             </div>
             <div class="row g-2">
-              <div class="col-6"><div class="metric-card"><div class="small-label">Evidence</div><strong>Ready</strong></div></div>
-              <div class="col-6"><div class="metric-card"><div class="small-label">Verifier</div><strong>Shareable</strong></div></div>
-              <div class="col-6"><div class="metric-card"><div class="small-label">Issuer</div><strong>ProofSkill AI</strong></div></div>
-              <div class="col-6"><div class="metric-card"><div class="small-label">Revocation</div><strong>Active</strong></div></div>
+              <div class="col-6"><div class="metric-card"><div class="small-label">certificateHash</div><strong>0xCERT...</strong></div></div>
+              <div class="col-6"><div class="metric-card"><div class="small-label">evidenceHash</div><strong>0xEVID...</strong></div></div>
+              <div class="col-6"><div class="metric-card"><div class="small-label">scoreHash</div><strong>0xSCORE...</strong></div></div>
+              <div class="col-6"><div class="metric-card"><div class="small-label">contract</div><strong>Registry</strong></div></div>
             </div>
           </div>
         </div>
@@ -109,286 +80,88 @@
     </div>
   </header>
 
-  <div class="sticky-subnav py-2">
-    <div class="container d-flex flex-wrap gap-2">
-      <a class="btn btn-sm btn-light rounded-pill" href="#certificates">Catalog</a>
-      <a class="btn btn-sm btn-light rounded-pill" href="#demo">Routes</a>
-      <a class="btn btn-sm btn-light rounded-pill" href="#agent">Agent Score</a>
-      <a class="btn btn-sm btn-light rounded-pill" href="#evidence">Evidence</a>
-      <a class="btn btn-sm btn-light rounded-pill" href="#proof">Proof</a>
-      <a class="btn btn-sm btn-light rounded-pill" href="#verifier">Verifier</a>
-      <a class="btn btn-sm btn-light rounded-pill" href="#founder">Founder View</a>
-    </div>
-  </div>
-
   <main>
     <section id="certificates" class="section">
       <div class="container">
-        <div class="row mb-4">
-          <div class="col-lg-8">
-            <div class="eyebrow mb-2">Certificate catalog</div>
-            <h2 class="section-title display-6">Two MVP routes, one credential infrastructure.</h2>
-            <p class="muted">AI Data validates the broad-market path. Cross-border Trade validates the evidence-heavy, verifier-first path.</p>
-          </div>
-        </div>
+        <div class="row mb-4"><div class="col-lg-8"><div class="eyebrow mb-2">Certificate catalog</div><h2 class="section-title display-6">Two MVP routes, one smart contract proof registry.</h2><p class="muted">AI Data validates the broad-market path. Cross-border Trade validates the evidence-heavy, verifier-first path.</p></div></div>
         <div class="row g-4">
-          <div class="col-lg-6">
-            <div class="card-soft p-4 h-100">
-              <span class="badge badge-soft rounded-pill mb-3">Primary route</span>
-              <h3>AI Data Analysis Assistant Certificate</h3>
-              <p class="muted">Prove you can turn business data into clear, verified insights with AI.</p>
-              <ul class="list-unstyled">
-                <li>✓ Spreadsheet reasoning</li>
-                <li>✓ Data quality and anomaly detection</li>
-                <li>✓ AI-assisted insight generation</li>
-                <li>✓ Mini BI project evidence</li>
-              </ul>
-              <a href="#demo" class="btn btn-primary rounded-pill px-4 route-link" data-route="data">View Data MVP</a>
-            </div>
-          </div>
-          <div class="col-lg-6">
-            <div class="card-soft p-4 h-100">
-              <span class="badge badge-proof rounded-pill mb-3">Differentiation route</span>
-              <h3>AI Trade Documentation & Compliance Assistant Certificate</h3>
-              <p class="muted">Prove you can review trade documents, detect discrepancies, and prepare evidence packages.</p>
-              <ul class="list-unstyled">
-                <li>✓ PO / Invoice / Packing List checks</li>
-                <li>✓ Document discrepancy detection</li>
-                <li>✓ Human review boundary awareness</li>
-                <li>✓ Proof-ready trade evidence package</li>
-              </ul>
-              <a href="#demo" class="btn btn-outline-primary rounded-pill px-4 route-link" data-route="trade">View Trade MVP</a>
-            </div>
-          </div>
+          <div class="col-lg-6"><div class="card-soft p-4 h-100"><span class="badge badge-soft rounded-pill mb-3">Primary route</span><h3>AI Data Analysis Assistant Certificate</h3><p class="muted">Prove you can turn business data into clear, verified insights with AI.</p><ul class="list-unstyled"><li>✓ Spreadsheet reasoning</li><li>✓ Data quality and anomaly detection</li><li>✓ Mini BI project evidence</li><li>✓ scoreHash + evidenceHash on contract</li></ul><a href="#demo" class="btn btn-primary rounded-pill px-4 route-link" data-route="data">View Data MVP</a></div></div>
+          <div class="col-lg-6"><div class="card-soft p-4 h-100"><span class="badge badge-proof rounded-pill mb-3">Differentiation route</span><h3>AI Trade Documentation & Compliance Assistant Certificate</h3><p class="muted">Prove you can review trade documents, detect discrepancies, and prepare evidence packages.</p><ul class="list-unstyled"><li>✓ PO / Invoice / Packing List checks</li><li>✓ Document discrepancy detection</li><li>✓ Human review boundary awareness</li><li>✓ proof-ready trade evidence package</li></ul><a href="#demo" class="btn btn-outline-primary rounded-pill px-4 route-link" data-route="trade">View Trade MVP</a></div></div>
         </div>
       </div>
     </section>
 
     <section id="demo" class="section bg-white border-top border-bottom">
       <div class="container">
-        <div class="row align-items-end mb-4 g-3">
-          <div class="col-lg-8">
-            <div class="eyebrow mb-2">Demo routes</div>
-            <h2 class="section-title display-6">Walk through the skill-to-proof loop.</h2>
-          </div>
-          <div class="col-lg-4 text-lg-end">
-            <div class="btn-group" role="group">
-              <button class="btn btn-outline-primary route-btn active" data-route="data">AI Data</button>
-              <button class="btn btn-outline-primary route-btn" data-route="trade">Trade</button>
-            </div>
-          </div>
-        </div>
-
-        <div id="pane-data" class="demo-pane active">
-          <div class="row g-4">
-            <div class="col-lg-5">
-              <div class="card-soft p-4 h-100">
-                <h3>AI Data Path Dashboard</h3>
-                <p class="muted">Learner: Mia Chen · Career switcher · Singapore</p>
-                <div class="mb-3"><div class="d-flex justify-content-between"><span>Data Literacy</span><strong>90%</strong></div><div class="score-bar"><div class="score-fill" style="width:90%"></div></div></div>
-                <div class="mb-3"><div class="d-flex justify-content-between"><span>Spreadsheet Reasoning</span><strong>84%</strong></div><div class="score-bar"><div class="score-fill" style="width:84%"></div></div></div>
-                <div class="mb-3"><div class="d-flex justify-content-between"><span>AI-assisted Analysis</span><strong>88%</strong></div><div class="score-bar"><div class="score-fill" style="width:88%"></div></div></div>
-                <div class="mb-3"><div class="d-flex justify-content-between"><span>Data Quality & Risk</span><strong>86%</strong></div><div class="score-bar"><div class="score-fill" style="width:86%"></div></div></div>
-                <span class="badge badge-proof rounded-pill">Certificate eligible</span>
-              </div>
-            </div>
-            <div class="col-lg-7">
-              <div class="mock-window">
-                <div class="mock-window-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><strong class="ms-2">Project Task</strong></div>
-                <div class="p-4">
-                  <h4>Sales Performance Mini BI Report</h4>
-                  <p class="muted">Analyze 12 months of sales data, identify anomalies, recommend charts, and write a business insight summary.</p>
-                  <div class="row g-3">
-                    <div class="col-md-6"><div class="metric-card"><div class="small-label">Input</div>sales_sample.csv<br>business_goal.txt<br>data_dictionary.md</div></div>
-                    <div class="col-md-6"><div class="metric-card"><div class="small-label">Submit</div>insight_summary.md<br>anomaly_notes.md<br>data_risk_note.md</div></div>
-                  </div>
-                  <div class="mt-3 p-3 rounded-4 bg-light border"><strong>Expected finding:</strong> South performs strongly; West has negative revenue anomaly; East has missing customer_count.</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div id="pane-trade" class="demo-pane">
-          <div class="row g-4">
-            <div class="col-lg-5">
-              <div class="card-soft p-4 h-100">
-                <h3>Trade Documentation Path</h3>
-                <p class="muted">Learner: Aarav Patel · Trade operations assistant · India</p>
-                <div class="mb-3"><div class="d-flex justify-content-between"><span>Trade Document Literacy</span><strong>90%</strong></div><div class="score-bar"><div class="score-fill" style="width:90%"></div></div></div>
-                <div class="mb-3"><div class="d-flex justify-content-between"><span>Consistency Check</span><strong>92%</strong></div><div class="score-bar"><div class="score-fill" style="width:92%"></div></div></div>
-                <div class="mb-3"><div class="d-flex justify-content-between"><span>Compliance Awareness</span><strong>80%</strong></div><div class="score-bar"><div class="score-fill" style="width:80%"></div></div></div>
-                <div class="mb-3"><div class="d-flex justify-content-between"><span>Evidence Package</span><strong>88%</strong></div><div class="score-bar"><div class="score-fill" style="width:88%"></div></div></div>
-                <span class="badge badge-proof rounded-pill">Certificate eligible</span>
-              </div>
-            </div>
-            <div class="col-lg-7">
-              <div class="mock-window">
-                <div class="mock-window-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><strong class="ms-2">Project Task</strong></div>
-                <div class="p-4">
-                  <h4>Trade Document Consistency Review</h4>
-                  <p class="muted">Review PO, invoice, packing list, BL summary, supplier certificate, and inspection note.</p>
-                  <div class="row g-3">
-                    <div class="col-md-6"><div class="metric-card"><div class="small-label">Document set</div>PO-2026-0710<br>INV-2026-0788<br>PL-2026-0788</div></div>
-                    <div class="col-md-6"><div class="metric-card"><div class="small-label">Detected risk</div>Quantity 1000 vs 980<br>Ship date mismatch<br>20 units pending replacement</div></div>
-                  </div>
-                  <div class="mt-3 p-3 rounded-4 bg-light border"><strong>Human review required:</strong> confirm whether the 20 pending units should block finance package submission.</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div class="row align-items-end mb-4 g-3"><div class="col-lg-8"><div class="eyebrow mb-2">Demo routes</div><h2 class="section-title display-6">Skill result becomes contract proof.</h2></div><div class="col-lg-4 text-lg-end"><div class="btn-group"><button class="btn btn-outline-primary route-btn active" data-route="data">AI Data</button><button class="btn btn-outline-primary route-btn" data-route="trade">Trade</button></div></div></div>
+        <div id="pane-data" class="demo-pane active"><div class="row g-4"><div class="col-lg-5"><div class="card-soft p-4 h-100"><h3>AI Data Path Dashboard</h3><p class="muted">Learner: Mia Chen · Career switcher · Singapore</p><div class="mb-3"><div class="d-flex justify-content-between"><span>Data Literacy</span><strong>90%</strong></div><div class="score-bar"><div class="score-fill" style="width:90%"></div></div></div><div class="mb-3"><div class="d-flex justify-content-between"><span>Spreadsheet Reasoning</span><strong>84%</strong></div><div class="score-bar"><div class="score-fill" style="width:84%"></div></div></div><div class="mb-3"><div class="d-flex justify-content-between"><span>Data Quality & Risk</span><strong>86%</strong></div><div class="score-bar"><div class="score-fill" style="width:86%"></div></div></div><span class="badge badge-proof rounded-pill">Eligible for contract proof</span></div></div><div class="col-lg-7"><div class="mock-window"><div class="mock-window-bar">Project Task</div><div class="p-4"><h4>Sales Performance Mini BI Report</h4><p class="muted">Analyze 12 months of sales data, identify anomalies, recommend charts, and write a business insight summary.</p><div class="row g-3"><div class="col-md-6"><div class="metric-card"><div class="small-label">Input</div>sales_sample.csv<br>business_goal.txt<br>data_dictionary.md</div></div><div class="col-md-6"><div class="metric-card"><div class="small-label">Submit</div>insight_summary.md<br>anomaly_notes.md<br>data_risk_note.md</div></div></div><div class="mt-3 p-3 rounded-4 bg-light border"><strong>Proof output:</strong> certificateHash + evidenceHash + scoreHash computed in browser.</div></div></div></div></div></div>
+        <div id="pane-trade" class="demo-pane"><div class="row g-4"><div class="col-lg-5"><div class="card-soft p-4 h-100"><h3>Trade Documentation Path</h3><p class="muted">Learner: Aarav Patel · Trade operations assistant · India</p><div class="mb-3"><div class="d-flex justify-content-between"><span>Document Literacy</span><strong>90%</strong></div><div class="score-bar"><div class="score-fill" style="width:90%"></div></div></div><div class="mb-3"><div class="d-flex justify-content-between"><span>Consistency Check</span><strong>92%</strong></div><div class="score-bar"><div class="score-fill" style="width:92%"></div></div></div><div class="mb-3"><div class="d-flex justify-content-between"><span>Evidence Package</span><strong>88%</strong></div><div class="score-bar"><div class="score-fill" style="width:88%"></div></div></div><span class="badge badge-proof rounded-pill">Eligible for contract proof</span></div></div><div class="col-lg-7"><div class="mock-window"><div class="mock-window-bar">Project Task</div><div class="p-4"><h4>Trade Document Consistency Review</h4><p class="muted">Review PO, invoice, packing list, BL summary, supplier certificate, and inspection note.</p><div class="row g-3"><div class="col-md-6"><div class="metric-card"><div class="small-label">Document set</div>PO-2026-0710<br>INV-2026-0788<br>PL-2026-0788</div></div><div class="col-md-6"><div class="metric-card"><div class="small-label">Detected risk</div>Quantity 1000 vs 980<br>Ship date mismatch<br>20 units pending replacement</div></div></div><div class="mt-3 p-3 rounded-4 bg-light border"><strong>Proof output:</strong> trade document hashes are not public; only evidenceHash and scoreHash are registered.</div></div></div></div></div></div>
       </div>
     </section>
 
-    <section id="agent" class="section">
+    <section id="contract" class="section">
       <div class="container">
-        <div class="row g-4 align-items-center">
-          <div class="col-lg-5">
-            <div class="eyebrow mb-2">Agent scoring</div>
-            <h2 class="section-title display-6">Scores are backed by rubrics and evidence.</h2>
-            <p class="muted">This demo does not call a real agent. It shows the shape of an auditable score report.</p>
-          </div>
-          <div class="col-lg-7">
-            <div class="card-soft p-4">
-              <div class="d-flex justify-content-between align-items-center mb-3"><h4 class="mb-0">Mock Agent Score Report</h4><span class="badge badge-soft rounded-pill">model: mock-agent-v0</span></div>
-              <div class="row g-3">
-                <div class="col-md-4"><div class="metric-card"><div class="small-label">Overall</div><h3>86</h3></div></div>
-                <div class="col-md-4"><div class="metric-card"><div class="small-label">Confidence</div><h3>0.82</h3></div></div>
-                <div class="col-md-4"><div class="metric-card"><div class="small-label">Risk flags</div><h3>1</h3></div></div>
-              </div>
-              <hr>
-              <div class="mb-2"><div class="d-flex justify-content-between"><span>Anomaly detection</span><strong>92</strong></div><div class="score-bar"><div class="score-fill" style="width:92%"></div></div></div>
-              <div class="mb-2"><div class="d-flex justify-content-between"><span>Insight quality</span><strong>84</strong></div><div class="score-bar"><div class="score-fill" style="width:84%"></div></div></div>
-              <div class="mb-2"><div class="d-flex justify-content-between"><span>Data risk awareness</span><strong>90</strong></div><div class="score-bar"><div class="score-fill" style="width:90%"></div></div></div>
-              <p class="small text-secondary mb-0 mt-3">rationale_hash: hash_mock_data_rationale_001</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="evidence" class="section bg-white border-top border-bottom">
-      <div class="container">
+        <div class="row mb-4"><div class="col-lg-9"><div class="eyebrow mb-2">Smart Contract Proof Registry</div><h2 class="section-title display-6">No backend database is required.</h2><p class="muted">The frontend canonicalizes certificate, evidence, and score objects, computes hashes, then submits those hashes to <code>ProofSkillCredentialRegistry</code>. Verifiers read contract state directly.</p></div></div>
         <div class="row g-4">
-          <div class="col-lg-6">
-            <div class="card-soft p-4 h-100">
-              <div class="eyebrow mb-2">Evidence package</div>
-              <h3>Certificate is not a PDF alone.</h3>
-              <div class="flow-step"><span class="step-num">1</span><div><strong>Exam Session</strong><br><span class="muted">40 questions, pass score 70%.</span></div></div>
-              <div class="flow-step"><span class="step-num">2</span><div><strong>Project Submission</strong><br><span class="muted">Task output files and hashes.</span></div></div>
-              <div class="flow-step"><span class="step-num">3</span><div><strong>Agent Score</strong><br><span class="muted">Rubric version, score breakdown, risk flags.</span></div></div>
-              <div class="flow-step"><span class="step-num">4</span><div><strong>Certificate Readiness</strong><br><span class="muted">Evidence package status: ready_for_certificate.</span></div></div>
-            </div>
-          </div>
-          <div class="col-lg-6">
-            <div class="code-block h-100">
-<pre>{
-  "evidence_package_id": "evidence_data_001",
-  "credential_type": "AI_DATA_ANALYSIS_ASSISTANT",
-  "learner_id": "learner_001",
-  "exam_session_id": "exam_data_001",
-  "project_submission_id": "project_submission_data_001",
-  "agent_score_id": "agent_score_data_001",
-  "final_score": 86,
-  "status": "ready_for_certificate"
-}</pre>
-            </div>
-          </div>
+          <div class="col-lg-5"><div class="card-soft p-4 h-100"><h3>Frontend hash pipeline</h3><div class="pipeline-step"><span class="step-num">1</span><div><strong>Canonical certificate JSON</strong><br><span class="muted">credential type, holder, issuer, score band, validity.</span></div></div><div class="pipeline-step"><span class="step-num">2</span><div><strong>Compute certificateHash</strong><br><span class="muted">keccak256(canonical certificate JSON).</span></div></div><div class="pipeline-step"><span class="step-num">3</span><div><strong>Compute evidenceHash</strong><br><span class="muted">hash of Evidence Package summary and project outputs.</span></div></div><div class="pipeline-step"><span class="step-num">4</span><div><strong>Compute scoreHash</strong><br><span class="muted">hash of module scores, AgentScore, rubric version.</span></div></div><div class="pipeline-step"><span class="step-num">5</span><div><strong>Wallet submits tx</strong><br><span class="muted">registerCredentialProof(...) on contract.</span></div></div></div></div>
+          <div class="col-lg-7"><div class="code-block h-100"><pre>registerCredentialProof(
+  credentialId: 0xDATA_CREDENTIAL_ID_MOCK_001,
+  holder: 0xLearnerMiaMock,
+  credentialType: "AI_DATA_ANALYSIS_ASSISTANT",
+  overallScore: 86,
+  certificateHash: 0xCERT_HASH_DATA_MOCK_001,
+  evidenceHash: 0xEVIDENCE_HASH_DATA_MOCK_001,
+  scoreHash: 0xSCORE_HASH_DATA_MOCK_001,
+  schemaHash: 0xSCHEMA_HASH_DATA_RUBRIC_V1,
+  expiresAt: 1846195200
+)
+
+// Contract event
+CredentialProofRegistered(
+  credentialId,
+  issuer,
+  holder,
+  credentialType,
+  overallScore,
+  certificateHash,
+  evidenceHash,
+  scoreHash,
+  schemaHash,
+  issuedAt,
+  expiresAt
+)</pre></div></div>
         </div>
       </div>
     </section>
 
-    <section id="proof" class="section">
+    <section id="proof" class="section bg-white border-top border-bottom">
       <div class="container">
-        <div class="row mb-4">
-          <div class="col-lg-8">
-            <div class="eyebrow mb-2">Crypto native proof</div>
-            <h2 class="section-title display-6">Only proof hash and status are registered.</h2>
-            <p class="muted">Raw answers, project files, personal data, enterprise data, and trade documents are not stored on-chain.</p>
-          </div>
-        </div>
+        <div class="row mb-4"><div class="col-lg-9"><div class="eyebrow mb-2">On-chain score proof mock</div><h2 class="section-title display-6">Score is provable without exposing raw answers.</h2><p class="muted">overallScore may be public; scoreHash proves the full module score breakdown and AgentScore object have not been changed.</p></div></div>
         <div class="card-soft p-4">
-          <div class="registry-row small-label d-none d-md-grid"><div>Proof hash</div><div>Credential type</div><div>Status</div><div>Revocation</div></div>
-          <div class="registry-row"><div class="text-truncate">0xDATA_PROOF_HASH_MOCK_001</div><div>AI Data Analysis</div><div><span class="badge badge-proof rounded-pill">registered</span></div><div>not_revoked</div></div>
-          <div class="registry-row"><div class="text-truncate">0xTRADE_PROOF_HASH_MOCK_001</div><div>Trade Documentation</div><div><span class="badge badge-proof rounded-pill">registered</span></div><div>not_revoked</div></div>
+          <div class="registry-row small-label d-none d-lg-grid"><div>Credential ID</div><div>Type</div><div>Score proof</div><div>Status</div><div>Revocation</div></div>
+          <div class="registry-row"><div class="text-truncate">0xDATA_CREDENTIAL_ID_MOCK_001</div><div>AI Data</div><div>86 + 0xSCORE...</div><div><span class="badge badge-proof rounded-pill">active</span></div><div>not_revoked</div></div>
+          <div class="registry-row"><div class="text-truncate">0xTRADE_CREDENTIAL_ID_MOCK_001</div><div>Trade Docs</div><div>88 + 0xSCORE...</div><div><span class="badge badge-proof rounded-pill">active</span></div><div>not_revoked</div></div>
         </div>
       </div>
     </section>
 
-    <section id="verifier" class="section bg-white border-top border-bottom">
-      <div class="container">
-        <div class="row g-4 align-items-center">
-          <div class="col-lg-5">
-            <div class="eyebrow mb-2">Verifier portal</div>
-            <h2 class="section-title display-6">Verifier checks status, scope, and authorized evidence.</h2>
-            <p class="muted">Designed for employers, clients, schools, partners, training teams, and trade finance reviewers.</p>
-            <div class="input-group input-group-lg mb-3">
-              <input class="form-control" value="proof_cred_data_001" readonly>
-              <button class="btn btn-primary">Verify</button>
-            </div>
-            <p class="small text-secondary">Mock verification only. No real registry call.</p>
-          </div>
-          <div class="col-lg-7">
-            <div class="card-soft p-4">
-              <div class="d-flex justify-content-between align-items-start mb-3">
-                <div><div class="small-label">Verification result</div><h4>Valid credential</h4></div>
-                <span class="badge badge-proof rounded-pill px-3 py-2">not revoked</span>
-              </div>
-              <div class="row g-3">
-                <div class="col-md-6"><div class="metric-card"><div class="small-label">Issuer</div>ProofSkill AI</div></div>
-                <div class="col-md-6"><div class="metric-card"><div class="small-label">Score band</div>Strong</div></div>
-                <div class="col-md-6"><div class="metric-card"><div class="small-label">Issued</div>2026-07-03</div></div>
-                <div class="col-md-6"><div class="metric-card"><div class="small-label">Expires</div>2028-07-03</div></div>
-              </div>
-              <hr>
-              <p><strong>Authorized evidence summary:</strong> Completed a mini BI report from mock sales data, identified anomalies, recommended charts, and flagged data quality risks.</p>
-              <p class="small text-secondary mb-0">Default view excludes full exam answers, raw project files, and personal sensitive information.</p>
-            </div>
-          </div>
-        </div>
-      </div>
+    <section id="verifier" class="section">
+      <div class="container"><div class="row g-4 align-items-center"><div class="col-lg-5"><div class="eyebrow mb-2">Verifier Portal</div><h2 class="section-title display-6">Verifier reads the contract, not our database.</h2><p class="muted">The verifier checks issuer, status, revocation, expiration, and hash match. Authorized evidence preview is optional.</p><div class="input-group input-group-lg mb-3"><input class="form-control" value="0xDATA_CREDENTIAL_ID_MOCK_001" readonly><button class="btn btn-primary">Read Contract</button></div><p class="small text-secondary">Mock only. No real RPC call in this static prototype.</p></div><div class="col-lg-7"><div class="card-soft p-4"><div class="d-flex justify-content-between align-items-start mb-3"><div><div class="small-label">Contract verification result</div><h4>Valid credential proof</h4></div><span class="badge badge-proof rounded-pill px-3 py-2">hash match</span></div><div class="row g-3"><div class="col-md-6"><div class="metric-card"><div class="small-label">Issuer</div>0xIssuerMock</div></div><div class="col-md-6"><div class="metric-card"><div class="small-label">Score</div>86 / Strong</div></div><div class="col-md-6"><div class="metric-card"><div class="small-label">certificateHash</div>0xCERT...</div></div><div class="col-md-6"><div class="metric-card"><div class="small-label">scoreHash</div>0xSCORE...</div></div></div><hr><p><strong>Authorized evidence summary:</strong> Completed a mini BI report from mock sales data, identified anomalies, recommended charts, and flagged data quality risks.</p><p class="small text-secondary mb-0">Default view excludes full exam answers, raw project files, personal data, and trade documents.</p></div></div></div></div>
     </section>
 
-    <section id="founder" class="section">
-      <div class="container">
-        <div class="row mb-4">
-          <div class="col-lg-8">
-            <div class="eyebrow mb-2">Founder dashboard</div>
-            <h2 class="section-title display-6">A 3 / 5 / 8 minute sales demo route.</h2>
-          </div>
-        </div>
-        <div class="row g-4">
-          <div class="col-lg-4"><div class="card-soft p-4 h-100"><h4>3-minute route</h4><ol class="small"><li>Hero positioning</li><li>Certificate catalog</li><li>Data MVP project</li><li>Evidence package</li><li>Verifier result</li></ol></div></div>
-          <div class="col-lg-4"><div class="card-soft p-4 h-100"><h4>5-minute route</h4><ol class="small"><li>Why not a course platform</li><li>Data route</li><li>Trade route</li><li>Proof registry</li><li>Roadmap</li></ol></div></div>
-          <div class="col-lg-4"><div class="card-soft p-4 h-100"><h4>8-minute route</h4><ol class="small"><li>Market research</li><li>Top 5 logic</li><li>Dual MVP choice</li><li>Crypto proof boundary</li><li>Verifier customer logic</li></ol></div></div>
-        </div>
-        <div class="row g-3 mt-3">
-          <div class="col-md-3"><div class="metric-card"><div class="small-label">Certificates</div><h3>2</h3></div></div>
-          <div class="col-md-3"><div class="metric-card"><div class="small-label">Mock questions</div><h3>20</h3></div></div>
-          <div class="col-md-3"><div class="metric-card"><div class="small-label">Project tasks</div><h3>2</h3></div></div>
-          <div class="col-md-3"><div class="metric-card"><div class="small-label">Real integrations</div><h3>0</h3></div></div>
-        </div>
-      </div>
+    <section id="founder" class="section bg-white border-top">
+      <div class="container"><div class="row mb-4"><div class="col-lg-8"><div class="eyebrow mb-2">Founder dashboard</div><h2 class="section-title display-6">Frontend + contract architecture, not backend SaaS yet.</h2></div></div><div class="row g-3"><div class="col-md-3"><div class="metric-card"><div class="small-label">Backend DB</div><h3>0</h3></div></div><div class="col-md-3"><div class="metric-card"><div class="small-label">Backend API</div><h3>0</h3></div></div><div class="col-md-3"><div class="metric-card"><div class="small-label">Smart contract</div><h3>1</h3></div></div><div class="col-md-3"><div class="metric-card"><div class="small-label">Proof records</div><h3>2 mock</h3></div></div></div></div>
     </section>
   </main>
 
-  <footer class="footer-boundary py-5">
-    <div class="container">
-      <h5>Static prototype boundary</h5>
-      <p class="mb-0">Static prototype only. No real wallet connection, no real chain transaction, no real database, no real exam, no real agent scoring, and no legal, trade compliance, financial, tax, medical, or investment advice.</p>
-    </div>
-  </footer>
+  <footer class="footer-boundary py-5"><div class="container"><h5>Static prototype boundary</h5><p class="mb-0">Static prototype only. No backend database, no backend server, no real wallet connection, no real chain transaction, no real deployed contract interaction, no real exam, no real agent scoring, and no legal, trade compliance, financial, tax, medical, or investment advice.</p></div></footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    const routeButtons = document.querySelectorAll('.route-btn, .route-link');
-    const panes = { data: document.getElementById('pane-data'), trade: document.getElementById('pane-trade') };
-    function setRoute(route) {
-      Object.entries(panes).forEach(([key, pane]) => pane.classList.toggle('active', key === route));
-      document.querySelectorAll('.route-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.route === route));
-    }
-    routeButtons.forEach(btn => btn.addEventListener('click', () => setRoute(btn.dataset.route)));
+    const routeButtons=document.querySelectorAll('.route-btn,.route-link');
+    const panes={data:document.getElementById('pane-data'),trade:document.getElementById('pane-trade')};
+    function setRoute(route){Object.entries(panes).forEach(([key,pane])=>pane.classList.toggle('active',key===route));document.querySelectorAll('.route-btn').forEach(btn=>btn.classList.toggle('active',btn.dataset.route===route));}
+    routeButtons.forEach(btn=>btn.addEventListener('click',()=>setRoute(btn.dataset.route)));
   </script>
 </body>
 </html>
