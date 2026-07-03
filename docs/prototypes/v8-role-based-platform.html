@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ProofSkill AI — Role-based Platform Prototype</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root{--ink:#0f172a;--muted:#64748b;--soft:#f8fafc;--line:#e2e8f0;--brand:#2563eb;--teal:#14b8a6;--dark:#020617}
+    body{background:var(--soft);color:var(--ink)}
+    .app-shell{min-height:100vh;display:grid;grid-template-columns:280px 1fr}
+    .sidebar{background:#fff;border-right:1px solid var(--line);padding:24px;position:sticky;top:0;height:100vh;overflow:auto}
+    .brand{font-weight:900;font-size:1.1rem;margin-bottom:6px}.muted{color:var(--muted)}.small-label{font-size:.74rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:800}
+    .role-btn{width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:16px;padding:14px 16px;margin-bottom:10px;color:var(--ink)}.role-btn.active{border-color:#93c5fd;background:#dbeafe;color:#1d4ed8;box-shadow:0 10px 22px rgba(37,99,235,.12)}
+    .main{padding:28px}.topbar{background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px 22px;margin-bottom:22px;display:flex;justify-content:space-between;gap:18px;align-items:center}
+    .panel{background:#fff;border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 18px 36px rgba(15,23,42,.05)}.panel-soft{background:#f8fafc;border:1px solid var(--line);border-radius:18px;padding:18px}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .badge-soft{background:#dbeafe;color:#1d4ed8;border:1px solid #bfdbfe}.badge-proof{background:#ccfbf1;color:#0f766e;border:1px solid #99f6e4}.badge-warn{background:#fef3c7;color:#92400e;border:1px solid #fde68a}.badge-gray{background:#f1f5f9;color:#475569;border:1px solid #cbd5e1}
+    .role-view{display:none}.role-view.active{display:block}.score-bar{height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden}.score-fill{height:100%;background:linear-gradient(90deg,var(--brand),var(--teal))}
+    .table-lite{width:100%;border-collapse:separate;border-spacing:0 10px}.table-lite td,.table-lite th{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:12px}.table-lite td:first-child,.table-lite th:first-child{border-left:1px solid var(--line);border-radius:14px 0 0 14px}.table-lite td:last-child,.table-lite th:last-child{border-right:1px solid var(--line);border-radius:0 14px 14px 0}
+    .code{background:#0f172a;color:#dbeafe;border-radius:16px;padding:16px;overflow:auto;font-size:.86rem}.action-row{display:flex;gap:10px;flex-wrap:wrap}.stat{border:1px solid var(--line);border-radius:18px;padding:16px;background:#fff}.stat h3{margin:0;font-weight:900}.mobile-role-select{display:none}
+    @media(max-width:980px){.app-shell{display:block}.sidebar{position:relative;height:auto}.main{padding:18px}.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}.desktop-roles{display:none}.mobile-role-select{display:block}.topbar{display:block}}
+  </style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">ProofSkill AI</div>
+    <p class="small muted mb-4">Role-based frontend platform · no backend DB</p>
+    <div class="desktop-roles">
+      <div class="small-label mb-2">Choose role</div>
+      <button class="role-btn active" data-role="learner"><strong>Learner / Candidate</strong><br><span class="small muted">tasks, local evidence, proof request</span></button>
+      <button class="role-btn" data-role="issuer"><strong>Issuer / Training Partner</strong><br><span class="small muted">review queue, issue, revoke</span></button>
+      <button class="role-btn" data-role="evaluator"><strong>Evaluator / Reviewer</strong><br><span class="small muted">score projects, sign reviews</span></button>
+      <button class="role-btn" data-role="verifier"><strong>Verifier / Employer</strong><br><span class="small muted">read contract, verify trust level</span></button>
+      <button class="role-btn" data-role="admin"><strong>Admin / Contract Owner</strong><br><span class="small muted">issuer registry, schema versions</span></button>
+    </div>
+    <div class="mobile-role-select mb-3"><select id="mobileRole" class="form-select"><option value="learner">Learner / Candidate</option><option value="issuer">Issuer / Training Partner</option><option value="evaluator">Evaluator / Reviewer</option><option value="verifier">Verifier / Employer</option><option value="admin">Admin / Contract Owner</option></select></div>
+    <hr>
+    <div class="small-label">Architecture</div>
+    <p class="small muted mb-1">Frontend public task bundle</p>
+    <p class="small muted mb-1">Local private evidence bundle</p>
+    <p class="small muted mb-1">Issuer / evaluator wallet signatures</p>
+    <p class="small muted mb-1">Smart contract proof registry</p>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div><div class="small-label">Current workspace</div><h2 id="workspaceTitle" class="mb-0">Learner / Candidate Dashboard</h2><p id="workspaceSubtitle" class="muted mb-0">Complete tasks, generate local evidence, request credential proof.</p></div>
+      <div class="text-lg-end"><span class="badge badge-proof rounded-pill px-3 py-2">Frontend + Contract Only</span><p class="small muted mb-0 mt-2">Backend DB: 0 · Backend API: 0 · Smart Contract: 1</p></div>
+    </div>
+
+    <section id="learner" class="role-view active">
+      <div class="grid-3 mb-3">
+        <div class="stat"><div class="small-label">Credential path</div><h3>AI Data</h3><span class="badge badge-soft rounded-pill">Level 2 target</span></div>
+        <div class="stat"><div class="small-label">Local evidence</div><h3>Draft</h3><span class="badge badge-warn rounded-pill">browser only</span></div>
+        <div class="stat"><div class="small-label">Proof status</div><h3>Pending</h3><span class="badge badge-gray rounded-pill">not on-chain</span></div>
+      </div>
+      <div class="grid-2">
+        <div class="panel"><h4>My tasks</h4><table class="table-lite"><tr><th>Task</th><th>Status</th><th>Action</th></tr><tr><td>Sales Performance Mini BI Report</td><td><span class="badge badge-warn rounded-pill">in progress</span></td><td><button class="btn btn-sm btn-primary">Open</button></td></tr><tr><td>Data quality risk note</td><td><span class="badge badge-gray rounded-pill">draft</span></td><td><button class="btn btn-sm btn-outline-primary">Edit</button></td></tr></table><hr><div class="action-row"><button class="btn btn-primary">Generate Evidence Bundle</button><button class="btn btn-outline-primary">Compute Hashes</button><button class="btn btn-outline-secondary">Download Local JSON</button></div></div>
+        <div class="panel"><h4>Local Evidence Bundle</h4><p class="muted">Private learner data stays local or encrypted. Contract only receives hashes.</p><pre class="code">{
+  bundleType: "EvidenceBundle",
+  credentialType: "AI_DATA_ANALYSIS_ASSISTANT",
+  outputs: {
+    insightSummaryHash: "0x...",
+    anomalyNotesHash: "0x..."
+  },
+  score: {
+    overallScore: 86,
+    scoreBand: "Strong"
+  }
+}</pre><div class="action-row mt-3"><button class="btn btn-outline-primary">Request Issuer Attestation</button><button class="btn btn-outline-warning">Self-attest Low Trust</button></div></div>
+      </div>
+    </section>
+
+    <section id="issuer" class="role-view">
+      <div class="grid-4 mb-3"><div class="stat"><div class="small-label">Review queue</div><h3>3</h3></div><div class="stat"><div class="small-label">Issued</div><h3>18</h3></div><div class="stat"><div class="small-label">Revoked</div><h3>1</h3></div><div class="stat"><div class="small-label">Issuer wallet</div><h3>OK</h3></div></div>
+      <div class="panel"><h4>Pending Evidence Bundles</h4><table class="table-lite"><tr><th>Learner</th><th>Credential</th><th>Score</th><th>Trust Target</th><th>Action</th></tr><tr><td>Mia Chen</td><td>AI Data Analysis</td><td>86</td><td><span class="badge badge-soft rounded-pill">IssuerAttested</span></td><td><button class="btn btn-sm btn-primary">Review & Issue</button></td></tr><tr><td>Aarav Patel</td><td>Trade Documentation</td><td>88</td><td><span class="badge badge-proof rounded-pill">EvaluatorSigned</span></td><td><button class="btn btn-sm btn-outline-primary">Review Evaluators</button></td></tr></table></div>
+      <div class="grid-2 mt-3"><div class="panel"><h4>Issue Credential</h4><pre class="code">registerIssuerAttestedProof(
+  credentialId,
+  holder,
+  credentialType,
+  overallScore,
+  certificateHash,
+  evidenceHash,
+  scoreHash,
+  schemaHash,
+  expiresAt
+)</pre><button class="btn btn-primary">Mock Sign with Issuer Wallet</button></div><div class="panel"><h4>Revoke Credential</h4><p class="muted">Issuer can revoke only credentials issued by this wallet.</p><input class="form-control mb-2" value="0xDATA_CREDENTIAL_ID_MOCK_001"><button class="btn btn-outline-danger">Mock Revoke</button></div></div>
+    </section>
+
+    <section id="evaluator" class="role-view">
+      <div class="grid-3 mb-3"><div class="stat"><div class="small-label">Assigned reviews</div><h3>5</h3></div><div class="stat"><div class="small-label">Signed today</div><h3>2</h3></div><div class="stat"><div class="small-label">Evaluator wallet</div><h3>OK</h3></div></div>
+      <div class="grid-2"><div class="panel"><h4>Review Assignment</h4><p><strong>Trade Document Consistency Review</strong></p><p class="muted">Detected risks: quantity mismatch, ship date mismatch, 20 units pending replacement.</p><div class="mb-2"><div class="d-flex justify-content-between"><span>Consistency check</span><strong>92</strong></div><div class="score-bar"><div class="score-fill" style="width:92%"></div></div></div><div class="mb-2"><div class="d-flex justify-content-between"><span>Human review boundary</span><strong>84</strong></div><div class="score-bar"><div class="score-fill" style="width:84%"></div></div></div><button class="btn btn-primary mt-3">Sign Evaluation</button></div><div class="panel"><h4>Evaluator Signature Preview</h4><pre class="code">{
+  evaluator: "0xEvaluatorMock",
+  credentialId: "0xTRADE...",
+  score: 88,
+  rubricVersion: "trade-rubric-v1",
+  signature: "0xSIG..."
+}</pre><p class="muted">Issuer aggregates evaluator signatures into evaluatorSetHash.</p></div></div>
+    </section>
+
+    <section id="verifier" class="role-view">
+      <div class="grid-2"><div class="panel"><h4>Verify Credential</h4><p class="muted">Verifier reads proof from smart contract, not backend database.</p><input class="form-control mb-2" value="0xTRADE_CREDENTIAL_ID_MOCK_001"><button class="btn btn-primary">Read Contract</button></div><div class="panel"><h4>Contract Verification Result</h4><div class="grid-2"><div class="panel-soft"><div class="small-label">Status</div><strong>Active</strong></div><div class="panel-soft"><div class="small-label">Trust level</div><strong>EvaluatorSigned</strong></div><div class="panel-soft"><div class="small-label">Hash match</div><strong>true</strong></div><div class="panel-soft"><div class="small-label">Revocation</div><strong>not_revoked</strong></div></div><hr><p><strong>Verifier meaning:</strong> authorized issuer signed this credential and evaluatorSetHash is recorded. Stronger than self-attested proof.</p></div></div>
+      <div class="panel mt-3"><h4>Authorized Evidence Summary</h4><p>Completed a simulated trade document review, detected quantity discrepancy, shipping date risk, and generated human review questions.</p><p class="small muted">Raw answers, raw project files, personal data, and trade documents are hidden by default.</p></div>
+    </section>
+
+    <section id="admin" class="role-view">
+      <div class="grid-4 mb-3"><div class="stat"><div class="small-label">Authorized issuers</div><h3>4</h3></div><div class="stat"><div class="small-label">Schemas</div><h3>3</h3></div><div class="stat"><div class="small-label">Events</div><h3>42</h3></div><div class="stat"><div class="small-label">Owner</div><h3>Multisig</h3></div></div>
+      <div class="grid-2"><div class="panel"><h4>Issuer Registry</h4><table class="table-lite"><tr><th>Wallet</th><th>Status</th><th>Action</th></tr><tr><td>0xAuthorizedIssuerMock</td><td><span class="badge badge-proof rounded-pill">active</span></td><td><button class="btn btn-sm btn-outline-danger">Remove</button></td></tr><tr><td>0xTrainingPartnerMock</td><td><span class="badge badge-proof rounded-pill">active</span></td><td><button class="btn btn-sm btn-outline-danger">Remove</button></td></tr></table><button class="btn btn-primary">Authorize New Issuer</button></div><div class="panel"><h4>Contract Events</h4><pre class="code">CredentialProofRegistered
+IssuerAuthorized
+CredentialProofRevoked
+EvaluatorSignedProofRegistered</pre><p class="muted">Admin manages issuer permissions and schema/rubric versions, not learner private data.</p></div></div>
+    </section>
+
+    <section class="mt-4"><div class="panel"><div class="small-label">Static prototype boundary</div><p class="mb-0 muted">No backend database, no backend server, no real wallet connection, no real chain transaction, no real deployed contract interaction, no real exam, no real agent scoring, and no legal, trade compliance, financial, tax, medical, or investment advice.</p></div></section>
+  </main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const titles={learner:['Learner / Candidate Dashboard','Complete tasks, generate local evidence, request credential proof.'],issuer:['Issuer / Training Partner Dashboard','Review evidence bundles, issue or revoke credentials with issuer wallet.'],evaluator:['Evaluator / Reviewer Dashboard','Score project evidence and sign evaluations.'],verifier:['Verifier / Employer Dashboard','Read contract proof and check trust level.'],admin:['Admin / Contract Owner Dashboard','Manage issuer registry, schemas, and contract events.']};
+  function setRole(role){document.querySelectorAll('.role-view').forEach(v=>v.classList.toggle('active',v.id===role));document.querySelectorAll('.role-btn').forEach(b=>b.classList.toggle('active',b.dataset.role===role));document.getElementById('workspaceTitle').textContent=titles[role][0];document.getElementById('workspaceSubtitle').textContent=titles[role][1];const mobile=document.getElementById('mobileRole');if(mobile)mobile.value=role;}
+  document.querySelectorAll('.role-btn').forEach(b=>b.addEventListener('click',()=>setRole(b.dataset.role)));
+  document.getElementById('mobileRole').addEventListener('change',e=>setRole(e.target.value));
+</script>
+</body>
+</html>
