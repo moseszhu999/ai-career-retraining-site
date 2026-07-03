@@ -4,6 +4,7 @@ window.ProofSkillState = (() => {
   const initialState = {
     currentRole: 'learner',
     learnerTab: 'learning',
+    demoStep: 0,
     evidence: 'not_generated',
     hashesComputed: false,
     learningProgress: 25,
