@@ -1,5 +1,6 @@
 window.ProofSkillApp = (() => {
   const roles = [
+    { id: 'overview', label: 'Overview', description: 'executive summary and guided demo' },
     { id: 'learner', label: 'Learner / Candidate', description: 'learn, practice, evidence, certificate' },
     { id: 'issuer', label: 'Issuer / Training Partner', description: 'learning ops, review, issue proof' },
     { id: 'evaluator', label: 'Evaluator / Reviewer', description: 'score and sign reviews' },
@@ -17,6 +18,14 @@ window.ProofSkillApp = (() => {
   const toastContainer = document.getElementById('toastContainer');
 
   const demoSteps = [
+    {
+      role: 'overview',
+      title: 'Open executive overview',
+      note: 'Start with the platform story, core workflow, and current prototype boundary.',
+      apply: (s) => {
+        s.currentRole = 'overview';
+      }
+    },
     {
       role: 'admin',
       title: 'Admin publishes curriculum',
@@ -117,6 +126,12 @@ window.ProofSkillApp = (() => {
   ];
 
   const demoGuide = {
+    overview: {
+      badge: 'Overview',
+      title: 'Start with the full platform story',
+      body: 'Use this page to explain the product before entering role-specific workflows.',
+      next: 'Next role: Admin'
+    },
     learner: {
       badge: 'Learning flow',
       title: 'Learner moves from study to evidence',
@@ -223,7 +238,7 @@ window.ProofSkillApp = (() => {
 
   function renderDemoGuide(roleId) {
     const state = window.ProofSkillState.state;
-    const guide = demoGuide[roleId] || demoGuide.learner;
+    const guide = demoGuide[roleId] || demoGuide.overview;
     const stepIndex = Math.min(state.demoStep || 0, demoSteps.length - 1);
     const step = demoSteps[stepIndex];
     return `
@@ -236,7 +251,7 @@ window.ProofSkillApp = (() => {
         </div>
         <div class="text-xl-end">
           <span class="badge text-bg-primary">${guide.next}</span>
-          <div class="small mt-1"><code>#${roleId}</code> shareable role URL</div>
+          <div class="small mt-1"><code>#${roleId}</code> shareable workspace URL</div>
           <div class="d-flex flex-wrap gap-2 justify-content-xl-end mt-2">
             <button id="runDemoStepBtn" class="btn btn-sm btn-primary">Run next demo step</button>
             <button id="restartDemoBtn" class="btn btn-sm btn-outline-secondary">Restart demo</button>
@@ -253,7 +268,7 @@ window.ProofSkillApp = (() => {
 
   function renderWorkspace() {
     const state = window.ProofSkillState.state;
-    const roleModule = window.ProofSkillRoles[state.currentRole];
+    const roleModule = window.ProofSkillRoles[state.currentRole] || window.ProofSkillRoles.overview;
 
     workspaceTitle.textContent = roleModule.title;
     workspaceSubtitle.textContent = roleModule.subtitle;
@@ -305,10 +320,10 @@ window.ProofSkillApp = (() => {
   function restartDemo() {
     window.ProofSkillState.reset();
     window.ProofSkillState.mutate((state) => {
-      state.currentRole = 'admin';
+      state.currentRole = 'overview';
       state.demoStep = 0;
     }, 'Guided demo restarted');
-    syncHash('admin');
+    syncHash('overview');
     render();
     showToast('Guided demo restarted', 'secondary');
   }
@@ -322,7 +337,7 @@ window.ProofSkillApp = (() => {
 
   resetStateBtn.addEventListener('click', () => {
     window.ProofSkillState.reset();
-    const roleId = roleFromHash() || 'learner';
+    const roleId = roleFromHash() || 'overview';
     window.ProofSkillState.mutate((state) => {
       state.currentRole = roleId;
     });
@@ -336,8 +351,10 @@ window.ProofSkillApp = (() => {
       state.currentRole = initialRole;
     });
   } else {
-    const stateRole = window.ProofSkillState.state.currentRole || 'learner';
-    syncHash(stateRole);
+    window.ProofSkillState.mutate((state) => {
+      state.currentRole = 'overview';
+    });
+    syncHash('overview');
   }
 
   render();
