@@ -2,9 +2,37 @@ window.ProofSkillRoles = window.ProofSkillRoles || {};
 
 window.ProofSkillRoles.learner = {
   title: 'Learner / Candidate Dashboard',
-  subtitle: 'Choose a credential path, complete project tasks, build evidence, and request attestation.',
+  subtitle: 'Learn, practice, build evidence, and request attestation.',
   render(state) {
     const data = window.ProofSkillData;
+    const modules = data.learningModules.map((module) => {
+      const done = state.completedLessons?.includes(module.id) || (module.id === 'quiz-1' && state.quizStatus === 'passed') || (module.id === 'lab-1' && state.practiceStatus === 'submitted');
+      const active = state.activeLesson === module.id;
+      return `
+        <button class="list-group-item list-group-item-action ${active ? 'active' : ''}" data-lesson="${module.id}">
+          <div class="d-flex justify-content-between align-items-start gap-2">
+            <div>
+              <div class="fw-bold">${module.title}</div>
+              <div class="small ${active ? 'text-white-50' : 'text-secondary'}">${module.type} · ${module.duration}</div>
+            </div>
+            <span class="badge text-bg-${done ? 'success' : active ? 'light' : 'secondary'}">${done ? 'done' : module.status}</span>
+          </div>
+        </button>
+      `;
+    }).join('');
+
+    const activeLesson = data.learningModules.find((item) => item.id === state.activeLesson) || data.learningModules[0];
+    const lessonPoints = activeLesson.keyPoints.map((item) => `<li>${item}</li>`).join('');
+    const quizRows = data.quizQuestions.map((q, index) => `
+      <div class="border rounded-3 p-3 mb-2">
+        <div class="fw-bold mb-2">Q${index + 1}. ${q.question}</div>
+        <select class="form-select form-select-sm">
+          ${q.choices.map((choice) => `<option>${choice}</option>`).join('')}
+        </select>
+        <div class="small text-secondary mt-2">Expected answer: ${q.answer}</div>
+      </div>
+    `).join('');
+
     const paths = data.credentialPaths.map((path) => `
       <div class="col-lg-6">
         <div class="card h-100 border-${path.id === 'ai-data' ? 'primary' : 'secondary'}">
@@ -28,7 +56,7 @@ window.ProofSkillRoles.learner = {
     const taskChecklist = task.checklist.map((item, index) => `
       <li class="list-group-item d-flex justify-content-between align-items-center">
         <span>${item}</span>
-        <span class="badge text-bg-${index < 2 ? 'success' : 'secondary'}">${index < 2 ? 'done' : 'todo'}</span>
+        <span class="badge text-bg-${index < 2 || state.practiceStatus === 'submitted' ? 'success' : 'secondary'}">${index < 2 || state.practiceStatus === 'submitted' ? 'done' : 'todo'}</span>
       </li>
     `).join('');
 
@@ -50,13 +78,54 @@ window.ProofSkillRoles.learner = {
     return `
       <div class="alert alert-primary d-flex justify-content-between align-items-center flex-wrap gap-2">
         <div><strong>Current learner:</strong> Mia Chen · Wallet 0xLearnerMiaMock · Goal: AI Data Analysis Assistant</div>
-        <span class="badge text-bg-light text-primary border">portfolio + issuer attestation path</span>
+        <span class="badge text-bg-light text-primary border">learn → practice → evidence → issuer attestation</span>
       </div>
 
       <div class="row g-3 mb-4">
-        <div class="col-md-4"><div class="card stat-card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Credential paths</div><div class="display-6">2</div><span class="badge text-bg-primary">active catalog</span></div></div></div>
-        <div class="col-md-4"><div class="card stat-card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Local evidence</div><div class="h3 mb-2">${state.evidence === 'generated' ? 'Ready' : 'Draft'}</div>${evidenceBadge}</div></div></div>
-        <div class="col-md-4"><div class="card stat-card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Proof status</div><div class="h3 mb-2">${state.proofStatus}</div>${proofBadge}</div></div></div>
+        <div class="col-md-3"><div class="card stat-card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Learning progress</div><div class="display-6">${state.learningProgress || 0}%</div><div class="progress"><div class="progress-bar" style="width:${state.learningProgress || 0}%"></div></div></div></div></div>
+        <div class="col-md-3"><div class="card stat-card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Quiz</div><div class="h3 mb-2">${state.quizScore ?? '--'}</div><span class="badge text-bg-${state.quizStatus === 'passed' ? 'success' : 'secondary'}">${state.quizStatus || 'not_started'}</span></div></div></div>
+        <div class="col-md-3"><div class="card stat-card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Local evidence</div><div class="h3 mb-2">${state.evidence === 'generated' ? 'Ready' : 'Draft'}</div>${evidenceBadge}</div></div></div>
+        <div class="col-md-3"><div class="card stat-card h-100"><div class="card-body"><div class="small text-uppercase text-secondary fw-bold">Proof status</div><div class="h3 mb-2">${state.proofStatus}</div>${proofBadge}</div></div></div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-header bg-white fw-bold">Learning Workspace</div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-xl-4">
+              <div class="list-group">${modules}</div>
+            </div>
+            <div class="col-xl-8">
+              <div class="card border-primary h-100">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                    <div><h5 class="card-title mb-1">${activeLesson.title}</h5><p class="text-secondary mb-0">${activeLesson.objective}</p></div>
+                    <span class="badge text-bg-primary">${activeLesson.type}</span>
+                  </div>
+                  <hr>
+                  <div class="row g-3">
+                    <div class="col-lg-6">
+                      <div class="small text-uppercase text-secondary fw-bold mb-2">Key learning points</div>
+                      <ul>${lessonPoints}</ul>
+                      <div class="small text-uppercase text-secondary fw-bold mb-2">Learning output</div>
+                      <p class="mb-0">${activeLesson.output}</p>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="small text-uppercase text-secondary fw-bold mb-2">Quiz / practice preview</div>
+                      ${activeLesson.type === 'quiz' ? quizRows : '<div class="alert alert-light border mb-0">Complete this lesson, then move to quiz or practice lab. Learning actions update browser-local state only.</div>'}
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="d-flex flex-wrap gap-2">
+                    <button id="markLessonComplete" class="btn btn-primary">Mark Lesson Complete</button>
+                    <button id="takeQuiz" class="btn btn-outline-primary">Take Quiz Mock</button>
+                    <button id="submitPractice" class="btn btn-outline-success">Submit Practice Lab</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="card mb-4">
@@ -108,6 +177,31 @@ window.ProofSkillRoles.learner = {
     `;
   },
   bind() {
+    document.querySelectorAll('[data-lesson]').forEach((button) => {
+      button.addEventListener('click', () => window.ProofSkillApp.mutate((s) => {
+        s.activeLesson = button.dataset.lesson;
+      }, `Opened ${button.textContent.trim().split('\n')[0]}`));
+    });
+
+    document.getElementById('markLessonComplete')?.addEventListener('click', () => window.ProofSkillApp.mutate((s) => {
+      const lessonId = s.activeLesson || 'lesson-1';
+      s.completedLessons = Array.from(new Set([...(s.completedLessons || []), lessonId]));
+      s.learningProgress = Math.max(s.learningProgress || 0, Math.min(60, (s.completedLessons.length / window.ProofSkillData.learningModules.length) * 100));
+    }, 'Lesson marked complete'));
+
+    document.getElementById('takeQuiz')?.addEventListener('click', () => window.ProofSkillApp.mutate((s) => {
+      s.activeLesson = 'quiz-1';
+      s.quizStatus = 'passed';
+      s.quizScore = 88;
+      s.learningProgress = Math.max(s.learningProgress || 0, 75);
+    }, 'Quiz completed with score 88'));
+
+    document.getElementById('submitPractice')?.addEventListener('click', () => window.ProofSkillApp.mutate((s) => {
+      s.activeLesson = 'lab-1';
+      s.practiceStatus = 'submitted';
+      s.learningProgress = 100;
+    }, 'Practice lab submitted'));
+
     document.getElementById('learnerGenerateEvidence')?.addEventListener('click', () => window.ProofSkillApp.mutate((s) => {
       s.evidence = 'generated';
     }, 'Learner generated local Evidence Bundle'));
