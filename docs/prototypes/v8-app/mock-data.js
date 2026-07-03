@@ -21,6 +21,42 @@ window.ProofSkillData = {
       targetRoles: ['Trade Documentation Assistant', 'Supply Chain Ops', 'Receivable Review Assistant']
     }
   ],
+  cohorts: [
+    {
+      id: 'cohort-ai-data-2026-07',
+      name: 'AI Data Assistant · July Pilot',
+      path: 'AI Data Analysis Assistant',
+      learners: 18,
+      avgProgress: 62,
+      quizPassRate: '72%',
+      practiceSubmitted: 9,
+      evidenceReady: 4,
+      status: 'active'
+    },
+    {
+      id: 'cohort-trade-2026-07',
+      name: 'Trade Documentation · Pilot Batch',
+      path: 'AI Trade Documentation Assistant',
+      learners: 8,
+      avgProgress: 48,
+      quizPassRate: '50%',
+      practiceSubmitted: 3,
+      evidenceReady: 1,
+      status: 'pilot'
+    }
+  ],
+  learnerProgress: [
+    { name: 'Mia Chen', wallet: '0xLearnerMiaMock', path: 'AI Data Analysis Assistant', progress: 100, quiz: 88, practice: 'submitted', evidence: 'ready', nextAction: 'issuer review' },
+    { name: 'Ken Sato', wallet: '0xLearnerKenMock', path: 'AI Data Analysis Assistant', progress: 75, quiz: 82, practice: 'in progress', evidence: 'not ready', nextAction: 'submit practice' },
+    { name: 'Lina Garcia', wallet: '0xLearnerLinaMock', path: 'AI Data Analysis Assistant', progress: 50, quiz: null, practice: 'not started', evidence: 'not ready', nextAction: 'take quiz' },
+    { name: 'Aarav Patel', wallet: '0xLearnerAaravMock', path: 'AI Trade Documentation Assistant', progress: 90, quiz: 91, practice: 'submitted', evidence: 'ready', nextAction: 'evaluator review' }
+  ],
+  curriculumOps: [
+    { item: 'Lesson 1 · Spreadsheet Data Hygiene', status: 'published', completions: 14, issue: 'none' },
+    { item: 'Lesson 2 · Metrics and Business Questions', status: 'published', completions: 10, issue: 'needs example update' },
+    { item: 'Quiz · Data Quality Judgment', status: 'published', completions: 13, issue: '2 weak questions' },
+    { item: 'Practice Lab · Mini BI Report', status: 'active', completions: 9, issue: 'mentor review queue growing' }
+  ],
   learningModules: [
     {
       id: 'lesson-1',
