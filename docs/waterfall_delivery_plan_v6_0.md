@@ -21,7 +21,7 @@ Correct waterfall sequence:
 ```text
 战略分析
 -> 痛点把握
--> 领域诊断桥：IS / TO-BE / Gap
+-> 领域诊断桥：AS-IS / TO-BE / Gap
 -> TOGAF 分层功能架构
 -> 三层数据架构
 -> 原型设计
@@ -46,7 +46,7 @@ Allowed now:
 ```text
 战略分析
 痛点把握
-领域 IS / TO-BE 分析
+领域 AS-IS / TO-BE 分析
 TOGAF 分层功能架构
 三层数据架构
 原型需求说明
@@ -119,7 +119,7 @@ Pain must be converted through a bridge before it becomes architecture.
 ```text
 Pain signal
 -> root cause
--> current-state IS
+-> current-state AS-IS
 -> target-state TO-BE
 -> capability gap
 -> target function
@@ -129,7 +129,7 @@ Pain signal
 
 ---
 
-## 3. Domain diagnosis bridge: IS / TO-BE / Gap
+## 3. Domain diagnosis bridge: AS-IS / TO-BE / Gap
 
 This is the missing bridge between pain and architecture.
 
@@ -139,14 +139,14 @@ This is the missing bridge between pain and architecture.
 | --- | --- | --- |
 | Pain signal | What hurts? | pain statement |
 | Root cause | Why does it hurt? | domain weakness |
-| IS | How does the domain work today? | current business/process/data/system state |
+| AS-IS | How does the domain work today? | current business/process/data/system state |
 | TO-BE | How should the domain work after redesign? | target operating model |
-| Gap | What is missing between IS and TO-BE? | capability, data, governance and system gaps |
+| Gap | What is missing between AS-IS and TO-BE? | capability, data, governance and system gaps |
 | Architecture | What must be built or configured? | function architecture and data architecture |
 
-### 3.2 Domain IS / TO-BE overview
+### 3.2 Domain AS-IS / TO-BE overview
 
-| Domain aspect | IS current state | TO-BE target state | Gap to close |
+| Domain aspect | AS-IS current state | TO-BE target state | Gap to close |
 | --- | --- | --- | --- |
 | Business model | Selling training, demo or manual service is easy to understand but hard to scale | Selling AI Agent governance diagnosis, pilot and proof-based delivery package | productized service model and reusable delivery method |
 | Customer entry | Customer pain is captured through conversation and founder judgment | Customer pain is converted into value-chain stage, scenario, expected outcome and pilot scope | structured intake and scenario classification |
@@ -157,9 +157,9 @@ This is the missing bridge between pain and architecture.
 | Reporting | Reports depend on manual selection and founder explanation | Internal and customer-safe reports are generated from approved evidence and visibility rules | metric model and report dataset |
 | Compliance and trust | AI output may be useful but hard to explain and defend | Customer-visible output is controlled by approval, audit and visibility policy | audit and customer-safe field rules |
 
-### 3.3 Scenario-level IS / TO-BE examples
+### 3.3 Scenario-level AS-IS / TO-BE examples
 
-| Scenario | IS | TO-BE | Required target capability |
+| Scenario | AS-IS | TO-BE | Required target capability |
 | --- | --- | --- | --- |
 | Lead-to-Proposal | Sales material and proposal drafting rely on founder experience | AI drafts customer profile, need summary and proposal outline; human approves commercial boundary | value-chain diagnosis, proposal evidence, claim boundary |
 | Requirement-to-Delivery | Requirements, task output and acceptance evidence are fragmented | Requirements map to tasks, evidence, review and customer-safe delivery summary | scenario-to-task mapping and evidence trail |
@@ -340,8 +340,8 @@ Every future screen and implementation task must pass this traceability test.
 
 | Trace level | Required mapping |
 | --- | --- |
-| Pain | pain only maps to root cause and IS / TO-BE analysis; it does not directly become a feature |
-| IS / TO-BE | every target function must be justified by an IS weakness and a TO-BE target state |
+| Pain | pain only maps to root cause and AS-IS / TO-BE analysis; it does not directly become a feature |
+| AS-IS / TO-BE | every target function must be justified by an AS-IS weakness and a TO-BE target state |
 | Level 1 | 一级功能 maps to one 一级数据域 |
 | Level 2 | 二级功能 maps to one or more 二级数据主题 |
 | Level 3 | 三级功能 maps to concrete 三级数据实体 and fields |
@@ -353,7 +353,7 @@ Every future screen and implementation task must pass this traceability test.
 
 | TOGAF layer | What it contains in this project |
 | --- | --- |
-| Business architecture | IS / TO-BE model, target operating model, three-level target functions |
+| Business architecture | AS-IS / TO-BE model, target operating model, three-level target functions |
 | Application architecture | future modules and screens derived from TO-BE functions, not from raw pain points |
 | Data architecture | three-level target data domains, subjects, entities, evidence chain and report measures |
 | Technology architecture | runtime, persistence, permission, export, deployment and observability plan |
@@ -381,7 +381,7 @@ customer-safe fields
 nonfunctional constraints
 ```
 
-Prototype design must also show which IS / TO-BE gap, Level-1 / Level-2 / Level-3 function and data level each screen belongs to.
+Prototype design must also show which AS-IS / TO-BE gap, Level-1 / Level-2 / Level-3 function and data level each screen belongs to.
 
 ### 5.2 Prototype navigation requirement
 
@@ -415,7 +415,7 @@ Purpose:
 
 ```text
 Show the complete waterfall method inside the live product.
-Make the founder demo explain strategy, pain, IS, TO-BE, gap, TOGAF, data, prototype, and technical architecture from one page.
+Make the founder demo explain strategy, pain, AS-IS, TO-BE, gap, TOGAF, data, prototype, and technical architecture from one page.
 ```
 
 No implementation file is added in this phase.
@@ -430,7 +430,7 @@ Use Streamlit as an executable prototype only after the prototype design gate is
 
 ### 6.2 MVP implementation order after the prototype gate
 
-1. Convert IS / TO-BE / Gap analysis into prototype navigation and screen inventory.
+1. Convert AS-IS / TO-BE / Gap analysis into prototype navigation and screen inventory.
 2. Convert Level-1 / Level-2 / Level-3 target function architecture into feature dictionary.
 3. Convert Level-1 / Level-2 / Level-3 target data architecture into data dictionary and persistence plan.
 4. Add Waterfall architecture page.
@@ -443,7 +443,7 @@ Use Streamlit as an executable prototype only after the prototype design gate is
 
 | Priority | Task | Result |
 | --- | --- | --- |
-| P0 | IS / TO-BE dictionary | every future feature is justified by current-state weakness and target-state need |
+| P0 | AS-IS / TO-BE dictionary | every future feature is justified by current-state weakness and target-state need |
 | P0 | Three-level target function dictionary | every feature has L1/L2/L3 code and owner |
 | P0 | Three-level target data dictionary | every data object has domain, subject and entity level |
 | P1 | Scenario-to-task mapping | every task traces to a business scenario |
@@ -461,8 +461,8 @@ The rebuild is acceptable when:
 ```text
 战略口径清楚：not course, not AI tool demo, but Agent governance and proof OS.
 痛点边界清楚：pain is input, not function.
-桥接层清楚：pain -> root cause -> IS -> TO-BE -> gap -> architecture.
-IS / TO-BE 清楚：current state and target state are listed by domain aspect.
+桥接层清楚：pain -> root cause -> AS-IS -> TO-BE -> gap -> architecture.
+AS-IS / TO-BE 清楚：current state and target state are listed by domain aspect.
 功能分层清楚：一级功能、二级功能、三级功能 are target capabilities derived from TO-BE.
 数据分层清楚：一级数据域、二级数据主题、三级数据实体 support target capabilities and reports.
 TOGAF 清楚：business, application, data, technology layers are traceable.
