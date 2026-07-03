@@ -5,6 +5,9 @@ window.ProofSkillRoles.overview = {
   subtitle: 'Learning, evidence, attestation, and verification in one browser-first workflow.',
   render(state) {
     const data = window.ProofSkillData;
+    const smoke = window.ProofSkillSmokeTest?.renderTable();
+    const smokeResult = smoke?.result || { passed: 0, failed: 0, total: 0 };
+    const smokeTable = smoke?.html || '<div class="text-secondary">Smoke test utility not loaded.</div>';
     return `
       <div class="p-4 p-lg-5 bg-white rounded-4 shadow-sm border mb-4">
         <div class="row g-4 align-items-center">
@@ -33,6 +36,14 @@ window.ProofSkillRoles.overview = {
         </div>
       </div>
 
+      <div class="card mb-4 border-${smokeResult.failed === 0 ? 'success' : 'danger'}">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <strong>Built-in Smoke Test</strong>
+          <div><span class="badge text-bg-${smokeResult.failed === 0 ? 'success' : 'danger'}">${smokeResult.passed}/${smokeResult.total} passed</span> <button id="rerunSmokeTest" class="btn btn-sm btn-outline-primary">Re-run</button></div>
+        </div>
+        <div class="card-body table-responsive">${smokeTable}</div>
+      </div>
+
       <div class="card mb-4">
         <div class="card-header bg-white fw-bold">End-to-end flow</div>
         <div class="card-body">
@@ -52,5 +63,7 @@ window.ProofSkillRoles.overview = {
       </div>
     `;
   },
-  bind() {}
+  bind() {
+    document.getElementById('rerunSmokeTest')?.addEventListener('click', () => window.ProofSkillApp.render());
+  }
 };
