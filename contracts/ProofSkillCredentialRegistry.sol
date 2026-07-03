@@ -3,7 +3,7 @@ pragma solidity ^0.8.24;
 
 /// @title ProofSkillCredentialRegistry
 /// @notice Minimal proof registry for frontend-issued, evidence-backed skill credentials.
-/// @dev This draft intentionally stores only hashes and status. It does not store raw answers,
+/// @dev Stores only hashes, status, and attestation metadata. It does not store raw answers,
 /// raw project files, personal data, trade documents, or AI scoring rationale.
 contract ProofSkillCredentialRegistry {
     enum ProofStatus {
@@ -13,12 +13,20 @@ contract ProofSkillCredentialRegistry {
         Expired
     }
 
+    enum AttestationLevel {
+        None,
+        SelfAttested,
+        IssuerAttested,
+        EvaluatorSigned
+    }
+
     struct CredentialProof {
         bytes32 credentialId;
         bytes32 certificateHash;
         bytes32 evidenceHash;
         bytes32 scoreHash;
         bytes32 schemaHash;
+        bytes32 evaluatorSetHash;
         address issuer;
         address holder;
         string credentialType;
@@ -26,6 +34,7 @@ contract ProofSkillCredentialRegistry {
         uint64 issuedAt;
         uint64 expiresAt;
         ProofStatus status;
+        AttestationLevel attestationLevel;
     }
 
     address public owner;
@@ -45,6 +54,8 @@ contract ProofSkillCredentialRegistry {
         bytes32 evidenceHash,
         bytes32 scoreHash,
         bytes32 schemaHash,
+        bytes32 evaluatorSetHash,
+        AttestationLevel attestationLevel,
         uint64 issuedAt,
         uint64 expiresAt
     );
@@ -62,6 +73,7 @@ contract ProofSkillCredentialRegistry {
     error CredentialNotFound();
     error InvalidHolder();
     error InvalidExpiry();
+    error InvalidEvaluatorSetHash();
 
     modifier onlyOwner() {
         if (msg.sender != owner) revert NotOwner();
@@ -84,6 +96,90 @@ contract ProofSkillCredentialRegistry {
         emit IssuerAuthorized(issuer, authorized);
     }
 
+    /// @notice Register a low-trust self-attested proof. Holder and issuer are both msg.sender.
+    function registerSelfAttestedProof(
+        bytes32 credentialId,
+        string calldata credentialType,
+        uint16 overallScore,
+        bytes32 certificateHash,
+        bytes32 evidenceHash,
+        bytes32 scoreHash,
+        bytes32 schemaHash,
+        uint64 expiresAt
+    ) external {
+        _registerCredentialProof(
+            credentialId,
+            msg.sender,
+            credentialType,
+            overallScore,
+            certificateHash,
+            evidenceHash,
+            scoreHash,
+            schemaHash,
+            bytes32(0),
+            expiresAt,
+            AttestationLevel.SelfAttested
+        );
+    }
+
+    /// @notice Register an authorized issuer-attested proof.
+    function registerIssuerAttestedProof(
+        bytes32 credentialId,
+        address holder,
+        string calldata credentialType,
+        uint16 overallScore,
+        bytes32 certificateHash,
+        bytes32 evidenceHash,
+        bytes32 scoreHash,
+        bytes32 schemaHash,
+        uint64 expiresAt
+    ) external onlyAuthorizedIssuer {
+        _registerCredentialProof(
+            credentialId,
+            holder,
+            credentialType,
+            overallScore,
+            certificateHash,
+            evidenceHash,
+            scoreHash,
+            schemaHash,
+            bytes32(0),
+            expiresAt,
+            AttestationLevel.IssuerAttested
+        );
+    }
+
+    /// @notice Register the strongest proof type: authorized issuer plus evaluator signature set hash.
+    function registerEvaluatorSignedProof(
+        bytes32 credentialId,
+        address holder,
+        string calldata credentialType,
+        uint16 overallScore,
+        bytes32 certificateHash,
+        bytes32 evidenceHash,
+        bytes32 scoreHash,
+        bytes32 schemaHash,
+        bytes32 evaluatorSetHash,
+        uint64 expiresAt
+    ) external onlyAuthorizedIssuer {
+        if (evaluatorSetHash == bytes32(0)) revert InvalidEvaluatorSetHash();
+
+        _registerCredentialProof(
+            credentialId,
+            holder,
+            credentialType,
+            overallScore,
+            certificateHash,
+            evidenceHash,
+            scoreHash,
+            schemaHash,
+            evaluatorSetHash,
+            expiresAt,
+            AttestationLevel.EvaluatorSigned
+        );
+    }
+
+    /// @dev Backward-compatible alias for issuer-attested registration.
     function registerCredentialProof(
         bytes32 credentialId,
         address holder,
@@ -95,33 +191,8 @@ contract ProofSkillCredentialRegistry {
         bytes32 schemaHash,
         uint64 expiresAt
     ) external onlyAuthorizedIssuer {
-        if (credentialId == bytes32(0)) revert InvalidCredentialId();
-        if (credentialProofs[credentialId].status != ProofStatus.None) revert CredentialAlreadyExists();
-        if (holder == address(0)) revert InvalidHolder();
-
-        uint64 issuedAt = uint64(block.timestamp);
-        if (expiresAt <= issuedAt) revert InvalidExpiry();
-
-        CredentialProof memory proof = CredentialProof({
-            credentialId: credentialId,
-            certificateHash: certificateHash,
-            evidenceHash: evidenceHash,
-            scoreHash: scoreHash,
-            schemaHash: schemaHash,
-            issuer: msg.sender,
-            holder: holder,
-            credentialType: credentialType,
-            overallScore: overallScore,
-            issuedAt: issuedAt,
-            expiresAt: expiresAt,
-            status: ProofStatus.Active
-        });
-
-        credentialProofs[credentialId] = proof;
-
-        emit CredentialProofRegistered(
+        _registerCredentialProof(
             credentialId,
-            msg.sender,
             holder,
             credentialType,
             overallScore,
@@ -129,8 +200,9 @@ contract ProofSkillCredentialRegistry {
             evidenceHash,
             scoreHash,
             schemaHash,
-            issuedAt,
-            expiresAt
+            bytes32(0),
+            expiresAt,
+            AttestationLevel.IssuerAttested
         );
     }
 
@@ -155,10 +227,10 @@ contract ProofSkillCredentialRegistry {
         bytes32 evidenceHash,
         bytes32 scoreHash,
         bytes32 schemaHash
-    ) external view returns (bool valid, ProofStatus status) {
+    ) external view returns (bool valid, ProofStatus status, AttestationLevel attestationLevel) {
         CredentialProof memory proof = credentialProofs[credentialId];
         if (proof.status == ProofStatus.None) {
-            return (false, ProofStatus.None);
+            return (false, ProofStatus.None, AttestationLevel.None);
         }
 
         ProofStatus effectiveStatus = proof.status;
@@ -171,6 +243,62 @@ contract ProofSkillCredentialRegistry {
             && proof.scoreHash == scoreHash
             && proof.schemaHash == schemaHash;
 
-        return (hashMatch && effectiveStatus == ProofStatus.Active, effectiveStatus);
+        return (hashMatch && effectiveStatus == ProofStatus.Active, effectiveStatus, proof.attestationLevel);
+    }
+
+    function _registerCredentialProof(
+        bytes32 credentialId,
+        address holder,
+        string calldata credentialType,
+        uint16 overallScore,
+        bytes32 certificateHash,
+        bytes32 evidenceHash,
+        bytes32 scoreHash,
+        bytes32 schemaHash,
+        bytes32 evaluatorSetHash,
+        uint64 expiresAt,
+        AttestationLevel attestationLevel
+    ) internal {
+        if (credentialId == bytes32(0)) revert InvalidCredentialId();
+        if (credentialProofs[credentialId].status != ProofStatus.None) revert CredentialAlreadyExists();
+        if (holder == address(0)) revert InvalidHolder();
+
+        uint64 issuedAt = uint64(block.timestamp);
+        if (expiresAt <= issuedAt) revert InvalidExpiry();
+
+        CredentialProof memory proof = CredentialProof({
+            credentialId: credentialId,
+            certificateHash: certificateHash,
+            evidenceHash: evidenceHash,
+            scoreHash: scoreHash,
+            schemaHash: schemaHash,
+            evaluatorSetHash: evaluatorSetHash,
+            issuer: msg.sender,
+            holder: holder,
+            credentialType: credentialType,
+            overallScore: overallScore,
+            issuedAt: issuedAt,
+            expiresAt: expiresAt,
+            status: ProofStatus.Active,
+            attestationLevel: attestationLevel
+        });
+
+        credentialProofs[credentialId] = proof;
+
+        emit CredentialProofRegistered(
+            credentialId,
+            msg.sender,
+            holder,
+            credentialType,
+            overallScore,
+            certificateHash,
+            evidenceHash,
+            scoreHash,
+            schemaHash,
+            evaluatorSetHash,
+            attestationLevel,
+            issuedAt,
+            expiresAt
+        );
     }
 }
