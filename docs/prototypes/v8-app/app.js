@@ -1,11 +1,16 @@
 window.ProofSkillApp = (() => {
-  const roles = [
+  const fallbackRoles = [
     { id: 'overview', label: 'Overview', description: 'executive summary and guided demo' },
     { id: 'learner', label: 'Learner / Candidate', description: 'learn, practice, evidence, certificate' },
     { id: 'issuer', label: 'Issuer / Training Partner', description: 'learning ops, review, issue proof' },
     { id: 'evaluator', label: 'Evaluator / Reviewer', description: 'score and sign reviews' },
-    { id: 'verifier', label: 'Verifier / Employer', description: 'proof and role-fit signals' },
+    { id: 'verifier', label: 'Verifier / Organization', description: 'proof and role-fit signals' },
     { id: 'admin', label: 'Admin / Contract Owner', description: 'curriculum and contract governance' }
+  ];
+
+  const roles = window.ProofSkillMenu?.roles || fallbackRoles;
+  const menuGroups = window.ProofSkillMenu?.groups || [
+    { id: 'fallback', label: 'Workspaces', children: roles.map((role) => ({ id: role.id, label: role.label, target: { role: role.id } })) }
   ];
 
   const roleNav = document.getElementById('roleNav');
@@ -220,20 +225,50 @@ window.ProofSkillApp = (() => {
     `;
   }
 
+  function isTargetActive(target, state) {
+    if (!target?.role || target.role !== state.currentRole) return false;
+    if (target.learnerTab && target.learnerTab !== state.learnerTab) return false;
+    return true;
+  }
+
+  function renderMenuNode(node, level = 2) {
+    const state = window.ProofSkillState.state;
+    const target = node.target || {};
+    const active = isTargetActive(target, state);
+    const children = node.children || [];
+    const sizeClass = level === 3 ? 'py-1 ps-4 small' : 'py-2';
+    const labelClass = level === 3 ? '' : 'fw-semibold';
+    const desc = level === 2 && target.role ? roles.find((role) => role.id === target.role)?.description : '';
+
+    return `
+      <button class="list-group-item list-group-item-action ${sizeClass} ${active ? 'active' : ''}" data-menu-role="${target.role || ''}" data-menu-learner-tab="${target.learnerTab || ''}" data-menu-anchor="${target.anchor || ''}">
+        <div class="${labelClass}">${node.label}</div>
+        ${desc ? `<div class="small ${active ? 'text-white-50' : 'text-secondary'}">${desc}</div>` : ''}
+      </button>
+      ${children.length ? `<div class="list-group list-group-flush border-start ms-2 mb-2">${children.map((child) => renderMenuNode(child, 3)).join('')}</div>` : ''}
+    `;
+  }
+
   function renderRoleNav() {
     const state = window.ProofSkillState.state;
-    roleNav.innerHTML = roles.map((role) => `
-      <button class="list-group-item list-group-item-action ${state.currentRole === role.id ? 'active' : ''}" data-role="${role.id}">
-        <div class="fw-bold">${role.label}</div>
-        <div class="small ${state.currentRole === role.id ? 'text-white-50' : 'text-secondary'}">${role.description}</div>
-      </button>
+    roleNav.innerHTML = menuGroups.map((group) => `
+      <div class="mb-3">
+        <div class="small text-uppercase text-secondary fw-bold mb-2">${group.label}</div>
+        <div class="list-group list-group-flush border rounded-3 overflow-hidden">
+          ${(group.children || []).map((node) => renderMenuNode(node, 2)).join('')}
+        </div>
+      </div>
     `).join('');
 
-    roleNav.querySelectorAll('[data-role]').forEach((button) => {
-      button.addEventListener('click', () => setRole(button.dataset.role));
+    roleNav.querySelectorAll('[data-menu-role]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const role = button.dataset.menuRole;
+        if (!role) return;
+        setMenuTarget({ role, learnerTab: button.dataset.menuLearnerTab || null, anchor: button.dataset.menuAnchor || null });
+      });
     });
 
-    mobileRoleSelect.value = state.currentRole;
+    mobileRoleSelect.value = validRole(state.currentRole) ? state.currentRole : 'overview';
   }
 
   function renderDemoGuide(roleId) {
@@ -287,15 +322,21 @@ window.ProofSkillApp = (() => {
     if (window.location.hash !== `#${roleId}`) history.replaceState(null, '', `#${roleId}`);
   }
 
-  function setRole(roleId, options = {}) {
-    if (!validRole(roleId)) return;
+  function setMenuTarget(target, options = {}) {
+    if (!validRole(target.role)) return;
     window.ProofSkillState.mutate((state) => {
-      state.currentRole = roleId;
+      state.currentRole = target.role;
+      if (target.learnerTab) state.learnerTab = target.learnerTab;
+      if (target.anchor) state.lastMenuAnchor = target.anchor;
     });
-    if (!options.fromHash) syncHash(roleId);
+    if (!options.fromHash) syncHash(target.role);
     render();
-    const role = roles.find((item) => item.id === roleId);
-    if (role && !options.silent) showToast(`Switched to ${role.label}`, 'primary');
+    const role = roles.find((item) => item.id === target.role);
+    if (role && !options.silent) showToast(`Opened ${role.label}`, 'primary');
+  }
+
+  function setRole(roleId, options = {}) {
+    setMenuTarget({ role: roleId }, options);
   }
 
   function mutate(mutator, eventMessage) {
@@ -362,6 +403,7 @@ window.ProofSkillApp = (() => {
   return {
     render,
     setRole,
+    setMenuTarget,
     mutate,
     showToast,
     runNextDemoStep,
