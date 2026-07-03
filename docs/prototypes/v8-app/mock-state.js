@@ -5,6 +5,12 @@ window.ProofSkillState = (() => {
     currentRole: 'learner',
     evidence: 'not_generated',
     hashesComputed: false,
+    learningProgress: 25,
+    completedLessons: ['lesson-1'],
+    activeLesson: 'lesson-1',
+    quizStatus: 'not_started',
+    quizScore: null,
+    practiceStatus: 'not_submitted',
     issuerReview: 'not_requested',
     evaluatorReview: 'not_assigned',
     evaluatorSetHash: null,
@@ -17,7 +23,7 @@ window.ProofSkillState = (() => {
 
   function load() {
     try {
-      return JSON.parse(localStorage.getItem(storageKey)) || { ...initialState };
+      return { ...initialState, ...(JSON.parse(localStorage.getItem(storageKey)) || {}) };
     } catch {
       return { ...initialState };
     }
