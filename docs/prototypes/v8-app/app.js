@@ -231,6 +231,10 @@ window.ProofSkillApp = (() => {
     return true;
   }
 
+  function hasActiveTarget(node, state) {
+    return isTargetActive(node.target || {}, state) || (node.children || []).some((child) => hasActiveTarget(child, state));
+  }
+
   function renderMenuNode(node, level = 2) {
     const state = window.ProofSkillState.state;
     const target = node.target || {};
@@ -251,14 +255,31 @@ window.ProofSkillApp = (() => {
 
   function renderRoleNav() {
     const state = window.ProofSkillState.state;
-    roleNav.innerHTML = menuGroups.map((group) => `
-      <div class="mb-3">
-        <div class="small text-uppercase text-secondary fw-bold mb-2">${group.label}</div>
-        <div class="list-group list-group-flush border rounded-3 overflow-hidden">
-          ${(group.children || []).map((node) => renderMenuNode(node, 2)).join('')}
-        </div>
+    roleNav.innerHTML = `
+      <div class="accordion accordion-flush" id="mainMenuAccordion">
+        ${menuGroups.map((group, index) => {
+          const active = (group.children || []).some((node) => hasActiveTarget(node, state));
+          const collapseId = `menu-collapse-${group.id}`;
+          const headingId = `menu-heading-${group.id}`;
+          return `
+            <div class="accordion-item border rounded-3 mb-2 overflow-hidden">
+              <h2 class="accordion-header" id="${headingId}">
+                <button class="accordion-button ${active || index === 0 ? '' : 'collapsed'} py-2 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-expanded="${active || index === 0 ? 'true' : 'false'}" aria-controls="${collapseId}">
+                  ${group.label}
+                </button>
+              </h2>
+              <div id="${collapseId}" class="accordion-collapse collapse ${active || index === 0 ? 'show' : ''}" aria-labelledby="${headingId}" data-bs-parent="#mainMenuAccordion">
+                <div class="accordion-body p-0">
+                  <div class="list-group list-group-flush">
+                    ${(group.children || []).map((node) => renderMenuNode(node, 2)).join('')}
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('')}
       </div>
-    `).join('');
+    `;
 
     roleNav.querySelectorAll('[data-menu-role]').forEach((button) => {
       button.addEventListener('click', () => {
