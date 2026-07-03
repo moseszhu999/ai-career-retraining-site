@@ -52,8 +52,8 @@ window.ProofSkillMenu = {
           label: 'Evaluator',
           target: { role: 'evaluator' },
           children: [
-            { id: 'evaluator-assignment', label: 'Assignment', target: { role: 'evaluator' } },
-            { id: 'evaluator-rubric', label: 'Rubric Review', target: { role: 'evaluator' } }
+            { id: 'evaluator-assignment', label: 'Assignment', target: { role: 'evaluator', anchor: 'evaluator-assignment' } },
+            { id: 'evaluator-rubric', label: 'Rubric Review', target: { role: 'evaluator', anchor: 'evaluator-rubric' } }
           ]
         }
       ]
@@ -67,9 +67,9 @@ window.ProofSkillMenu = {
           label: 'Verifier Workspace',
           target: { role: 'verifier' },
           children: [
-            { id: 'verifier-proof', label: 'Proof Check', target: { role: 'verifier' } },
-            { id: 'verifier-signals', label: 'Role-fit Signals', target: { role: 'verifier' } },
-            { id: 'verifier-receipt', label: 'Receipt Preview', target: { role: 'verifier' } }
+            { id: 'verifier-proof', label: 'Proof Check', target: { role: 'verifier', anchor: 'verifier-proof' } },
+            { id: 'verifier-signals', label: 'Role-fit Signals', target: { role: 'verifier', anchor: 'verifier-signals' } },
+            { id: 'verifier-receipt', label: 'Receipt Preview', target: { role: 'verifier', anchor: 'verifier-receipt' } }
           ]
         }
       ]
@@ -83,10 +83,10 @@ window.ProofSkillMenu = {
           label: 'Admin Workspace',
           target: { role: 'admin' },
           children: [
-            { id: 'admin-curriculum', label: 'Curriculum Builder', target: { role: 'admin' } },
-            { id: 'admin-quiz', label: 'Quiz Bank', target: { role: 'admin' } },
-            { id: 'admin-practice', label: 'Practice Templates', target: { role: 'admin' } },
-            { id: 'admin-registry', label: 'Issuer Registry', target: { role: 'admin' } }
+            { id: 'admin-curriculum', label: 'Curriculum Builder', target: { role: 'admin', anchor: 'admin-curriculum' } },
+            { id: 'admin-quiz', label: 'Quiz Bank', target: { role: 'admin', anchor: 'admin-quiz' } },
+            { id: 'admin-practice', label: 'Practice Templates', target: { role: 'admin', anchor: 'admin-practice' } },
+            { id: 'admin-registry', label: 'Issuer Registry', target: { role: 'admin', anchor: 'admin-registry' } }
           ]
         }
       ]
